@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/walletFragment"
+        android:icon="@drawable/ic_baseline_account_balance_wallet_24"
+        android:title="Cüzdan" />
+
+
+
+
+    <item
+        android:id="@+id/residentsInformationFragment"
+        android:icon="@drawable/ic_baseline_people_24"
+        android:title="Sakinler" />
+    <item
+        android:id="@+id/executiveHomePage"
+        android:icon="@drawable/ic_baseline_home_24"
+        android:title="Anasayfa"  />
+    <item
+        android:id="@+id/conciergeFragment"
+        android:icon="@drawable/ic_baseline_spatial_audio_off_24"
+        android:title="Kapıcı" />
+    <item
+        android:id="@+id/settingsFragmet"
+        android:icon="@drawable/ic_baseline_settings_24"
+        android:title="Ayarlar" />
+</menu>

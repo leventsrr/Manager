@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/Users/leven/AndroidStudioProjects/Manager/app/src/main/res/drawable/ic_baseline_access_time_24.xml" value="0.3005" />
+        <entry key="..\:/Users/leven/AndroidStudioProjects/Manager/app/src/main/res/drawable/ic_baseline_done_all_24.xml" value="0.3005" />
+        <entry key="..\:/Users/leven/AndroidStudioProjects/Manager/app/src/main/res/drawable/ic_baseline_sensor_door_24.xml" value="0.264" />
+        <entry key="..\:/Users/leven/AndroidStudioProjects/Manager/app/src/main/res/layout/activity_main.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/leven/AndroidStudioProjects/Manager/app/src/main/res/layout/concierge_announcement_row.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/leven/AndroidStudioProjects/Manager/app/src/main/res/layout/concierge_duty_row.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/leven/AndroidStudioProjects/Manager/app/src/main/res/layout/custoheader.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/leven/AndroidStudioProjects/Manager/app/src/main/res/layout/duepayment_status_row.xml" value="0.365625" />
+        <entry key="..\:/Users/leven/AndroidStudioProjects/Manager/app/src/main/res/layout/fragment_concierge.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/leven/AndroidStudioProjects/Manager/app/src/main/res/layout/fragment_executive_home_page.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/leven/AndroidStudioProjects/Manager/app/src/main/res/layout/fragment_login.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/leven/AndroidStudioProjects/Manager/app/src/main/res/layout/fragment_resident_information_details.xml" value="0.24242424242424243" />
+        <entry key="..\:/Users/leven/AndroidStudioProjects/Manager/app/src/main/res/layout/fragment_residents_information.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/leven/AndroidStudioProjects/Manager/app/src/main/res/layout/fragment_settings_fragmet.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/leven/AndroidStudioProjects/Manager/app/src/main/res/layout/fragment_signup.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/leven/AndroidStudioProjects/Manager/app/src/main/res/layout/fragment_wallet.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/leven/AndroidStudioProjects/Manager/app/src/main/res/layout/income_expense_row.xml" value="0.365625" />
+        <entry key="..\:/Users/leven/AndroidStudioProjects/Manager/app/src/main/res/layout/resident_information_row.xml" value="0.30085470085470084" />
+        <entry key="..\:/Users/leven/AndroidStudioProjects/Manager/app/src/main/res/layout/resident_past_request_raw.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/leven/AndroidStudioProjects/Manager/app/src/main/res/layout/resident_request_raw.xml" value="0.25416666666666665" />
+        <entry key="..\:/Users/leven/AndroidStudioProjects/Manager/app/src/main/res/menu/nav_menu.xml" value="0.15683760683760684" />
+      </map>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/build/classes" />
+  </component>
+  <component name="ProjectType">
+    <option name="id" value="Android" />
+  </component>
+</project>

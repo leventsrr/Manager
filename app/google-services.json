@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "921118921031",
+    "project_id": "yonetici-78470",
+    "storage_bucket": "yonetici-78470.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:921118921031:android:738b46ab687a4b80c23c62",
+        "android_client_info": {
+          "package_name": "com.leventsurer.manager"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "921118921031-ar77b04gqtqonbiasqvgptom45frk9u9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.leventsurer.manager",
+            "certificate_hash": "9475d0c9e3706da822bdf57b11a0930140621934"
+          }
+        },
+        {
+          "client_id": "921118921031-22idqn1iq7h2o3sasem7fmfuhel1pfgg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD-woBxNQpe2ri2efnPzVsOgPbUeXSJw6A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "921118921031-22idqn1iq7h2o3sasem7fmfuhel1pfgg.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

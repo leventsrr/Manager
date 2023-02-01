@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/loginFragment">
+
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="com.leventsurer.manager.ui.fragments.LoginFragment"
+        android:label="fragment_login"
+        tools:layout="@layout/fragment_login" >
+        <action
+            android:id="@+id/action_loginFragment_to_signupFragment"
+            app:destination="@id/signupFragment" />
+        <action
+            android:id="@+id/action_loginFragment_to_executiveHomePage"
+            app:destination="@id/executiveHomePage" />
+    </fragment>
+    <fragment
+        android:id="@+id/signupFragment"
+        android:name="com.leventsurer.manager.ui.fragments.SignupFragment"
+        android:label="SignupFragment" />
+    <fragment
+        android:id="@+id/executiveHomePage"
+        android:name="com.leventsurer.manager.ui.fragments.ExecutiveHomePageFragment"
+        android:label="ExecutiveHomePage" />
+    <fragment
+        android:id="@+id/walletFragment"
+        android:name="com.leventsurer.manager.ui.fragments.WalletFragment"
+        android:label="WalletFragment" />
+    <fragment
+        android:id="@+id/conciergeFragment"
+        android:name="com.leventsurer.manager.ui.fragments.ConciergeFragment"
+        android:label="ConciergeFragment" />
+    <fragment
+        android:id="@+id/residentsInformationFragment"
+        android:name="com.leventsurer.manager.ui.fragments.ResidentsInformationFragment"
+        android:label="ResidentsInformationFragment" >
+        <action
+            android:id="@+id/action_residentsInformationFragment_to_residentInformationDetailsFragment"
+            app:destination="@id/residentInformationDetailsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/residentInformationDetailsFragment"
+        android:name="com.leventsurer.manager.ui.fragments.ResidentInformationDetailsFragment"
+        android:label="ResidentInformationDetailsFragment" />
+    <fragment
+        android:id="@+id/settingsFragmet"
+        android:name="com.leventsurer.manager.ui.fragments.SettingsFragmet"
+        android:label="SettingsFragmet" />
+</navigation>
