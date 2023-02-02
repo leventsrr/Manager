@@ -16,7 +16,6 @@ import javax.inject.Inject
 @HiltViewModel
 class AuthViewModel @Inject constructor(
     private val repository: AuthRepository,
-    private val databaseRepository:DatabaseRepository
 
 ): ViewModel() {
 
@@ -55,8 +54,5 @@ class AuthViewModel @Inject constructor(
         _signupFlow.value = null
     }
 
-    fun a(){
-        databaseRepository.getConciergeDuties()
-    }
 
 }

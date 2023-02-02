@@ -26,8 +26,9 @@ class DatabaseViewModel @Inject constructor(
     fun getConciergeAnnouncement()= viewModelScope.launch {
         _conciergeAnnouncementFlow.value = Resource.Loading
         val result = databaseRepository.getConciergeAnnouncements()
+        Log.e("kontrol","result : $result")
         _conciergeAnnouncementFlow.value = result
-        Log.e("cevap",result.toString())
+
     }
 
 

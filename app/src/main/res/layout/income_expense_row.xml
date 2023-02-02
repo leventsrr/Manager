@@ -30,7 +30,7 @@
                 android:layout_height="match_parent"
                 android:layout_marginStart="10dp"
                 android:layout_weight="6"
-                android:fontFamily="@font/titillium_web_extralight"
+                android:fontFamily="@font/titillium_web"
                 android:gravity="start"
                 android:text="Levent Beyin aidatı"
                 android:textSize="15sp" />

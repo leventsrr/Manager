@@ -31,7 +31,7 @@ class ConciergeAnnouncementAdapter : RecyclerView.Adapter<ConciergeAnnouncementA
     override fun onBindViewHolder(holder: ConciergeAnnouncementHolder, position: Int) {
         holder.binding.apply {
             val currentItem:ConciergeAnnouncementModel = list[position]
-            twAnnouncement.text = currentItem.title
+            twAnnouncement.text = currentItem.announcement
         }
     }
 

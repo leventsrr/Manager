@@ -55,12 +55,13 @@ class ExecutiveHomePageFragment : Fragment() {
         setupConciergeAnnouncementAdapter()
         setupResidentRequestAdapter()
         getConciergeAnnouncement()
-        observeFlow()
+
 
     }
 
     private fun getConciergeAnnouncement() {
         databaseViewModel.getConciergeAnnouncement()
+        observeFlow()
     }
 
     private fun observeFlow() {
@@ -68,14 +69,17 @@ class ExecutiveHomePageFragment : Fragment() {
             databaseViewModel.conciergeAnnouncementFlow.collect{
                 when(it){
                     is Resource.Failure ->{
-                        Toast.makeText(context,it.exception.message, Toast.LENGTH_LONG).show()
-                        //binding.pbProgressBar.visibility = View.GONE
+                        Toast.makeText(context,it.exception.message,Toast.LENGTH_LONG).show()
+                        binding.rw.visibility = View.GONE
 
                     }
                     is Resource.Loading ->{
-                        //binding.pbProgressBar.visibility = View.VISIBLE
+                        binding.rw.visibility = View.VISIBLE
                     }
                     is Resource.Success ->{
+                        binding.rw.visibility = View.GONE
+                        Log.e("kontrol","buraya geldi,success")
+
                         conciergeAnnouncementsAdapterList.addAll(it.result)
                         conciergeAnnouncementAdapter.list = conciergeAnnouncementsAdapterList
 
@@ -84,6 +88,7 @@ class ExecutiveHomePageFragment : Fragment() {
 
                     }
                 }
+
             }
 
         }
