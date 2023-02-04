@@ -14,6 +14,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.leventsurer.manager.MainActivity
 import com.leventsurer.manager.R
 import com.leventsurer.manager.data.model.ConciergeAnnouncementModel
+import com.leventsurer.manager.data.model.ConciergeDutiesModel
+import com.leventsurer.manager.data.model.ResidentsRequestModel
 import com.leventsurer.manager.data.model.Resource
 import com.leventsurer.manager.databinding.FragmentExecutiveHomePageBinding
 import com.leventsurer.manager.tools.adapters.ConciergeAnnouncementAdapter
@@ -31,8 +33,12 @@ class ExecutiveHomePageFragment : Fragment() {
     private val binding: FragmentExecutiveHomePageBinding get() = _binding!!
     private val viewModel by viewModels<AuthViewModel>()
     private val databaseViewModel by viewModels<DatabaseViewModel>()
+
     private val conciergeAnnouncementsAdapterList = ArrayList<ConciergeAnnouncementModel>()
+    private val residentRequestAdapterList = ArrayList<ResidentsRequestModel>()
+    //Adapters
     private lateinit var conciergeAnnouncementAdapter : ConciergeAnnouncementAdapter
+    private lateinit var residentRequestAdapter: ResidentRequestAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -55,30 +61,30 @@ class ExecutiveHomePageFragment : Fragment() {
         setupConciergeAnnouncementAdapter()
         setupResidentRequestAdapter()
         getConciergeAnnouncement()
-
+        getResidentRequests()
 
     }
 
     private fun getConciergeAnnouncement() {
         databaseViewModel.getConciergeAnnouncement()
-        observeFlow()
+        observeAnnouncementFlow()
     }
 
-    private fun observeFlow() {
+    private fun observeAnnouncementFlow() {
         viewLifecycleOwner.lifecycleScope.launch{
+
             databaseViewModel.conciergeAnnouncementFlow.collect{
                 when(it){
                     is Resource.Failure ->{
                         Toast.makeText(context,it.exception.message,Toast.LENGTH_LONG).show()
-                        binding.rw.visibility = View.GONE
+                        binding.pbConciergeAnnouncement.visibility = View.GONE
 
                     }
                     is Resource.Loading ->{
-                        binding.rw.visibility = View.VISIBLE
+                        binding.pbConciergeAnnouncement.visibility = View.VISIBLE
                     }
                     is Resource.Success ->{
-                        binding.rw.visibility = View.GONE
-                        Log.e("kontrol","buraya geldi,success")
+                        binding.pbConciergeAnnouncement.visibility = View.GONE
 
                         conciergeAnnouncementsAdapterList.addAll(it.result)
                         conciergeAnnouncementAdapter.list = conciergeAnnouncementsAdapterList
@@ -93,9 +99,45 @@ class ExecutiveHomePageFragment : Fragment() {
 
         }
     }
+
+    private fun getResidentRequests(){
+        databaseViewModel.getResidentRequests()
+        observeResidentRequestFlow()
+    }
+
+    private fun observeResidentRequestFlow() {
+        viewLifecycleOwner.lifecycleScope.launch{
+
+            databaseViewModel.residentRequestFlow.collect{
+                when(it){
+                    is Resource.Failure ->{
+                        Toast.makeText(context,it.exception.message,Toast.LENGTH_LONG).show()
+                        binding.pbResidentRequests.visibility = View.GONE
+
+                    }
+                    is Resource.Loading ->{
+                        binding.pbResidentRequests.visibility = View.VISIBLE
+                    }
+                    is Resource.Success ->{
+                        binding.pbResidentRequests.visibility = View.GONE
+
+                        residentRequestAdapterList.addAll(it.result)
+                        residentRequestAdapter.list = residentRequestAdapterList
+
+                    }
+                    else -> {
+
+                    }
+                }
+
+            }
+
+        }
+    }
+
     private fun setupResidentRequestAdapter() {
         binding.rwResidentRequest.layoutManager = LinearLayoutManager(requireContext())
-        val residentRequestAdapter = ResidentRequestAdapter()
+        residentRequestAdapter = ResidentRequestAdapter()
         binding.rwResidentRequest.adapter = residentRequestAdapter
     }
 
@@ -123,7 +165,6 @@ class ExecutiveHomePageFragment : Fragment() {
 
                 viewModel.logout()
                 findNavController().popBackStack()
-                Log.e("kontrol", viewModel.currentUser.toString())
 
             },
             endIconClick = {

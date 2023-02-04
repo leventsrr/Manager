@@ -5,6 +5,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseUser
 import com.leventsurer.manager.data.model.ConciergeAnnouncementModel
+import com.leventsurer.manager.data.model.ConciergeDutiesModel
+import com.leventsurer.manager.data.model.ResidentsRequestModel
 import com.leventsurer.manager.data.model.Resource
 import com.leventsurer.manager.data.repository.DatabaseRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -22,13 +24,32 @@ class DatabaseViewModel @Inject constructor(
     private val _conciergeAnnouncementFlow = MutableStateFlow<Resource<ArrayList<ConciergeAnnouncementModel>>?>(null)
     val conciergeAnnouncementFlow : StateFlow<Resource<ArrayList<ConciergeAnnouncementModel>>?> = _conciergeAnnouncementFlow
 
+    private val _conciergeDutiesFlow = MutableStateFlow<Resource<ArrayList<ConciergeDutiesModel>>?>(null)
+    val conciergeDutiesFlow : StateFlow<Resource<ArrayList<ConciergeDutiesModel>>?> = _conciergeDutiesFlow
+
+    private val _residentRequestFlow = MutableStateFlow<Resource<ArrayList<ResidentsRequestModel>>?>(null)
+    val residentRequestFlow : StateFlow<Resource<ArrayList<ResidentsRequestModel>>?> = _residentRequestFlow
 
     fun getConciergeAnnouncement()= viewModelScope.launch {
         _conciergeAnnouncementFlow.value = Resource.Loading
         val result = databaseRepository.getConciergeAnnouncements()
-        Log.e("kontrol","result : $result")
+
         _conciergeAnnouncementFlow.value = result
 
+    }
+
+    fun getResidentRequests() = viewModelScope.launch {
+        _residentRequestFlow.value = Resource.Loading
+        val result = databaseRepository.getResidentsRequests()
+
+        _residentRequestFlow.value = result
+
+    }
+
+    fun getConciergeDuties() = viewModelScope.launch {
+        _conciergeDutiesFlow.value = Resource.Loading
+        val result = databaseRepository.getConciergeDuties()
+        _conciergeDutiesFlow.value = result
     }
 
 

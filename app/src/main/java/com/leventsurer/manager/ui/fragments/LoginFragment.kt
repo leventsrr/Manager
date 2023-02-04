@@ -62,7 +62,7 @@ class LoginFragment : Fragment() {
                                 val action = LoginFragmentDirections.actionLoginFragmentToExecutiveHomePage()
                                 findNavController().navigate(action)
                                 binding.pbProgressBar.visibility = View.GONE
-                                Log.e("kontrol","success")
+
                             }
 
                         }

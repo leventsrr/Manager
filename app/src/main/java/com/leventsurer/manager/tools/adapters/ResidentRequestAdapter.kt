@@ -3,6 +3,8 @@ package com.leventsurer.manager.tools.adapters
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.leventsurer.manager.data.model.ConciergeAnnouncementModel
+import com.leventsurer.manager.data.model.ResidentsRequestModel
 import com.leventsurer.manager.databinding.ResidentRequestRawBinding
 
 class ResidentRequestAdapter : RecyclerView.Adapter<ResidentRequestAdapter.ResidentRequestHolder>() {
@@ -13,7 +15,7 @@ class ResidentRequestAdapter : RecyclerView.Adapter<ResidentRequestAdapter.Resid
 
     }
 
-    var list = ArrayList<String>()
+    var list = ArrayList<ResidentsRequestModel>()
         set(value) {
             field = value
             notifyDataSetChanged()
@@ -29,12 +31,14 @@ class ResidentRequestAdapter : RecyclerView.Adapter<ResidentRequestAdapter.Resid
     //Bağlanma olduktan sonra ne olacak
     override fun onBindViewHolder(holder: ResidentRequestHolder, position: Int) {
         holder.binding.apply {
-            twResidentRequest.text = "Parkı artık bakıma alın!!"
+            val currentItem: ResidentsRequestModel = list[position]
+            twResidentRequest.text = currentItem.request
+
         }
     }
 
     //Kaç tane olacak
     override fun getItemCount(): Int {
-        return 4
+        return list.size
     }
 }

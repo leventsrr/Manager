@@ -126,7 +126,7 @@
 
                 <ProgressBar
                     android:layout_gravity="center"
-                    android:id="@+id/rw"
+                    android:id="@+id/pbConciergeAnnouncement"
                     android:layout_width="50dp"
                     android:layout_height="50dp" />
 
@@ -175,7 +175,12 @@
 
 
                 </com.google.android.material.card.MaterialCardView>
-                -->
+
+                <ProgressBar
+                    android:id="@+id/pbResidentRequests"
+                    android:layout_gravity="center"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp" />
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>
 
