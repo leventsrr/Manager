@@ -36,9 +36,9 @@ class IncomeExpenseAdapter : RecyclerView.Adapter<IncomeExpenseAdapter.IncomeExp
             val currentItem = list[position]
             textViewIncomeExpenseName.text = currentItem.eventName
             Log.e("kontrol",currentItem.isExpense.toString())
-            if (currentItem.isExpense) {
+            if (currentItem.isExpense)
                 iwArrowImage.setImageResource(R.drawable.ic_baseline_expense_arrow)
-            }else{
+            else{
                 iwArrowImage.setImageResource(R.drawable.ic_outline_income_arrow)
             }
 

@@ -1,7 +1,8 @@
 package com.leventsurer.manager.data.model
 
 data class ConciergeDutiesModel(
-    val name:String,
-    val isDone: Boolean
+    val assignmentDate:String = "",
+    val duty:String = "",
+    @field:JvmField val isDone: Boolean = false
 )
 

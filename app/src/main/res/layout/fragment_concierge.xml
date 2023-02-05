@@ -26,14 +26,15 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:orientation="vertical">
 
 
                 <com.google.android.material.card.MaterialCardView
 
                     android:layout_width="match_parent"
-                    android:layout_height="300dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
                     app:cardCornerRadius="10dp"
                     android:layout_marginBottom="10dp"
                     android:elevation="5dp"
@@ -79,10 +80,16 @@
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
 
+                <ProgressBar
+                    android:id="@+id/pbDutiesDo"
+                    android:layout_gravity="center"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp" />
                 <com.google.android.material.card.MaterialCardView
 
                     android:layout_width="match_parent"
-                    android:layout_height="300dp"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
                     app:cardCornerRadius="10dp"
                     android:elevation="5dp"
                     android:layout_marginTop="20dp"
@@ -127,6 +134,12 @@
                             android:layout_margin="10dp" />
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
+
+                <ProgressBar
+                    android:layout_gravity="center"
+                    android:id="@+id/pbDutiesDone"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp" />
             </LinearLayout>
         </androidx.core.widget.NestedScrollView>
 
