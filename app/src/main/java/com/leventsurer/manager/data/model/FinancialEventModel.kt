@@ -1,11 +1,9 @@
 package com.leventsurer.manager.data.model
 
-import java.util.Date
-
 data class FinancialEventModel(
-    val amount:Double,
-    val date:Date,
-    val isExpense:Boolean,
-    val name:String,
+    val amount:String = "",
+    val date:String = "",
+    val eventName:String = "",
+    @field:JvmField val isExpense:Boolean = false,
 )
 

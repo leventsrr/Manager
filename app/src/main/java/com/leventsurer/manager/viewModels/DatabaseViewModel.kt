@@ -4,10 +4,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseUser
-import com.leventsurer.manager.data.model.ConciergeAnnouncementModel
-import com.leventsurer.manager.data.model.ConciergeDutiesModel
-import com.leventsurer.manager.data.model.ResidentsRequestModel
-import com.leventsurer.manager.data.model.Resource
+import com.leventsurer.manager.data.model.*
 import com.leventsurer.manager.data.repository.DatabaseRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -29,6 +26,15 @@ class DatabaseViewModel @Inject constructor(
 
     private val _residentRequestFlow = MutableStateFlow<Resource<ArrayList<ResidentsRequestModel>>?>(null)
     val residentRequestFlow : StateFlow<Resource<ArrayList<ResidentsRequestModel>>?> = _residentRequestFlow
+
+    private val _financialEventsFlow = MutableStateFlow<Resource<ArrayList<FinancialEventModel>>?>(null)
+    val financialEventsFlow : StateFlow<Resource<ArrayList<FinancialEventModel>>?> = _financialEventsFlow
+
+    fun getFinancialEvents()= viewModelScope.launch {
+        _financialEventsFlow.value = Resource.Loading
+        val result = databaseRepository.getRecentFinancialEvents()
+        _financialEventsFlow.value = result
+    }
 
     fun getConciergeAnnouncement()= viewModelScope.launch {
         _conciergeAnnouncementFlow.value = Resource.Loading

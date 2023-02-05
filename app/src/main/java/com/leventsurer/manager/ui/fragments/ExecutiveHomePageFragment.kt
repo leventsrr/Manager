@@ -13,10 +13,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.leventsurer.manager.MainActivity
 import com.leventsurer.manager.R
-import com.leventsurer.manager.data.model.ConciergeAnnouncementModel
-import com.leventsurer.manager.data.model.ConciergeDutiesModel
-import com.leventsurer.manager.data.model.ResidentsRequestModel
-import com.leventsurer.manager.data.model.Resource
+import com.leventsurer.manager.data.model.*
 import com.leventsurer.manager.databinding.FragmentExecutiveHomePageBinding
 import com.leventsurer.manager.tools.adapters.ConciergeAnnouncementAdapter
 import com.leventsurer.manager.tools.adapters.IncomeExpenseAdapter
@@ -36,9 +33,11 @@ class ExecutiveHomePageFragment : Fragment() {
 
     private val conciergeAnnouncementsAdapterList = ArrayList<ConciergeAnnouncementModel>()
     private val residentRequestAdapterList = ArrayList<ResidentsRequestModel>()
+    private val financialEventAdapterList = ArrayList<FinancialEventModel>()
     //Adapters
     private lateinit var conciergeAnnouncementAdapter : ConciergeAnnouncementAdapter
     private lateinit var residentRequestAdapter: ResidentRequestAdapter
+    private lateinit var financialEventAdapter: IncomeExpenseAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -57,12 +56,14 @@ class ExecutiveHomePageFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupUi()
-        setupIncomeExpenseAdapter()
+
         setupConciergeAnnouncementAdapter()
         setupResidentRequestAdapter()
         getConciergeAnnouncement()
         getResidentRequests()
+        getFinancialEvents()
 
+        setupIncomeExpenseAdapter()
     }
 
     private fun getConciergeAnnouncement() {
@@ -135,6 +136,42 @@ class ExecutiveHomePageFragment : Fragment() {
         }
     }
 
+    private fun getFinancialEvents(){
+        databaseViewModel.getFinancialEvents()
+        observeFinancialEventFlow()
+    }
+
+    private fun observeFinancialEventFlow() {
+        viewLifecycleOwner.lifecycleScope.launch{
+
+            databaseViewModel.financialEventsFlow.collect{
+                when(it){
+                    is Resource.Failure ->{
+                        Toast.makeText(context,it.exception.message,Toast.LENGTH_LONG).show()
+                        binding.pbFinancialEvents.visibility = View.GONE
+
+                    }
+                    is Resource.Loading ->{
+                        binding.pbFinancialEvents.visibility = View.VISIBLE
+                    }
+                    is Resource.Success ->{
+                        binding.pbFinancialEvents.visibility = View.GONE
+
+                        financialEventAdapterList.addAll(it.result)
+                        Log.e("kontrol",financialEventAdapterList.toString())
+                        financialEventAdapter.list = financialEventAdapterList
+
+                    }
+                    else -> {
+
+                    }
+                }
+
+            }
+
+        }
+    }
+
     private fun setupResidentRequestAdapter() {
         binding.rwResidentRequest.layoutManager = LinearLayoutManager(requireContext())
         residentRequestAdapter = ResidentRequestAdapter()
@@ -149,8 +186,8 @@ class ExecutiveHomePageFragment : Fragment() {
 
     private fun setupIncomeExpenseAdapter() {
         binding.rwIncomeExpense.layoutManager = LinearLayoutManager(requireContext())
-        val incomeExpenseAdapter = IncomeExpenseAdapter()
-        binding.rwIncomeExpense.adapter = incomeExpenseAdapter
+        financialEventAdapter = IncomeExpenseAdapter()
+        binding.rwIncomeExpense.adapter = financialEventAdapter
     }
 
     private fun setupUi() {

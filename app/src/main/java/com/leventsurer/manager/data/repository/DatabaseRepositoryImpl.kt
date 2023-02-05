@@ -6,6 +6,7 @@ import com.leventsurer.manager.data.model.*
 import com.leventsurer.manager.tools.constants.FirebaseConstants.APARTMENT_COLLECTIONS
 import com.leventsurer.manager.tools.constants.FirebaseConstants.CONCIERGE_ANNOUNCEMENT
 import com.leventsurer.manager.tools.constants.FirebaseConstants.DUTIES
+import com.leventsurer.manager.tools.constants.FirebaseConstants.FINANCIAL_EVENTS
 import com.leventsurer.manager.tools.constants.FirebaseConstants.RESIDENT_REQUESTS
 
 import kotlinx.coroutines.tasks.await
@@ -48,8 +49,20 @@ class DatabaseRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getRecentFinancialEvents(): ArrayList<FinancialEventModel> {
-        TODO("Not yet implemented")
+    override suspend fun getRecentFinancialEvents(): Resource<ArrayList<FinancialEventModel>> {
+        return try {
+            val financialEvents = arrayListOf<FinancialEventModel>()
+            val result:QuerySnapshot = database.collection(APARTMENT_COLLECTIONS).document("mrpLL3uhAi35Kl4lSohj").collection(
+                FINANCIAL_EVENTS
+            ).get().await()
+
+            for (document in result){
+                financialEvents.add(document.toObject(FinancialEventModel::class.java))
+            }
+            Resource.Success(financialEvents)
+        }catch (e:Exception){
+            Resource.Failure(e)
+        }
     }
 
     override suspend fun getResidentsRequests(): Resource<ArrayList<ResidentsRequestModel>> {

@@ -1,8 +1,11 @@
 package com.leventsurer.manager.tools.adapters
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.leventsurer.manager.R
+import com.leventsurer.manager.data.model.FinancialEventModel
 import com.leventsurer.manager.databinding.IncomeExpenseRowBinding
 
 
@@ -14,7 +17,7 @@ class IncomeExpenseAdapter : RecyclerView.Adapter<IncomeExpenseAdapter.IncomeExp
 
     }
 
-    var list = ArrayList<String>()
+    var list = ArrayList<FinancialEventModel>()
         set(value) {
             field = value
             notifyDataSetChanged()
@@ -30,12 +33,20 @@ class IncomeExpenseAdapter : RecyclerView.Adapter<IncomeExpenseAdapter.IncomeExp
     //Bağlanma olduktan sonra ne olacak
     override fun onBindViewHolder(holder: IncomeExpenseHolder, position: Int) {
         holder.binding.apply {
-            textViewIncomeExpenseName.text = "Şunun bunun aidatı"
+            val currentItem = list[position]
+            textViewIncomeExpenseName.text = currentItem.eventName
+            Log.e("kontrol",currentItem.isExpense.toString())
+            if (currentItem.isExpense) {
+                iwArrowImage.setImageResource(R.drawable.ic_baseline_expense_arrow)
+            }else{
+                iwArrowImage.setImageResource(R.drawable.ic_outline_income_arrow)
+            }
+
         }
     }
 
     //Kaç tane olacak
     override fun getItemCount(): Int {
-        return 4
+        return list.size
     }
 }

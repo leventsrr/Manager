@@ -75,6 +75,11 @@
 
                 </com.google.android.material.card.MaterialCardView>
 
+                <ProgressBar
+                    android:id="@+id/pbFinancialEvents"
+                    android:layout_gravity="center"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp" />
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/secondSection"
                     android:layout_width="match_parent"
