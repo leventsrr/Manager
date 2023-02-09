@@ -8,6 +8,7 @@ import com.leventsurer.manager.tools.constants.FirebaseConstants.CONCIERGE_ANNOU
 import com.leventsurer.manager.tools.constants.FirebaseConstants.DUTIES
 import com.leventsurer.manager.tools.constants.FirebaseConstants.FINANCIAL_EVENTS
 import com.leventsurer.manager.tools.constants.FirebaseConstants.RESIDENT_REQUESTS
+import com.leventsurer.manager.tools.constants.FirebaseConstants.USER_COLLECTION
 
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
@@ -97,5 +98,23 @@ class DatabaseRepositoryImpl @Inject constructor(
                  Log.d("kontrol","get failed with ", exception)
              }*/
         TODO()
+    }
+
+    override suspend fun addNewUser(
+        name: String,
+        apartmentCode: String,
+        carPlate: String,
+        doorNumber: String,
+        role: String
+    ) {
+        val user = hashMapOf(
+            "carPlate" to carPlate,
+            "doorNumber" to doorNumber,
+            "duesPaymentStatus" to false,
+            "fullName" to name,
+            "phoneNumber" to "",
+            "role" to role
+        )
+        database.collection(APARTMENT_COLLECTIONS).document("mrpLL3uhAi35Kl4lSohj").collection(USER_COLLECTION).add(user)
     }
 }

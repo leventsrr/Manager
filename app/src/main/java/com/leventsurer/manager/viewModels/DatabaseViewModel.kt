@@ -58,5 +58,7 @@ class DatabaseViewModel @Inject constructor(
         _conciergeDutiesFlow.value = result
     }
 
-
+    fun addNewUser(name:String,apartmentCode:String,carPlate:String,doorNumber:String,role:String) = viewModelScope.launch {
+        databaseRepository.addNewUser(name, apartmentCode, carPlate , doorNumber,role)
+    }
 }

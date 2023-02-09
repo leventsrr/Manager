@@ -11,6 +11,8 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.leventsurer.manager.MainActivity
 import com.leventsurer.manager.R
 import com.leventsurer.manager.data.model.Resource
@@ -74,17 +76,21 @@ class LoginFragment : Fragment() {
 
         }
     }
-
     private fun onClickHandler() {
         binding.apply {
             buttonNavigateSignUp.setOnClickListener {
-
+                val action = LoginFragmentDirections.actionLoginFragmentToSignupFragment()
+                findNavController().navigate(action)
             }
             buttonLogin.setOnClickListener {
                 val email:String = twUserEmail.text.toString()
                 val password:String = twUserPassword.text.toString()
                 viewModel.login(email,password)
                 observeFlow()
+            }
+
+            iwSignInWithGoogle.setOnClickListener {
+
             }
         }
     }

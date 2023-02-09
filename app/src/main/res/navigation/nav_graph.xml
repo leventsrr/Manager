@@ -20,7 +20,11 @@
     <fragment
         android:id="@+id/signupFragment"
         android:name="com.leventsurer.manager.ui.fragments.SignupFragment"
-        android:label="SignupFragment" />
+        android:label="SignupFragment" >
+        <action
+            android:id="@+id/action_signupFragment_to_executiveHomePage"
+            app:destination="@id/executiveHomePage" />
+    </fragment>
     <fragment
         android:id="@+id/executiveHomePage"
         android:name="com.leventsurer.manager.ui.fragments.ExecutiveHomePageFragment"

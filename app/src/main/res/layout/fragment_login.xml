@@ -17,6 +17,7 @@
         <!-- TODO: Update blank fragment layout -->
 
         <ImageView
+            android:id="@+id/iwSignInWithGoogle"
             android:layout_width="246dp"
             android:layout_height="209dp"
             android:layout_marginTop="7dp"

@@ -1,26 +1,30 @@
 package com.leventsurer.manager.ui.fragments
 
-import android.content.ContentValues.TAG
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.ktx.Firebase
 import com.leventsurer.manager.MainActivity
 import com.leventsurer.manager.R
+import com.leventsurer.manager.data.model.Resource
 import com.leventsurer.manager.databinding.FragmentSignupBinding
-
+import com.leventsurer.manager.viewModels.AuthViewModel
+import com.leventsurer.manager.viewModels.DatabaseViewModel
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
+@AndroidEntryPoint
 class SignupFragment : Fragment() {
     private var _binding: FragmentSignupBinding? = null
     private val binding: FragmentSignupBinding get() = _binding!!
-    private lateinit var auth: FirebaseAuth
-
+    private val authViewModel by viewModels<AuthViewModel>()
+    private val databaseViewModel by viewModels<DatabaseViewModel>()
+    private lateinit var newUserRole:String
+    private var isRoleSelected:Boolean = false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -40,6 +44,40 @@ class SignupFragment : Fragment() {
         (requireActivity() as MainActivity).hideBottomNavigation()
     }
 
+    private fun observeSignUpFlow() {
+        viewLifecycleOwner.lifecycleScope.launch{
+            authViewModel.signupFlow.collect{
+                when(it){
+                    is Resource.Failure ->{
+                        Toast.makeText(context,it.exception.message,Toast.LENGTH_LONG).show()
+                        binding.pbProgressBar.visibility = View.GONE
+
+                    }
+                    is Resource.Loading ->{
+                        binding.pbProgressBar.visibility = View.VISIBLE
+                    }
+                    is Resource.Success ->{
+                        if(findNavController().currentDestination?.id == R.id.signupFragment){
+                            val action = SignupFragmentDirections.actionSignupFragmentToExecutiveHomePage()
+                            findNavController().navigate(action)
+                            binding.pbProgressBar.visibility = View.GONE
+
+                        }
+
+                    }
+                    else -> {
+
+                    }
+                }
+            }
+
+        }
+    }
+    private fun signUp(name:String,email:String,password:String,apartmentCode:String,role:String,doorNumber:String,carPlate:String){
+        authViewModel.signup(name,email,password)
+        databaseViewModel.addNewUser(name,apartmentCode,carPlate,doorNumber,role)
+        observeSignUpFlow()
+    }
     private fun onClickHandler() {
         binding.apply {
             buttonNavigateLogin.setOnClickListener {
@@ -47,35 +85,44 @@ class SignupFragment : Fragment() {
             }
 
             buttonSignup.setOnClickListener {
-                signUpWithEmailAndPassword(newUserMail.text.toString(),newUserPassword.text.toString())
+                val userName = etNewUserName.text.toString()
+                val userEmail = etNewUserMail.text.toString()
+                val userPassword = etNewUserPassword.text.toString()
+                val userCarPlate = etCarPlate.text.toString()
+                val userDoorNumber = etDoorNumber.text.toString()
+                val apartmentCode = etApartmentCode.text.toString()
 
+                if(isRoleSelected){
+                    signUp(userName,userEmail,userPassword,apartmentCode,newUserRole,userDoorNumber, userCarPlate)
+                }else{
+                    Toast.makeText(context,"Rol Seçimi Yapmak Zorunludur.",Toast.LENGTH_LONG).show()
+                }
+
+            }
+            toggleButton.addOnButtonCheckedListener { toggleButton, checkedId, isChecked ->
+                if(isChecked){
+                    when(checkedId){
+                        R.id.button1 -> {
+                            newUserRole = "yonetici"
+                            isRoleSelected= true
+                        }
+                        R.id.button2 -> {
+                            newUserRole = "sakin"
+                            isRoleSelected = true
+                        }
+                        R.id.button3 -> {
+                            newUserRole = "kapici"
+                            isRoleSelected = true
+                        }
+                    }
+                }else{
+                    isRoleSelected = false
+                }
             }
         }
     }
 
 
-    private fun signUpWithEmailAndPassword(email:String,password:String){
-        auth = Firebase.auth
-
-        auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener {
-            if (it.isSuccessful) {
-                // Sign in success, update UI with the signed-in user's information
-                Log.d(TAG, "createUserWithEmail:success")
-                val user = auth.currentUser
-                //updateUI(user)
-            } else {
-                // If sign in fails, display a message to the user.
-                Log.w(TAG, "createUserWithEmail:failure", it.exception)
-                Toast.makeText(requireContext(), "Authentication failed.",
-                    Toast.LENGTH_SHORT).show()
-                //updateUI(null)
-            }
-        }
-
-
-
-
-    }
 
 
 }

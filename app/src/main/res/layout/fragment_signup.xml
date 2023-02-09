@@ -17,6 +17,7 @@
         <!-- TODO: Update blank fragment layout -->
 
         <ImageView
+            android:id="@+id/iwSignUpButton"
             android:layout_width="246dp"
             android:layout_height="209dp"
             android:layout_marginTop="7dp"
@@ -50,7 +51,7 @@
                     android:layout_height="wrap_content"
 
                     android:layout_marginStart="135dp"
-                    android:layout_marginTop="16dp"
+                    android:layout_marginTop="4dp"
                     android:layout_marginEnd="135dp"
                     android:fontFamily="@font/titillium_web_bold"
                     android:text="Yeni Kayıt"
@@ -64,17 +65,17 @@
                     android:id="@+id/textInputLayout"
                     android:layout_width="300dp"
                     android:layout_height="50dp"
-                    android:layout_marginStart="46dp"
-                    android:layout_marginTop="50dp"
-                    android:layout_marginEnd="65dp"
-                    app:boxBackgroundColor="@color/white"
+                    android:layout_marginStart="55dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="51dp"
                     android:hint="E-posta Adresiniz"
+                    app:boxBackgroundColor="@color/white"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/textView">
 
                     <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/newUserMail"
+                        android:id="@+id/etNewUserMail"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent" />
                 </com.google.android.material.textfield.TextInputLayout>
@@ -83,9 +84,9 @@
                     android:id="@+id/textInputLayout2"
                     android:layout_width="300dp"
                     android:layout_height="50dp"
-                    android:layout_marginStart="46dp"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginEnd="65dp"
+                    android:layout_marginStart="55dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginEnd="51dp"
                     android:hint="Şifreniz"
                     app:boxBackgroundColor="@color/white"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -94,7 +95,7 @@
                     app:passwordToggleEnabled="true">
 
                     <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/newUserPassword"
+                        android:id="@+id/etNewUserPassword"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent" />
                 </com.google.android.material.textfield.TextInputLayout>
@@ -103,70 +104,137 @@
                     android:id="@+id/textInputLayout3"
                     android:layout_width="300dp"
                     android:layout_height="50dp"
-                    android:layout_marginStart="46dp"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginEnd="65dp"
-                    android:hint="Şifreniz"
+                    android:layout_marginStart="55dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginEnd="51dp"
+                    android:hint="İsminiz"
                     app:boxBackgroundColor="@color/white"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textInputLayout2"
-                    app:passwordToggleEnabled="true">
+                    app:layout_constraintTop_toBottomOf="@+id/textInputLayout2">
 
                     <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/newUserPasswordAgain"
+                        android:id="@+id/etNewUserName"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent" />
                 </com.google.android.material.textfield.TextInputLayout>
 
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/textInputLayout4"
+                    android:layout_width="300dp"
+                    android:layout_height="50dp"
+                    android:layout_marginStart="55dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="51dp"
+                    android:hint="Apartman Kodu"
+                    app:boxBackgroundColor="@color/white"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textInputLayout3">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etApartmentCode"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/textInputLayout5"
+                    android:layout_width="150dp"
+                    android:layout_height="50dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="51dp"
+                    android:hint="Kapı Numarası"
+                    app:boxBackgroundColor="@color/white"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textInputLayout4">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etDoorNumber"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/textInputLayout6"
+                    android:layout_width="150dp"
+                    android:layout_height="50dp"
+                    android:layout_marginStart="55dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="5dp"
+                    android:hint="Plaka"
+                    app:boxBackgroundColor="@color/white"
+                    app:layout_constraintEnd_toStartOf="@+id/textInputLayout5"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textInputLayout4">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etCarPlate"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+
+                <com.google.android.material.button.MaterialButtonToggleGroup
+                    android:id="@+id/toggleButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    app:layout_constraintBottom_toTopOf="@+id/buttonSignup"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textInputLayout6"
+                    app:singleSelection="true">
+
+                    <Button
+                        android:id="@+id/button1"
+                        style="?attr/materialButtonOutlinedStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Yönetici" />
+
+                    <Button
+                        android:id="@+id/button2"
+                        style="?attr/materialButtonOutlinedStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Apartman Sakini" />
+
+                    <Button
+                        android:id="@+id/button3"
+                        style="?attr/materialButtonOutlinedStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Kapıcı" />
+                </com.google.android.material.button.MaterialButtonToggleGroup>
 
                 <Button
                     android:id="@+id/buttonSignup"
                     android:layout_width="200dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="106dp"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginEnd="106dp"
+                    android:layout_marginTop="10dp"
                     android:backgroundTint="@color/secondColor"
                     android:text="Kayıt Ol"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="1.0"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
+                    app:layout_constraintTop_toBottomOf="@+id/toggleButton" />
 
-                <LinearLayout
-                    android:id="@+id/linearLayout"
 
-                    android:layout_width="200dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:gravity="center"
-                    android:orientation="horizontal"
-                    app:layout_constraintBottom_toTopOf="@+id/uttonSignup"
+                <ProgressBar
+                    android:id="@+id/pbProgressBar"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_marginStart="12dp"
+
+                    android:layout_marginTop="15dp"
+                    android:layout_marginEnd="53dp"
+                    android:visibility="gone"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textInputLayout3">
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:fontFamily="@font/titillium_web_bold"
-                        android:gravity="center"
-                        android:text="Daire Sakini" />
-
-                    <com.google.android.material.divider.MaterialDivider
-                        android:layout_width="1dp"
-                        android:layout_height="match_parent" />
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:fontFamily="@font/titillium_web_bold"
-                        android:gravity="center"
-                        android:text="Yönetici" />
-                </LinearLayout>
+                    app:layout_constraintStart_toEndOf="@+id/buttonSignup"
+                    app:layout_constraintTop_toBottomOf="@+id/toggleButton" />
 
                 <TextView
                     android:layout_width="wrap_content"

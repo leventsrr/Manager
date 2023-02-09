@@ -7,4 +7,6 @@ object FirebaseConstants {
     val DUTIES = "conciergeDuties"
     val RESIDENT_REQUESTS = "residentsRequest"
     val FINANCIAL_EVENTS = "recentFinancialEvents"
+    val USER_COLLECTION = "users"
+
 }
