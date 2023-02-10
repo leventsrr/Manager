@@ -158,7 +158,6 @@ class ExecutiveHomePageFragment : Fragment() {
                         binding.pbFinancialEvents.visibility = View.GONE
 
                         financialEventAdapterList.addAll(it.result)
-                        Log.e("kontrol",financialEventAdapterList.toString())
                         financialEventAdapter.list = financialEventAdapterList
 
                     }

@@ -58,6 +58,7 @@ class SignupFragment : Fragment() {
                     }
                     is Resource.Success ->{
                         if(findNavController().currentDestination?.id == R.id.signupFragment){
+
                             val action = SignupFragmentDirections.actionSignupFragmentToExecutiveHomePage()
                             findNavController().navigate(action)
                             binding.pbProgressBar.visibility = View.GONE
@@ -75,7 +76,12 @@ class SignupFragment : Fragment() {
     }
     private fun signUp(name:String,email:String,password:String,apartmentCode:String,role:String,doorNumber:String,carPlate:String){
         authViewModel.signup(name,email,password)
-        databaseViewModel.addNewUser(name,apartmentCode,carPlate,doorNumber,role)
+        if(newUserRole == "yonetici"){
+            databaseViewModel.addNewApartment(name,apartmentCode,carPlate,doorNumber,role,apartmentCode)
+        }else{
+            databaseViewModel.addNewUser(name,apartmentCode,carPlate,doorNumber,role)
+        }
+
         observeSignUpFlow()
     }
     private fun onClickHandler() {
@@ -105,6 +111,7 @@ class SignupFragment : Fragment() {
                         R.id.button1 -> {
                             newUserRole = "yonetici"
                             isRoleSelected= true
+
                         }
                         R.id.button2 -> {
                             newUserRole = "sakin"

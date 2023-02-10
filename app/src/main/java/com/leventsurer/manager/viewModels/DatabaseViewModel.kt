@@ -61,4 +61,12 @@ class DatabaseViewModel @Inject constructor(
     fun addNewUser(name:String,apartmentCode:String,carPlate:String,doorNumber:String,role:String) = viewModelScope.launch {
         databaseRepository.addNewUser(name, apartmentCode, carPlate , doorNumber,role)
     }
+
+    fun addNewApartment(name: String,
+                        apartmentCode: String,
+                        carPlate: String,
+                        doorNumber: String,
+                        role: String, apartmentName: String) = viewModelScope.launch {
+        databaseRepository.addNewApartment(name,apartmentCode,carPlate,doorNumber, role, apartmentName)
+    }
 }
