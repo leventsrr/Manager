@@ -118,12 +118,20 @@ class DatabaseRepositoryImpl @Inject constructor(
 
         val apartmentsCollection:QuerySnapshot = database.collection(APARTMENT_COLLECTIONS).get().await()
         var documentPath = ""
+
+
         for(apartmentDocument:DocumentSnapshot in apartmentsCollection){
             if(apartmentDocument.data?.get("apartmentName") as String == apartmentCode){
                 documentPath = apartmentDocument.reference.path
+                Log.e("kontrol",documentPath)
+                database.document("/$documentPath").collection(USER_COLLECTION).add(user)
+                break
+            }else{
+                documentPath = "apartmets"
+                database.document("/$documentPath").collection(USER_COLLECTION).add(user)
             }
         }
-        database.document("/$documentPath").collection(USER_COLLECTION).add(user)
+        //database.document("/$documentPath").collection(USER_COLLECTION).add(user)
 
     }
 
