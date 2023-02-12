@@ -14,6 +14,7 @@ import com.leventsurer.manager.R
 import com.leventsurer.manager.data.model.Resource
 import com.leventsurer.manager.databinding.FragmentSignupBinding
 import com.leventsurer.manager.viewModels.AuthViewModel
+import com.leventsurer.manager.viewModels.DataStoreViewModel
 import com.leventsurer.manager.viewModels.DatabaseViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -23,6 +24,7 @@ class SignupFragment : Fragment() {
     private val binding: FragmentSignupBinding get() = _binding!!
     private val authViewModel by viewModels<AuthViewModel>()
     private val databaseViewModel by viewModels<DatabaseViewModel>()
+    private val dataStoreViewModel by viewModels<DataStoreViewModel>()
     private lateinit var newUserRole:String
     private var isRoleSelected:Boolean = false
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -58,7 +60,7 @@ class SignupFragment : Fragment() {
                     }
                     is Resource.Success ->{
                         if(findNavController().currentDestination?.id == R.id.signupFragment){
-
+                            writeDataStore()
                             val action = SignupFragmentDirections.actionSignupFragmentToExecutiveHomePage()
                             findNavController().navigate(action)
                             binding.pbProgressBar.visibility = View.GONE
@@ -84,6 +86,14 @@ class SignupFragment : Fragment() {
 
         observeSignUpFlow()
     }
+
+    private fun writeDataStore(){
+        dataStoreViewModel.storeUserName(authViewModel.currentUser!!.displayName!!)
+        dataStoreViewModel.storeApartmentCode(binding.etApartmentCode.text.toString())
+        dataStoreViewModel.storeIsLogin(true)
+
+    }
+
     private fun onClickHandler() {
         binding.apply {
             buttonNavigateLogin.setOnClickListener {

@@ -65,11 +65,9 @@
                     android:id="@+id/textInputLayout"
                     android:layout_width="300dp"
                     android:layout_height="50dp"
-                    android:layout_marginStart="46dp"
-                    android:layout_marginTop="50dp"
-                    android:layout_marginEnd="65dp"
-                    app:boxBackgroundColor="@color/white"
+                    android:layout_marginTop="30dp"
                     android:hint="E-posta Adresiniz"
+                    app:boxBackgroundColor="@color/white"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/textView">
@@ -84,9 +82,7 @@
                     android:id="@+id/textInputLayout2"
                     android:layout_width="300dp"
                     android:layout_height="50dp"
-                    android:layout_marginStart="46dp"
                     android:layout_marginTop="20dp"
-                    android:layout_marginEnd="65dp"
                     android:hint="Şifreniz"
                     app:boxBackgroundColor="@color/white"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -96,6 +92,23 @@
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/twUserPassword"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/textInputLayout3"
+                    android:layout_width="300dp"
+                    android:layout_height="50dp"
+                    android:layout_marginTop="20dp"
+                    android:hint="Apartman Kodu"
+                    app:boxBackgroundColor="@color/white"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textInputLayout2">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/twUserApartmentName"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent" />
                 </com.google.android.material.textfield.TextInputLayout>
@@ -111,28 +124,27 @@
                     android:text="Giriş Yap"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textInputLayout2" >
+                    app:layout_constraintTop_toBottomOf="@+id/textInputLayout3">
 
                 </Button>
 
 
                 <ProgressBar
                     android:id="@+id/pbProgressBar"
-                    android:visibility="invisible"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
-                    android:layout_marginStart="181dp"
-                    android:layout_marginEnd="190dp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/buttonLogin" />
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="20dp"
+                    android:visibility="invisible"
+                    app:layout_constraintStart_toEndOf="@+id/buttonLogin"
+                    app:layout_constraintTop_toBottomOf="@+id/textInputLayout3" />
 
                 <TextView
                     android:id="@+id/textView2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="131dp"
-                    android:layout_marginTop="50dp"
+                    android:layout_marginTop="20dp"
                     android:layout_marginEnd="130dp"
                     android:text="veya Google ile giriş yap"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -146,7 +158,7 @@
 
                     android:layout_height="40dp"
                     android:layout_marginStart="181dp"
-                    android:layout_marginTop="20dp"
+                    android:layout_marginTop="5dp"
                     android:layout_marginEnd="181dp"
                     android:foregroundGravity="center"
                     app:cardBackgroundColor="@color/red"
@@ -160,8 +172,8 @@
                         android:layout_width="16dp"
                         android:layout_height="30dp"
                         android:layout_gravity="center"
-                        android:text="G"
                         android:gravity="center"
+                        android:text="G"
                         android:textColor="@color/white"
                         android:textSize="20sp" />
 

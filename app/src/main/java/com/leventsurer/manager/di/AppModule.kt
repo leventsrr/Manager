@@ -1,15 +1,14 @@
 package com.leventsurer.manager.di
 
+import android.content.Context
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.firestore.FirebaseFirestore
-import com.leventsurer.manager.data.repository.AuthRepository
-import com.leventsurer.manager.data.repository.AuthRepositoryImpl
-import com.leventsurer.manager.data.repository.DatabaseRepository
-import com.leventsurer.manager.data.repository.DatabaseRepositoryImpl
+import com.leventsurer.manager.data.repository.*
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
@@ -17,14 +16,14 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 @Module
 class AppModule {
-
+    //Auth module
     @Provides
     fun provideFirebaseAuth(): FirebaseAuth =FirebaseAuth.getInstance()
 
     @Provides
     fun provideAuthRepository(impl: AuthRepositoryImpl) : AuthRepository = impl
 
-
+    //Firestore module
     @Singleton
     @Provides
     fun provideDatabaseRepository(impl: DatabaseRepositoryImpl) : DatabaseRepository = impl
@@ -46,5 +45,11 @@ class AppModule {
     fun provideFirebaseStroageInstance(): StorageReference {
         return FirebaseStorage.getInstance().getReference(FirebaseStorageConstants.ROOT_DIRECTORY)
     }*/
+
+    @Singleton
+    @Provides
+    fun provideDataStoreRepository(
+        @ApplicationContext context: Context
+    ):DataStoreRepository = DataStoreRepositoryImpl(context)
 
 }

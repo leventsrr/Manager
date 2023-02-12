@@ -20,6 +20,7 @@ import com.leventsurer.manager.tools.adapters.IncomeExpenseAdapter
 import com.leventsurer.manager.tools.adapters.ResidentRequestAdapter
 import com.leventsurer.manager.tools.helpers.HeaderHelper
 import com.leventsurer.manager.viewModels.AuthViewModel
+import com.leventsurer.manager.viewModels.DataStoreViewModel
 import com.leventsurer.manager.viewModels.DatabaseViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -30,6 +31,7 @@ class ExecutiveHomePageFragment : Fragment() {
     private val binding: FragmentExecutiveHomePageBinding get() = _binding!!
     private val viewModel by viewModels<AuthViewModel>()
     private val databaseViewModel by viewModels<DatabaseViewModel>()
+    private val dataStoreViewModel by viewModels<DataStoreViewModel>()
 
     private val conciergeAnnouncementsAdapterList = ArrayList<ConciergeAnnouncementModel>()
     private val residentRequestAdapterList = ArrayList<ResidentsRequestModel>()
@@ -64,6 +66,7 @@ class ExecutiveHomePageFragment : Fragment() {
         getFinancialEvents()
 
         setupIncomeExpenseAdapter()
+        readDataStore()
     }
 
     private fun getConciergeAnnouncement() {
@@ -209,6 +212,18 @@ class ExecutiveHomePageFragment : Fragment() {
 
 
         (requireActivity() as MainActivity).showBottomNavigation()
+    }
+
+    private  fun readDataStore(){
+        dataStoreViewModel.getUserName()
+        val userName = dataStoreViewModel.userNameFlow.value
+        dataStoreViewModel.getApartmentCode()
+        val apartmentCode = dataStoreViewModel.apartmentCodeFlow.value
+        dataStoreViewModel.getIsLogin()
+        val isLogin = dataStoreViewModel.isLoginFlow.value
+
+
+            Log.e("kontrol","userName:$userName, apartmentCode:$apartmentCode, isLogin:$isLogin")
     }
 
 }

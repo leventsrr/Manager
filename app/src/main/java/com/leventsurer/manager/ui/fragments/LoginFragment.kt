@@ -18,7 +18,10 @@ import com.leventsurer.manager.R
 import com.leventsurer.manager.data.model.Resource
 import com.leventsurer.manager.databinding.FragmentLoginBinding
 import com.leventsurer.manager.viewModels.AuthViewModel
+import com.leventsurer.manager.viewModels.DataStoreViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -27,6 +30,8 @@ class LoginFragment : Fragment() {
     private val binding: FragmentLoginBinding get() = _binding!!
 
     private val viewModel by viewModels<AuthViewModel>()
+    private val dataStoreViewModel by viewModels<DataStoreViewModel>()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,6 +66,7 @@ class LoginFragment : Fragment() {
                         }
                         is Resource.Success ->{
                             if(findNavController().currentDestination?.id == R.id.loginFragment){
+                                writeDataStore()
                                 val action = LoginFragmentDirections.actionLoginFragmentToExecutiveHomePage()
                                 findNavController().navigate(action)
                                 binding.pbProgressBar.visibility = View.GONE
@@ -75,6 +81,13 @@ class LoginFragment : Fragment() {
                 }
 
         }
+    }
+
+    private fun writeDataStore(){
+        dataStoreViewModel.storeUserName(viewModel.currentUser!!.displayName!!)
+        dataStoreViewModel.storeApartmentCode(binding.twUserApartmentName.text.toString())
+        dataStoreViewModel.storeIsLogin(true)
+
     }
     private fun onClickHandler() {
         binding.apply {
