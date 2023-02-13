@@ -1,0 +1,56 @@
+package com.leventsurer.manager.data.repository
+
+import android.content.Context
+import android.content.SharedPreferences
+import javax.inject.Inject
+
+
+
+class SharedRepositoryImpl @Inject constructor(
+):SharedRepository {
+
+    @Inject
+    lateinit var sharedPreferences: SharedPreferences
+
+    override fun writeApartmentCode(key: String, value: String) {
+       val editor : SharedPreferences.Editor = sharedPreferences.edit()
+        editor.putString(key,value)
+        editor.apply()
+    }
+
+    override fun writeUserName(key: String, value: String) {
+        val editor : SharedPreferences.Editor = sharedPreferences.edit()
+        editor.putString(key,value)
+        editor.apply()
+    }
+
+    override fun writeIsLogin(key: String, value: Boolean) {
+        val editor : SharedPreferences.Editor = sharedPreferences.edit()
+        editor.putBoolean(key,value)
+        editor.apply()
+    }
+
+    override fun readApartmentName(key: String): String? {
+        return sharedPreferences.getString(key, "")
+    }
+
+    override fun readUserName(key: String): String? {
+        return sharedPreferences.getString(key, "")
+    }
+
+    override fun readIsLogin(key: String):Boolean? {
+        return sharedPreferences.getBoolean(key, false)
+    }
+
+    override fun removeValue(key: String) {
+        val editor:SharedPreferences.Editor = sharedPreferences.edit()
+        editor.remove(key)
+        editor.apply()
+    }
+
+    override fun clearSharedPref() {
+        val editor:SharedPreferences.Editor = sharedPreferences.edit()
+        editor.clear()
+        editor.apply()
+    }
+}

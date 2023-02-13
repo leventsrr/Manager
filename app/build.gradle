@@ -19,7 +19,7 @@ android {
 
     defaultConfig {
         applicationId "com.leventsurer.manager"
-        minSdk 21
+        minSdk 23
         targetSdk 31
         versionCode 1
         versionName "1.0"
@@ -52,6 +52,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-firestore-ktx:24.4.2'
     implementation 'com.google.firebase:firebase-storage-ktx:20.1.0'
     implementation 'com.google.android.gms:play-services-auth:20.4.1'
+    implementation 'androidx.security:security-crypto-ktx:1.1.0-alpha03'
     def nav_version = "2.3.5"
     def fragment_version = "1.3.6"
     def recycler_version = "1.2.1"

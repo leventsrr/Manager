@@ -1,10 +1,14 @@
 package com.leventsurer.manager.di
 
+import android.app.Application
 import android.content.Context
+import android.content.SharedPreferences
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.firestore.FirebaseFirestore
 import com.leventsurer.manager.data.repository.*
+import com.leventsurer.manager.tools.constants.SharedPreferencesConstants.PREFERENCES_NAME
+import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -46,10 +50,10 @@ class AppModule {
         return FirebaseStorage.getInstance().getReference(FirebaseStorageConstants.ROOT_DIRECTORY)
     }*/
 
-    @Singleton
+    //Shared Preferences
     @Provides
-    fun provideDataStoreRepository(
-        @ApplicationContext context: Context
-    ):DataStoreRepository = DataStoreRepositoryImpl(context)
-
+    @Singleton
+    fun provideSharedPreferences(
+        sharedPrefManager: SharedPrefManager
+    ): SharedPreferences = sharedPrefManager.getSharedPref()
 }

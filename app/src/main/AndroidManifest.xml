@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.leventsurer.manager">
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-sdk tools:overrideLibrary="androidx.security" />
     <application
         android:name=".MyApplication"
         android:allowBackup="true"

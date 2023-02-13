@@ -1,27 +1,21 @@
 package com.leventsurer.manager.ui.fragments
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.leventsurer.manager.MainActivity
 import com.leventsurer.manager.R
 import com.leventsurer.manager.data.model.Resource
 import com.leventsurer.manager.databinding.FragmentLoginBinding
 import com.leventsurer.manager.viewModels.AuthViewModel
-import com.leventsurer.manager.viewModels.DataStoreViewModel
+import com.leventsurer.manager.viewModels.SharedPreferencesViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -30,8 +24,7 @@ class LoginFragment : Fragment() {
     private val binding: FragmentLoginBinding get() = _binding!!
 
     private val viewModel by viewModels<AuthViewModel>()
-    private val dataStoreViewModel by viewModels<DataStoreViewModel>()
-
+    private val sharedPrefViewModel by viewModels<SharedPreferencesViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -66,7 +59,7 @@ class LoginFragment : Fragment() {
                         }
                         is Resource.Success ->{
                             if(findNavController().currentDestination?.id == R.id.loginFragment){
-                                writeDataStore()
+                                writeDataToSharedPref()
                                 val action = LoginFragmentDirections.actionLoginFragmentToExecutiveHomePage()
                                 findNavController().navigate(action)
                                 binding.pbProgressBar.visibility = View.GONE
@@ -82,13 +75,13 @@ class LoginFragment : Fragment() {
 
         }
     }
-
-    private fun writeDataStore(){
-        dataStoreViewModel.storeUserName(viewModel.currentUser!!.displayName!!)
-        dataStoreViewModel.storeApartmentCode(binding.twUserApartmentName.text.toString())
-        dataStoreViewModel.storeIsLogin(true)
-
+    private fun writeDataToSharedPref(){
+        sharedPrefViewModel.writeIsLogin(true)
+        sharedPrefViewModel.writeApartmentCode(binding.twUserApartmentName.text.toString())
+        sharedPrefViewModel.writeUserName(viewModel.currentUser?.displayName.toString())
     }
+
+
     private fun onClickHandler() {
         binding.apply {
             buttonNavigateSignUp.setOnClickListener {
