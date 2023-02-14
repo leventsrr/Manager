@@ -46,18 +46,17 @@ class ResidentsInformationFragment : Fragment() {
                 findNavController().popBackStack()
             },
             endIconClick = {
-                //test2()
+                val action = ResidentsInformationFragmentDirections.actionResidentsInformationFragmentToUserProfileFragment2()
+                findNavController().navigate(action)
             },
         )
     }
 
     private fun setupConciergeDutyToDoAdapter() {
-        binding.rwResidentsInformation.layoutManager = GridLayoutManager(requireContext(),3)
+        binding.rwResidentsInformation.layoutManager = GridLayoutManager(requireContext(), 3)
         val residentsInformationAdapter = ResidentsInformationAdapter()
         binding.rwResidentsInformation.adapter = residentsInformationAdapter
     }
-
-
 
 
 }

@@ -54,7 +54,8 @@ class WalletFragment : Fragment() {
                 findNavController().popBackStack()
             },
             endIconClick = {
-                //test2()
+                val action = WalletFragmentDirections.actionWalletFragmentToUserProfileFragment2()
+                findNavController().navigate(action)
             },
         )
     }

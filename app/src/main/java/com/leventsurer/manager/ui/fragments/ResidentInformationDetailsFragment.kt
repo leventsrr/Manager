@@ -35,8 +35,6 @@ class ResidentInformationDetailsFragment : Fragment() {
     }
 
 
-
-
     private fun setupUi() {
         HeaderHelper.customHeader(
             binding.customHeader,
@@ -49,7 +47,8 @@ class ResidentInformationDetailsFragment : Fragment() {
                 findNavController().popBackStack()
             },
             endIconClick = {
-                //test2()
+                val action = ResidentInformationDetailsFragmentDirections.actionResidentInformationDetailsFragmentToUserProfileFragment()
+                findNavController().navigate(action)
             },
         )
     }

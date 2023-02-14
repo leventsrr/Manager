@@ -28,15 +28,27 @@
     <fragment
         android:id="@+id/executiveHomePage"
         android:name="com.leventsurer.manager.ui.fragments.ExecutiveHomePageFragment"
-        android:label="ExecutiveHomePage" />
+        android:label="ExecutiveHomePage" >
+        <action
+            android:id="@+id/action_executiveHomePage_to_userProfileFragment2"
+            app:destination="@id/userProfileFragment" />
+    </fragment>
     <fragment
         android:id="@+id/walletFragment"
         android:name="com.leventsurer.manager.ui.fragments.WalletFragment"
-        android:label="WalletFragment" />
+        android:label="WalletFragment" >
+        <action
+            android:id="@+id/action_walletFragment_to_userProfileFragment2"
+            app:destination="@id/userProfileFragment" />
+    </fragment>
     <fragment
         android:id="@+id/conciergeFragment"
         android:name="com.leventsurer.manager.ui.fragments.ConciergeFragment"
-        android:label="ConciergeFragment" />
+        android:label="ConciergeFragment" >
+        <action
+            android:id="@+id/action_conciergeFragment_to_userProfileFragment2"
+            app:destination="@id/userProfileFragment" />
+    </fragment>
     <fragment
         android:id="@+id/residentsInformationFragment"
         android:name="com.leventsurer.manager.ui.fragments.ResidentsInformationFragment"
@@ -44,13 +56,28 @@
         <action
             android:id="@+id/action_residentsInformationFragment_to_residentInformationDetailsFragment"
             app:destination="@id/residentInformationDetailsFragment" />
+        <action
+            android:id="@+id/action_residentsInformationFragment_to_userProfileFragment2"
+            app:destination="@id/userProfileFragment" />
     </fragment>
     <fragment
         android:id="@+id/residentInformationDetailsFragment"
         android:name="com.leventsurer.manager.ui.fragments.ResidentInformationDetailsFragment"
-        android:label="ResidentInformationDetailsFragment" />
+        android:label="ResidentInformationDetailsFragment" >
+        <action
+            android:id="@+id/action_residentInformationDetailsFragment_to_userProfileFragment"
+            app:destination="@id/userProfileFragment" />
+    </fragment>
     <fragment
         android:id="@+id/settingsFragmet"
         android:name="com.leventsurer.manager.ui.fragments.SettingsFragmet"
-        android:label="SettingsFragmet" />
+        android:label="SettingsFragmet" >
+        <action
+            android:id="@+id/action_settingsFragmet_to_userProfileFragment2"
+            app:destination="@id/userProfileFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/userProfileFragment"
+        android:name="com.leventsurer.manager.ui.fragments.UserProfileFragment"
+        android:label="UserProfileFragment" />
 </navigation>

@@ -36,8 +36,9 @@ class ExecutiveHomePageFragment : Fragment() {
     private val conciergeAnnouncementsAdapterList = ArrayList<ConciergeAnnouncementModel>()
     private val residentRequestAdapterList = ArrayList<ResidentsRequestModel>()
     private val financialEventAdapterList = ArrayList<FinancialEventModel>()
+
     //Adapters
-    private lateinit var conciergeAnnouncementAdapter : ConciergeAnnouncementAdapter
+    private lateinit var conciergeAnnouncementAdapter: ConciergeAnnouncementAdapter
     private lateinit var residentRequestAdapter: ResidentRequestAdapter
     private lateinit var financialEventAdapter: IncomeExpenseAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -69,11 +70,11 @@ class ExecutiveHomePageFragment : Fragment() {
         readSharedPref()
     }
 
-    private fun readSharedPref(){
+    private fun readSharedPref() {
         val isLogin = sharedPrefViewModel.readIsLogin()
         val apartmentName = sharedPrefViewModel.readApartmentName()
         val userName = sharedPrefViewModel.readUserName()
-        Log.e("kontrol","isLogin:$isLogin , apartment:$apartmentName  userName:$userName,")
+        Log.e("kontrol", "isLogin:$isLogin , apartment:$apartmentName  userName:$userName,")
     }
 
     private fun getConciergeAnnouncement() {
@@ -82,19 +83,19 @@ class ExecutiveHomePageFragment : Fragment() {
     }
 
     private fun observeAnnouncementFlow() {
-        viewLifecycleOwner.lifecycleScope.launch{
+        viewLifecycleOwner.lifecycleScope.launch {
 
-            databaseViewModel.conciergeAnnouncementFlow.collect{
-                when(it){
-                    is Resource.Failure ->{
-                        Toast.makeText(context,it.exception.message,Toast.LENGTH_LONG).show()
+            databaseViewModel.conciergeAnnouncementFlow.collect {
+                when (it) {
+                    is Resource.Failure -> {
+                        Toast.makeText(context, it.exception.message, Toast.LENGTH_LONG).show()
                         binding.pbConciergeAnnouncement.visibility = View.GONE
 
                     }
-                    is Resource.Loading ->{
+                    is Resource.Loading -> {
                         binding.pbConciergeAnnouncement.visibility = View.VISIBLE
                     }
-                    is Resource.Success ->{
+                    is Resource.Success -> {
                         binding.pbConciergeAnnouncement.visibility = View.GONE
 
                         conciergeAnnouncementsAdapterList.addAll(it.result)
@@ -111,25 +112,25 @@ class ExecutiveHomePageFragment : Fragment() {
         }
     }
 
-    private fun getResidentRequests(){
+    private fun getResidentRequests() {
         databaseViewModel.getResidentRequests()
         observeResidentRequestFlow()
     }
 
     private fun observeResidentRequestFlow() {
-        viewLifecycleOwner.lifecycleScope.launch{
+        viewLifecycleOwner.lifecycleScope.launch {
 
-            databaseViewModel.residentRequestFlow.collect{
-                when(it){
-                    is Resource.Failure ->{
-                        Toast.makeText(context,it.exception.message,Toast.LENGTH_LONG).show()
+            databaseViewModel.residentRequestFlow.collect {
+                when (it) {
+                    is Resource.Failure -> {
+                        Toast.makeText(context, it.exception.message, Toast.LENGTH_LONG).show()
                         binding.pbResidentRequests.visibility = View.GONE
 
                     }
-                    is Resource.Loading ->{
+                    is Resource.Loading -> {
                         binding.pbResidentRequests.visibility = View.VISIBLE
                     }
-                    is Resource.Success ->{
+                    is Resource.Success -> {
                         binding.pbResidentRequests.visibility = View.GONE
 
                         residentRequestAdapterList.addAll(it.result)
@@ -146,25 +147,25 @@ class ExecutiveHomePageFragment : Fragment() {
         }
     }
 
-    private fun getFinancialEvents(){
+    private fun getFinancialEvents() {
         databaseViewModel.getFinancialEvents()
         observeFinancialEventFlow()
     }
 
     private fun observeFinancialEventFlow() {
-        viewLifecycleOwner.lifecycleScope.launch{
+        viewLifecycleOwner.lifecycleScope.launch {
 
-            databaseViewModel.financialEventsFlow.collect{
-                when(it){
-                    is Resource.Failure ->{
-                        Toast.makeText(context,it.exception.message,Toast.LENGTH_LONG).show()
+            databaseViewModel.financialEventsFlow.collect {
+                when (it) {
+                    is Resource.Failure -> {
+                        Toast.makeText(context, it.exception.message, Toast.LENGTH_LONG).show()
                         binding.pbFinancialEvents.visibility = View.GONE
 
                     }
-                    is Resource.Loading ->{
+                    is Resource.Loading -> {
                         binding.pbFinancialEvents.visibility = View.VISIBLE
                     }
-                    is Resource.Success ->{
+                    is Resource.Success -> {
                         binding.pbFinancialEvents.visibility = View.GONE
 
                         financialEventAdapterList.addAll(it.result)
@@ -214,6 +215,8 @@ class ExecutiveHomePageFragment : Fragment() {
 
             },
             endIconClick = {
+                val action = ExecutiveHomePageFragmentDirections.actionExecutiveHomePageToUserProfileFragment2()
+                findNavController().navigate(action)
             },
         )
 

@@ -69,7 +69,8 @@ class ConciergeFragment : Fragment() {
                 findNavController().popBackStack()
             },
             endIconClick = {
-                //test2()
+                val action = ConciergeFragmentDirections.actionConciergeFragmentToUserProfileFragment2()
+                findNavController().navigate(action)
             },
         )
     }

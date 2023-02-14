@@ -7,13 +7,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 import com.leventsurer.manager.R
-import com.leventsurer.manager.databinding.FragmentSettingsFragmetBinding
+import com.leventsurer.manager.databinding.FragmentSignupBinding
+import com.leventsurer.manager.databinding.FragmentUserProfileBinding
 import com.leventsurer.manager.tools.helpers.HeaderHelper
 
-class SettingsFragmet : Fragment() {
-    private var _binding: FragmentSettingsFragmetBinding? = null
-    private val binding: FragmentSettingsFragmetBinding get() = _binding!!
-
+class UserProfileFragment : Fragment() {
+    private var _binding: FragmentUserProfileBinding? = null
+    private val binding: FragmentUserProfileBinding get() = _binding!!
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -23,8 +23,8 @@ class SettingsFragmet : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentSettingsFragmetBinding.inflate(inflater, container, false)
-        return binding.root
+        _binding = FragmentUserProfileBinding.inflate(inflater, container, false)
+        return inflater.inflate(R.layout.fragment_user_profile, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -33,20 +33,19 @@ class SettingsFragmet : Fragment() {
     }
 
 
+
     private fun setupUi() {
         HeaderHelper.customHeader(
             binding.customHeader,
-            title = "Ayarlar",
+            title = "Profiliniz",
             startIconVisibility = true,
             endIconVisibility = true,
-            startIcon = R.drawable.ic_baseline_sensor_door_24,
+            startIcon = R.drawable.ic_baseline_arrow_back_24,
             endIcon = R.drawable.ic_baseline_account_circle_24,
             startIconClick = {
                 findNavController().popBackStack()
             },
             endIconClick = {
-                val action = SettingsFragmetDirections.actionSettingsFragmetToUserProfileFragment2()
-                findNavController().navigate(action)
             },
         )
     }

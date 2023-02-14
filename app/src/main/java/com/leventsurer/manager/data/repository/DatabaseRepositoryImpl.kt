@@ -21,10 +21,9 @@ import javax.inject.Inject
 
 class DatabaseRepositoryImpl @Inject constructor(
     private val database: FirebaseFirestore,
-
 ) : DatabaseRepository {
     @Inject
-    lateinit var  sharedRepository :  SharedRepositoryImpl
+    lateinit var sharedRepository: SharedRepositoryImpl
     override suspend fun getConciergeAnnouncements(): Resource<ArrayList<ConciergeAnnouncementModel>> {
         val documentId = reachToDocumentIdFromSharedPref()
         return try {
@@ -127,7 +126,7 @@ class DatabaseRepositoryImpl @Inject constructor(
 
         val apartmentsCollection: QuerySnapshot =
             database.collection(APARTMENT_COLLECTIONS).get().await()
-        var documentId = ""
+        var documentId: String
         for (apartmentDocument: DocumentSnapshot in apartmentsCollection) {
             runBlocking {
                 if (apartmentDocument.data?.get("apartmentName") as String == apartmentCode) {
@@ -195,8 +194,8 @@ class DatabaseRepositoryImpl @Inject constructor(
         return documentId
     }
 
-    private suspend fun reachToDocumentIdFromSharedPref(): String{
+    private suspend fun reachToDocumentIdFromSharedPref(): String {
         val apartmentName = sharedRepository.readApartmentName(APARTMENT_NAME)
-        return  getApartmentDocumentId(apartmentName!!)
+        return getApartmentDocumentId(apartmentName!!)
     }
 }
