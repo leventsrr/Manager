@@ -1,6 +1,7 @@
 package com.leventsurer.manager.ui.fragments
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -82,12 +83,14 @@ class SignupFragment : Fragment() {
         sharedPrefViewModel.writeUserName(authViewModel.currentUser?.displayName.toString())
     }
     private fun signUp(name:String,email:String,password:String,apartmentCode:String,role:String,doorNumber:String,carPlate:String){
-        authViewModel.signup(name,email,password)
+
         if(newUserRole == "yonetici"){
             databaseViewModel.addNewApartment(name,apartmentCode,carPlate,doorNumber,role,apartmentCode)
         }else{
+            Log.e("kontrol",newUserRole)
             databaseViewModel.addNewUser(name,apartmentCode,carPlate,doorNumber,role)
         }
+        authViewModel.signup(name,email,password)
 
         observeSignUpFlow()
     }

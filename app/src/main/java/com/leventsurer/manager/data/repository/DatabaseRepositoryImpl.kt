@@ -1,6 +1,7 @@
 package com.leventsurer.manager.data.repository
 
 import android.content.Context
+import android.content.SharedPreferences
 import android.util.Log
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
@@ -12,20 +13,25 @@ import com.leventsurer.manager.tools.constants.FirebaseConstants.DUTIES
 import com.leventsurer.manager.tools.constants.FirebaseConstants.FINANCIAL_EVENTS
 import com.leventsurer.manager.tools.constants.FirebaseConstants.RESIDENT_REQUESTS
 import com.leventsurer.manager.tools.constants.FirebaseConstants.USER_COLLECTION
+import com.leventsurer.manager.tools.constants.SharedPreferencesConstants.APARTMENT_NAME
+import kotlinx.coroutines.runBlocking
 
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
 class DatabaseRepositoryImpl @Inject constructor(
     private val database: FirebaseFirestore,
+
 ) : DatabaseRepository {
-
-
+    @Inject
+    lateinit var  sharedRepository :  SharedRepositoryImpl
     override suspend fun getConciergeAnnouncements(): Resource<ArrayList<ConciergeAnnouncementModel>> {
+        val apartmentName = sharedRepository.readApartmentName(APARTMENT_NAME)
+        val documentId = getApartmentDocumentId(apartmentName!!)
         return try {
             val announcements = arrayListOf<ConciergeAnnouncementModel>()
             val result: QuerySnapshot =
-                database.collection(APARTMENT_COLLECTIONS).document("mrpLL3uhAi35Kl4lSohj")
+                database.collection(APARTMENT_COLLECTIONS).document(documentId)
                     .collection(
                         CONCIERGE_ANNOUNCEMENT
                     ).get().await()
@@ -116,25 +122,43 @@ class DatabaseRepositoryImpl @Inject constructor(
             "phoneNumber" to "",
             "role" to role
         )
-        var documentPath = ""
-        if(role == "yonetici"){
-            documentPath = "apartments"
-            //database.document("/$documentPath/").collection("/${USER_COLLECTION}").add(user)
-            database.collection(documentPath).document().collection(USER_COLLECTION).add(user)
-        }else{
-            val apartmentsCollection:QuerySnapshot = database.collection(APARTMENT_COLLECTIONS).get().await()
-            var documentPath = ""
-            for(apartmentDocument:DocumentSnapshot in apartmentsCollection){
-                if(apartmentDocument.data?.get("apartmentName") as String == apartmentCode){
-                    documentPath = apartmentDocument.reference.path
-                    Log.e("kontrol",documentPath)
-                    database.document("/$documentPath").collection(USER_COLLECTION).add(user)
+
+        val apartmentsCollection: QuerySnapshot =
+            database.collection(APARTMENT_COLLECTIONS).get().await()
+        var documentId = ""
+        for (apartmentDocument: DocumentSnapshot in apartmentsCollection) {
+            runBlocking {
+                if (apartmentDocument.data?.get("apartmentName") as String == apartmentCode) {
+                    documentId = apartmentDocument.reference.id
+
+                    database.collection("apartments").document(documentId)
+                        .collection(USER_COLLECTION).add(user).await()
                 }
             }
+
         }
 
+    }
 
-
+    override suspend fun addNewUserToNewApartment(
+        name: String,
+        apartmentCode: String,
+        carPlate: String,
+        doorNumber: String,
+        role: String,
+        documentId: String
+    ) {
+        val user = hashMapOf(
+            "carPlate" to carPlate,
+            "doorNumber" to doorNumber,
+            "duesPaymentStatus" to false,
+            "fullName" to name,
+            "phoneNumber" to "",
+            "role" to role
+        )
+        val documentPath = "apartments"
+        database.collection(documentPath).document(documentId).collection(USER_COLLECTION).add(user)
+            .await()
     }
 
     override suspend fun addNewApartment(
@@ -144,11 +168,29 @@ class DatabaseRepositoryImpl @Inject constructor(
         doorNumber: String,
         role: String, apartmentName: String
     ) {
-        database.collection(APARTMENT_COLLECTIONS).add(
+        val result = database.collection(APARTMENT_COLLECTIONS).add(
             hashMapOf(
                 "apartmentName" to apartmentName
             )
-        )
-        addNewUser(name, apartmentCode, carPlate, doorNumber, role)
+        ).await().id
+        addNewUserToNewApartment(name, apartmentCode, carPlate, doorNumber, role, result)
     }
+
+    override suspend fun getApartmentDocumentId(apartmentCode: String): String {
+        val apartmentsCollection: QuerySnapshot =
+            database.collection(APARTMENT_COLLECTIONS).get().await()
+        var documentId = ""
+        for (apartmentDocument: DocumentSnapshot in apartmentsCollection) {
+            runBlocking {
+                if (apartmentDocument.data?.get("apartmentName") as String == apartmentCode) {
+                    documentId = apartmentDocument.reference.id
+
+
+                }
+            }
+
+        }
+        return documentId
+    }
+
 }

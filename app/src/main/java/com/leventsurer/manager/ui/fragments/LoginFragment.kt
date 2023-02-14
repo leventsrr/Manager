@@ -79,6 +79,7 @@ class LoginFragment : Fragment() {
         sharedPrefViewModel.writeIsLogin(true)
         sharedPrefViewModel.writeApartmentCode(binding.twUserApartmentName.text.toString())
         sharedPrefViewModel.writeUserName(viewModel.currentUser?.displayName.toString())
+
     }
 
 

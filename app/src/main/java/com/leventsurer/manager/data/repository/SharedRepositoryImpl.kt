@@ -30,6 +30,11 @@ class SharedRepositoryImpl @Inject constructor(
         editor.apply()
     }
 
+    override fun writeApartmentDocumentId(key: String, value: String) {
+        val editor : SharedPreferences.Editor = sharedPreferences.edit()
+        editor.putString(key,value)
+        editor.apply()
+    }
     override fun readApartmentName(key: String): String? {
         return sharedPreferences.getString(key, "")
     }
@@ -40,6 +45,10 @@ class SharedRepositoryImpl @Inject constructor(
 
     override fun readIsLogin(key: String):Boolean? {
         return sharedPreferences.getBoolean(key, false)
+    }
+
+    override fun readApartmentDocumentId(key: String):String? {
+        return sharedPreferences.getString(key, "")
     }
 
     override fun removeValue(key: String) {
