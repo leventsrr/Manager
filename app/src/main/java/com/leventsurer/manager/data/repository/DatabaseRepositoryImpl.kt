@@ -26,8 +26,7 @@ class DatabaseRepositoryImpl @Inject constructor(
     @Inject
     lateinit var  sharedRepository :  SharedRepositoryImpl
     override suspend fun getConciergeAnnouncements(): Resource<ArrayList<ConciergeAnnouncementModel>> {
-        val apartmentName = sharedRepository.readApartmentName(APARTMENT_NAME)
-        val documentId = getApartmentDocumentId(apartmentName!!)
+        val documentId = reachToDocumentIdFromSharedPref()
         return try {
             val announcements = arrayListOf<ConciergeAnnouncementModel>()
             val result: QuerySnapshot =
@@ -46,10 +45,11 @@ class DatabaseRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getConciergeDuties(): Resource<ArrayList<ConciergeDutiesModel>> {
+        val documentId = reachToDocumentIdFromSharedPref()
         return try {
             val duties = arrayListOf<ConciergeDutiesModel>()
             val result: QuerySnapshot =
-                database.collection(APARTMENT_COLLECTIONS).document("mrpLL3uhAi35Kl4lSohj")
+                database.collection(APARTMENT_COLLECTIONS).document(documentId)
                     .collection(
                         DUTIES
                     ).get().await()
@@ -64,10 +64,11 @@ class DatabaseRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getRecentFinancialEvents(): Resource<ArrayList<FinancialEventModel>> {
+        val documentId = reachToDocumentIdFromSharedPref()
         return try {
             val financialEvents = arrayListOf<FinancialEventModel>()
             val result: QuerySnapshot =
-                database.collection(APARTMENT_COLLECTIONS).document("mrpLL3uhAi35Kl4lSohj")
+                database.collection(APARTMENT_COLLECTIONS).document(documentId)
                     .collection(
                         FINANCIAL_EVENTS
                     ).get().await()
@@ -82,10 +83,11 @@ class DatabaseRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getResidentsRequests(): Resource<ArrayList<ResidentsRequestModel>> {
+        val documentId = reachToDocumentIdFromSharedPref()
         return try {
             val requests = arrayListOf<ResidentsRequestModel>()
             val result: QuerySnapshot =
-                database.collection(APARTMENT_COLLECTIONS).document("mrpLL3uhAi35Kl4lSohj")
+                database.collection(APARTMENT_COLLECTIONS).document(documentId)
                     .collection(
                         RESIDENT_REQUESTS
                     ).get().await()
@@ -193,4 +195,8 @@ class DatabaseRepositoryImpl @Inject constructor(
         return documentId
     }
 
+    private suspend fun reachToDocumentIdFromSharedPref(): String{
+        val apartmentName = sharedRepository.readApartmentName(APARTMENT_NAME)
+        return  getApartmentDocumentId(apartmentName!!)
+    }
 }
