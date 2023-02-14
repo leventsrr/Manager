@@ -116,21 +116,24 @@ class DatabaseRepositoryImpl @Inject constructor(
             "phoneNumber" to "",
             "role" to role
         )
-
-        val apartmentsCollection:QuerySnapshot = database.collection(APARTMENT_COLLECTIONS).get().await()
         var documentPath = ""
-        for(apartmentDocument:DocumentSnapshot in apartmentsCollection){
-            if(apartmentDocument.data?.get("apartmentName") as String == apartmentCode){
-                documentPath = apartmentDocument.reference.path
-                Log.e("kontrol",documentPath)
-                database.document("/$documentPath").collection(USER_COLLECTION).add(user)
-                break
-            }else{
-                documentPath = "apartmets"
-                database.document("/$documentPath").collection(USER_COLLECTION).add(user)
+        if(role == "yonetici"){
+            documentPath = "apartments"
+            //database.document("/$documentPath/").collection("/${USER_COLLECTION}").add(user)
+            database.collection(documentPath).document().collection(USER_COLLECTION).add(user)
+        }else{
+            val apartmentsCollection:QuerySnapshot = database.collection(APARTMENT_COLLECTIONS).get().await()
+            var documentPath = ""
+            for(apartmentDocument:DocumentSnapshot in apartmentsCollection){
+                if(apartmentDocument.data?.get("apartmentName") as String == apartmentCode){
+                    documentPath = apartmentDocument.reference.path
+                    Log.e("kontrol",documentPath)
+                    database.document("/$documentPath").collection(USER_COLLECTION).add(user)
+                }
             }
         }
-        //database.document("/$documentPath").collection(USER_COLLECTION).add(user)
+
+
 
     }
 

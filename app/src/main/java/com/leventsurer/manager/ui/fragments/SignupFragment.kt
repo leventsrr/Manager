@@ -15,6 +15,7 @@ import com.leventsurer.manager.data.model.Resource
 import com.leventsurer.manager.databinding.FragmentSignupBinding
 import com.leventsurer.manager.viewModels.AuthViewModel
 import com.leventsurer.manager.viewModels.DatabaseViewModel
+import com.leventsurer.manager.viewModels.SharedPreferencesViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 @AndroidEntryPoint
@@ -23,6 +24,7 @@ class SignupFragment : Fragment() {
     private val binding: FragmentSignupBinding get() = _binding!!
     private val authViewModel by viewModels<AuthViewModel>()
     private val databaseViewModel by viewModels<DatabaseViewModel>()
+    private val sharedPrefViewModel by viewModels<SharedPreferencesViewModel>()
     private lateinit var newUserRole:String
     private var isRoleSelected:Boolean = false
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -58,6 +60,7 @@ class SignupFragment : Fragment() {
                     }
                     is Resource.Success ->{
                         if(findNavController().currentDestination?.id == R.id.signupFragment){
+                            writeDataToSharedPref()
                             val action = SignupFragmentDirections.actionSignupFragmentToExecutiveHomePage()
                             findNavController().navigate(action)
                             binding.pbProgressBar.visibility = View.GONE
@@ -72,6 +75,11 @@ class SignupFragment : Fragment() {
             }
 
         }
+    }
+    private fun writeDataToSharedPref(){
+        sharedPrefViewModel.writeIsLogin(true)
+        sharedPrefViewModel.writeApartmentCode(binding.etApartmentCode.text.toString())
+        sharedPrefViewModel.writeUserName(authViewModel.currentUser?.displayName.toString())
     }
     private fun signUp(name:String,email:String,password:String,apartmentCode:String,role:String,doorNumber:String,carPlate:String){
         authViewModel.signup(name,email,password)
