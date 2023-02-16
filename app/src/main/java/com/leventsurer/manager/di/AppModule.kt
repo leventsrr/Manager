@@ -3,7 +3,10 @@ import android.content.SharedPreferences
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
 import com.leventsurer.manager.data.repository.*
+import com.leventsurer.manager.tools.constants.FirebaseConstants
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -38,11 +41,11 @@ class AppModule {
         return FirebaseFirestore.getInstance()
     }
 
-    /*@Singleton
+    @Singleton
     @Provides
     fun provideFirebaseStroageInstance(): StorageReference {
-        return FirebaseStorage.getInstance().getReference(FirebaseStorageConstants.ROOT_DIRECTORY)
-    }*/
+        return FirebaseStorage.getInstance().reference.child(FirebaseConstants.ROOT_DIRECTORY)
+    }
 
     //Shared Preferences
     @Provides

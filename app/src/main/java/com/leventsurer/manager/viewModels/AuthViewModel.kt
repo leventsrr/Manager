@@ -31,7 +31,6 @@ class AuthViewModel @Inject constructor(
     init{
         if (repository.currentUser != null){
             _loginFlow.value = Resource.Success(repository.currentUser!!)
-
         }
     }
 
