@@ -49,7 +49,7 @@ class WalletFragment : Fragment() {
             startIconVisibility = true,
             endIconVisibility = true,
             startIcon = R.drawable.ic_baseline_sensor_door_24,
-            endIcon = R.drawable.ic_baseline_account_circle_24,
+            endIcon = R.drawable.ic_baseline_settings_24,
             startIconClick = {
                 findNavController().popBackStack()
             },

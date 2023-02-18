@@ -7,11 +7,12 @@
         <entry key="..\:/Users/leven/AndroidStudioProjects/Manager/app/src/main/res/drawable/ic_baseline_done_all_24.xml" value="0.3005" />
         <entry key="..\:/Users/leven/AndroidStudioProjects/Manager/app/src/main/res/drawable/ic_baseline_expense_arrow.xml" value="0.1915" />
         <entry key="..\:/Users/leven/AndroidStudioProjects/Manager/app/src/main/res/drawable/ic_baseline_sensor_door_24.xml" value="0.264" />
+        <entry key="..\:/Users/leven/AndroidStudioProjects/Manager/app/src/main/res/drawable/ic_baseline_settings_24.xml" value="0.16" />
         <entry key="..\:/Users/leven/AndroidStudioProjects/Manager/app/src/main/res/layout/activity_main.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/leven/AndroidStudioProjects/Manager/app/src/main/res/layout/concierge_announcement_row.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/leven/AndroidStudioProjects/Manager/app/src/main/res/layout/concierge_duty_row.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/leven/AndroidStudioProjects/Manager/app/src/main/res/layout/custoheader.xml" value="0.36666666666666664" />
-        <entry key="..\:/Users/leven/AndroidStudioProjects/Manager/app/src/main/res/layout/custom_header.xml" value="0.4" />
+        <entry key="..\:/Users/leven/AndroidStudioProjects/Manager/app/src/main/res/layout/custom_header.xml" value="0.2" />
         <entry key="..\:/Users/leven/AndroidStudioProjects/Manager/app/src/main/res/layout/duepayment_status_row.xml" value="0.365625" />
         <entry key="..\:/Users/leven/AndroidStudioProjects/Manager/app/src/main/res/layout/fragment_concierge.xml" value="0.2421875" />
         <entry key="..\:/Users/leven/AndroidStudioProjects/Manager/app/src/main/res/layout/fragment_executive_home_page.xml" value="0.228125" />
@@ -20,7 +21,7 @@
         <entry key="..\:/Users/leven/AndroidStudioProjects/Manager/app/src/main/res/layout/fragment_residents_information.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/leven/AndroidStudioProjects/Manager/app/src/main/res/layout/fragment_settings_fragmet.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/leven/AndroidStudioProjects/Manager/app/src/main/res/layout/fragment_signup.xml" value="0.36666666666666664" />
-        <entry key="..\:/Users/leven/AndroidStudioProjects/Manager/app/src/main/res/layout/fragment_user_profile.xml" value="0.4" />
+        <entry key="..\:/Users/leven/AndroidStudioProjects/Manager/app/src/main/res/layout/fragment_user_profile.xml" value="0.264" />
         <entry key="..\:/Users/leven/AndroidStudioProjects/Manager/app/src/main/res/layout/fragment_wallet.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/leven/AndroidStudioProjects/Manager/app/src/main/res/layout/income_expense_row.xml" value="0.2552083333333333" />
         <entry key="..\:/Users/leven/AndroidStudioProjects/Manager/app/src/main/res/layout/resident_information_row.xml" value="0.30085470085470084" />

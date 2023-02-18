@@ -10,6 +10,7 @@ import com.leventsurer.manager.tools.constants.FirebaseConstants
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.scopes.ViewModelScoped
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
@@ -43,9 +44,13 @@ class AppModule {
 
     @Singleton
     @Provides
-    fun provideFirebaseStroageInstance(): StorageReference {
-        return FirebaseStorage.getInstance().reference.child(FirebaseConstants.ROOT_DIRECTORY)
+    fun provideFirebaseStorageInstance(): FirebaseStorage {
+        return FirebaseStorage.getInstance()
     }
+
+    @Provides
+    @Singleton
+    fun provideStorageRepository(impl: FirebaseStorageRepositoryImpl) : FirebaseStorageRepository = impl
 
     //Shared Preferences
     @Provides

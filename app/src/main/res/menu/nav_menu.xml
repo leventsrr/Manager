@@ -22,7 +22,7 @@
         android:icon="@drawable/ic_baseline_spatial_audio_off_24"
         android:title="Kapıcı" />
     <item
-        android:id="@+id/settingsFragmet"
-        android:icon="@drawable/ic_baseline_settings_24"
-        android:title="Ayarlar" />
+        android:id="@+id/userProfileFragment"
+        android:icon="@drawable/ic_baseline_account_circle_24"
+        android:title="Profil" />
 </menu>

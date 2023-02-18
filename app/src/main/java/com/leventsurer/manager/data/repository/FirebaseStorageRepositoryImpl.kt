@@ -19,7 +19,7 @@ class FirebaseStorageRepositoryImpl @Inject constructor(
         imageUri.let {
             storageRef.putFile(it).addOnCompleteListener { task ->
                 if(task.isSuccessful){
-                    storageRef.downloadUrl.addOnCompleteListener { uri ->
+                    storageRef.downloadUrl.addOnSuccessListener { uri ->
 
                         val map = HashMap<String,Any>()
                         map["images"] = uri.toString()
