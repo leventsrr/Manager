@@ -46,12 +46,12 @@ class ResidentsInformationFragment : Fragment() {
                 findNavController().popBackStack()
             },
             endIconClick = {
-                val action = ResidentsInformationFragmentDirections.actionResidentsInformationFragmentToUserProfileFragment2()
+                val action = ResidentsInformationFragmentDirections.actionResidentsInformationFragmentToSettingsFragmet()
                 findNavController().navigate(action)
             },
         )
     }
-
+    //Kapıcı görevlerinin listeleneceği adapter ın kurulumunu yapar
     private fun setupConciergeDutyToDoAdapter() {
         binding.rwResidentsInformation.layoutManager = GridLayoutManager(requireContext(), 3)
         val residentsInformationAdapter = ResidentsInformationAdapter()

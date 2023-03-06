@@ -52,7 +52,7 @@ class ResidentInformationDetailsFragment : Fragment() {
             },
         )
     }
-
+    //İncelenen kullanıcının geçmiş isteklerinin listeleneceği adapter ın kurulumunu yapar
     private fun setupResidentPastRequestAdapter() {
         binding.rwResidentPastRequest.layoutManager = LinearLayoutManager(requireContext())
         val residentsPastRequestAdapter = ResidentPastRequestAdapter()

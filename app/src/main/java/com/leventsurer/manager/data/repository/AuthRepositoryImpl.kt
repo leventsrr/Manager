@@ -13,7 +13,7 @@ class AuthRepositoryImpl @Inject constructor(
 ) : AuthRepository {
     override val currentUser: FirebaseUser?
         get() = firebaseAuth.currentUser
-
+    //Kayıtlı kullanıcının girişiyapılır
     override suspend fun login(email: String, password: String): Resource<FirebaseUser> {
         return try {
             val result = firebaseAuth.signInWithEmailAndPassword(email, password).await()
@@ -26,7 +26,7 @@ class AuthRepositoryImpl @Inject constructor(
         }
 
     }
-
+    //Yenş kullanıcı kayıt işlemi yapılır
     override suspend fun signup(
         name: String,
         email: String,
@@ -43,7 +43,7 @@ class AuthRepositoryImpl @Inject constructor(
             Resource.Failure(e)
         }
     }
-
+    //Çıkış işlemi yapılır
     override fun logout() {
         firebaseAuth.signOut()
     }

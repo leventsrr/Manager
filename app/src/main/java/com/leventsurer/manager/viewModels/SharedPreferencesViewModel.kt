@@ -1,10 +1,11 @@
 package com.leventsurer.manager.viewModels
 
 import androidx.lifecycle.ViewModel
-import com.leventsurer.manager.data.repository.SharedRepository
 import com.leventsurer.manager.data.repository.SharedRepositoryImpl
+import com.leventsurer.manager.tools.constants.SharedPreferencesConstants.APARTMENT_DOCUMENT_ID
 import com.leventsurer.manager.tools.constants.SharedPreferencesConstants.APARTMENT_NAME
 import com.leventsurer.manager.tools.constants.SharedPreferencesConstants.IS_LOGIN
+import com.leventsurer.manager.tools.constants.SharedPreferencesConstants.USER_DOCUMENT_ID
 import com.leventsurer.manager.tools.constants.SharedPreferencesConstants.USER_NAME
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -14,8 +15,8 @@ class SharedPreferencesViewModel @Inject constructor(
     private val sharedPrefRepository:SharedRepositoryImpl
 ) :ViewModel(){
 
-    fun writeApartmentCode(value:String){
-        sharedPrefRepository.writeApartmentCode(APARTMENT_NAME,value)
+    fun writeApartmentName(value:String){
+        sharedPrefRepository.writeApartmentName(APARTMENT_NAME,value)
     }
     fun writeUserName(value: String){
         sharedPrefRepository.writeUserName(USER_NAME,value)
@@ -24,6 +25,13 @@ class SharedPreferencesViewModel @Inject constructor(
         sharedPrefRepository.writeIsLogin(IS_LOGIN,value)
     }
 
+    fun writeApartmentDocumentId(value:String){
+        sharedPrefRepository.writeApartmentDocumentId(APARTMENT_DOCUMENT_ID,value)
+    }
+
+    fun writeUserDocumentId(value:String){
+        sharedPrefRepository.writeUserDocumentId(USER_DOCUMENT_ID,value)
+    }
     fun readApartmentName(): String?{
        return sharedPrefRepository.readApartmentName(APARTMENT_NAME)
     }
@@ -32,6 +40,14 @@ class SharedPreferencesViewModel @Inject constructor(
     }
     fun readIsLogin():Boolean?{
         return sharedPrefRepository.readIsLogin(IS_LOGIN)
+    }
+
+    fun readApartmentDocumentId():String?{
+        return sharedPrefRepository.readApartmentDocumentId(APARTMENT_DOCUMENT_ID)
+    }
+
+    fun readUserDocumentId():String?{
+        return sharedPrefRepository.readUserDocumentId(USER_DOCUMENT_ID)
     }
 
     fun removeValue(key: String){

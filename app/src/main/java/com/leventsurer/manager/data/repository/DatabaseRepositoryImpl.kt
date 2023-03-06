@@ -24,6 +24,8 @@ class DatabaseRepositoryImpl @Inject constructor(
 ) : DatabaseRepository {
     @Inject
     lateinit var sharedRepository: SharedRepositoryImpl
+
+    //Kapıcı duyurularının veri tabanından alınması
     override suspend fun getConciergeAnnouncements(): Resource<ArrayList<ConciergeAnnouncementModel>> {
         val documentId = reachToDocumentIdFromSharedPref()
         return try {
@@ -42,7 +44,7 @@ class DatabaseRepositoryImpl @Inject constructor(
             Resource.Failure(e)
         }
     }
-
+    //Kapıcı görevlerinin veri tabanından alınması
     override suspend fun getConciergeDuties(): Resource<ArrayList<ConciergeDutiesModel>> {
         val documentId = reachToDocumentIdFromSharedPref()
         return try {
@@ -61,7 +63,7 @@ class DatabaseRepositoryImpl @Inject constructor(
             Resource.Failure(e)
         }
     }
-
+    //Ekonomik işlemlerin veri tabanından alınması
     override suspend fun getRecentFinancialEvents(): Resource<ArrayList<FinancialEventModel>> {
         val documentId = reachToDocumentIdFromSharedPref()
         return try {
@@ -80,7 +82,7 @@ class DatabaseRepositoryImpl @Inject constructor(
             Resource.Failure(e)
         }
     }
-
+    //Apartman sakinlerinin isteklerinin veri tabanından alınması
     override suspend fun getResidentsRequests(): Resource<ArrayList<ResidentsRequestModel>> {
         val documentId = reachToDocumentIdFromSharedPref()
         return try {
@@ -107,7 +109,7 @@ class DatabaseRepositoryImpl @Inject constructor(
     override suspend fun getAUser(fullName: String, doorNumber: String): UserModel {
         TODO()
     }
-
+    //Daha önce kaydedilen apartmana yeni kullanıcı eklenmesi
     override suspend fun addNewUser(
         name: String,
         apartmentCode: String,
@@ -140,7 +142,7 @@ class DatabaseRepositoryImpl @Inject constructor(
         }
 
     }
-
+    //Yeni açılan apartmana yeni kullanıcı kaydedilmesi
     override suspend fun addNewUserToNewApartment(
         name: String,
         apartmentCode: String,
@@ -161,7 +163,7 @@ class DatabaseRepositoryImpl @Inject constructor(
         database.collection(documentPath).document(documentId).collection(USER_COLLECTION).add(user)
             .await()
     }
-
+    //Veri tabanına yeni apartman kaydedilmesi
     override suspend fun addNewApartment(
         name: String,
         apartmentCode: String,
@@ -177,6 +179,7 @@ class DatabaseRepositoryImpl @Inject constructor(
         addNewUserToNewApartment(name, apartmentCode, carPlate, doorNumber, role, result)
     }
 
+    //Grilen apartman adına göre apartmanın veri tabanındaki id sinin getirilmesi
     override suspend fun getApartmentDocumentId(apartmentCode: String): String {
         val apartmentsCollection: QuerySnapshot =
             database.collection(APARTMENT_COLLECTIONS).get().await()
@@ -194,6 +197,11 @@ class DatabaseRepositoryImpl @Inject constructor(
         return documentId
     }
 
+    override suspend fun getUserDocumentId(userName: String): String {
+        TODO("Not yet implemented")
+    }
+
+    //Apartman id sine ulaşmak için kullanılacak apartman adının shared preferencesten çekilmesi.
     private suspend fun reachToDocumentIdFromSharedPref(): String {
         val apartmentName = sharedRepository.readApartmentName(APARTMENT_NAME)
         return getApartmentDocumentId(apartmentName!!)

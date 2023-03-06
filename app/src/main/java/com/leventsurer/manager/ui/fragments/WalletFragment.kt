@@ -34,7 +34,7 @@ class WalletFragment : Fragment() {
         setupDuesPaymentStatusAdapter()
     }
 
-
+    //Aidat ödeme durumunun listeleneceği adapterın kurulumunu yapar
     private fun setupDuesPaymentStatusAdapter() {
         binding.rwDuesPaymentStatus.layoutManager = LinearLayoutManager(requireContext())
         val duesPaymentStatusAdapter = DuesPaymentStatusAdapter()
@@ -54,7 +54,7 @@ class WalletFragment : Fragment() {
                 findNavController().popBackStack()
             },
             endIconClick = {
-                val action = WalletFragmentDirections.actionWalletFragmentToUserProfileFragment2()
+                val action = WalletFragmentDirections.actionWalletFragmentToSettingsFragmet()
                 findNavController().navigate(action)
             },
         )

@@ -46,6 +46,7 @@ class SignupFragment : Fragment() {
         onClickHandler()
         (requireActivity() as MainActivity).hideBottomNavigation()
     }
+    //Yeni kayıt olunurken girilen bilgiler doğrultusunda istek atılmasını ve gelen cevaba göre yönlendirme yapılmasını sağlar
 
     private fun observeSignUpFlow() {
         viewLifecycleOwner.lifecycleScope.launch{
@@ -77,11 +78,14 @@ class SignupFragment : Fragment() {
 
         }
     }
+    //Girilen bilgilerin shared preferencese yazılması sağlanır
     private fun writeDataToSharedPref(){
         sharedPrefViewModel.writeIsLogin(true)
-        sharedPrefViewModel.writeApartmentCode(binding.etApartmentCode.text.toString())
+        sharedPrefViewModel.writeApartmentName(binding.etApartmentCode.text.toString())
         sharedPrefViewModel.writeUserName(authViewModel.currentUser?.displayName.toString())
     }
+
+    //Seçilen role göre gerekli kayıt olma fonksiyonları çalıştırılır.
     private fun signUp(name:String,email:String,password:String,apartmentCode:String,role:String,doorNumber:String,carPlate:String){
 
         if(newUserRole == "yonetici"){

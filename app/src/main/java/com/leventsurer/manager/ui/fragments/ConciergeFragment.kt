@@ -69,16 +69,18 @@ class ConciergeFragment : Fragment() {
                 findNavController().popBackStack()
             },
             endIconClick = {
-                val action = ConciergeFragmentDirections.actionConciergeFragmentToUserProfileFragment2()
+                val action = ConciergeFragmentDirections.actionConciergeFragmentToSettingsFragmet()
                 findNavController().navigate(action)
             },
         )
     }
-
+    //Veri tabanından kapıcı görevlerinin getirilmesi sağlanır
     private fun getConciergeDuties(){
         databaseViewModel.getConciergeDuties()
         observeFinancialEventFlow()
     }
+    //Kapıcı görevleri için atılan isteğe karşılık gelen cevabın incelenmesini ve gelen verilerin
+    // adapter listesine aktarılması sağlanır
     private fun observeFinancialEventFlow() {
         viewLifecycleOwner.lifecycleScope.launch{
 
@@ -115,12 +117,14 @@ class ConciergeFragment : Fragment() {
         }
     }
 
+    //Kapıcının yapılacaklar listesi için olan adapterın kurulumu sağlanır
     private fun setupConciergeDutyToDoAdapter() {
         binding.rwDutyToDo.layoutManager = LinearLayoutManager(requireContext())
         conciergeDutyDoAdapter = ConciergeDutyToDoAdapterAdapter()
         binding.rwDutyToDo.adapter = conciergeDutyDoAdapter
     }
 
+    //Kapıcının yapılan listesi için olan adapterın kurulumu sağlanır
     private fun setupConciergeDutyToDoneAdapter() {
         binding.rwDutyToDone.layoutManager = LinearLayoutManager(requireContext())
         conciergeDutyDoneAdapter = ConciergeDutyToDoneAdapter()

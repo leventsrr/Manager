@@ -77,11 +77,12 @@ class ExecutiveHomePageFragment : Fragment() {
         Log.e("kontrol", "isLogin:$isLogin , apartment:$apartmentName  userName:$userName,")
     }
 
+    //Veri tabanından kapıcı duyurularının listesinin çekilmesi sağlanır
     private fun getConciergeAnnouncement() {
         databaseViewModel.getConciergeAnnouncement()
         observeAnnouncementFlow()
     }
-
+    //Kapıcı duyuruları için atılan isteğe karşılık gelen cevabı inceler ve gelen verileri ilgili adapter listesine aktarır
     private fun observeAnnouncementFlow() {
         viewLifecycleOwner.lifecycleScope.launch {
 
@@ -112,11 +113,13 @@ class ExecutiveHomePageFragment : Fragment() {
         }
     }
 
+    //Veri tabanından apartman sakinlerinin isteklerini çeker
     private fun getResidentRequests() {
         databaseViewModel.getResidentRequests()
         observeResidentRequestFlow()
     }
 
+    //sakin istekleri için atılan isteğe karşılık gelen cevabı inceler ve gelen verileri ilgili adapter listesine aktarır
     private fun observeResidentRequestFlow() {
         viewLifecycleOwner.lifecycleScope.launch {
 
@@ -147,11 +150,12 @@ class ExecutiveHomePageFragment : Fragment() {
         }
     }
 
+    //Gerçekleşen ekonomik harcama ve birikim olayları için istek atar
     private fun getFinancialEvents() {
         databaseViewModel.getFinancialEvents()
         observeFinancialEventFlow()
     }
-
+    //Ekonomik olaylar için atılan isteğe karşılık gelen cevabı inceler ve gelen verileri ilgili adapter listesine aktarır
     private fun observeFinancialEventFlow() {
         viewLifecycleOwner.lifecycleScope.launch {
 
@@ -182,18 +186,19 @@ class ExecutiveHomePageFragment : Fragment() {
         }
     }
 
+    //Sakin isteklerinin listeleneceği adapter ın kurulumunu yapar
     private fun setupResidentRequestAdapter() {
         binding.rwResidentRequest.layoutManager = LinearLayoutManager(requireContext())
         residentRequestAdapter = ResidentRequestAdapter()
         binding.rwResidentRequest.adapter = residentRequestAdapter
     }
-
+    //Kapıcı duyurularının listeleneceği adapter ın kurulumunu yapar
     private fun setupConciergeAnnouncementAdapter() {
         binding.rwConciergeAnnouncement.layoutManager = LinearLayoutManager(requireContext())
         conciergeAnnouncementAdapter = ConciergeAnnouncementAdapter()
         binding.rwConciergeAnnouncement.adapter = conciergeAnnouncementAdapter
     }
-
+    //Gelir gider verilerinin listeleneceği adapter ın kurulumunu yapar
     private fun setupIncomeExpenseAdapter() {
         binding.rwIncomeExpense.layoutManager = LinearLayoutManager(requireContext())
         financialEventAdapter = IncomeExpenseAdapter()
@@ -215,7 +220,7 @@ class ExecutiveHomePageFragment : Fragment() {
 
             },
             endIconClick = {
-                val action = ExecutiveHomePageFragmentDirections.actionExecutiveHomePageToUserProfileFragment2()
+                val action = ExecutiveHomePageFragmentDirections.actionExecutiveHomePageToSettingsFragmet()
                 findNavController().navigate(action)
             },
         )

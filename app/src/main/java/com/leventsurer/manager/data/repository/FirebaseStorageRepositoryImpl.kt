@@ -13,7 +13,7 @@ class FirebaseStorageRepositoryImpl @Inject constructor(
 
     @Inject
     lateinit var firebaseFireStore:FirebaseFirestore
-
+    //Storage a yeni fotoğraf eklenmesi
     override suspend fun uploadImage(imageUri :Uri) {
        val storageRef = firebaseStorage.reference.child(System.currentTimeMillis().toString())
         imageUri.let {

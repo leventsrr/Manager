@@ -45,8 +45,8 @@ class SettingsFragmet : Fragment() {
                 findNavController().popBackStack()
             },
             endIconClick = {
-                val action = SettingsFragmetDirections.actionSettingsFragmetToUserProfileFragment2()
-                findNavController().navigate(action)
+                /*val action = SettingsFragmetDirections.actionSettingsFragmetToUserProfileFragment2()
+                findNavController().navigate(action)*/
             },
         )
     }

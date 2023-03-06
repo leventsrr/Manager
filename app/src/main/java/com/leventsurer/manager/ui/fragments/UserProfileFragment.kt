@@ -16,12 +16,13 @@ import com.leventsurer.manager.tools.helpers.HeaderHelper
 import com.leventsurer.manager.viewModels.FirebaseStorageViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.runBlocking
+
 @AndroidEntryPoint
 class UserProfileFragment : Fragment() {
     private var _binding: FragmentUserProfileBinding? = null
     private val binding: FragmentUserProfileBinding get() = _binding!!
     private val storageViewModel by viewModels<FirebaseStorageViewModel>()
-    private var imageUri:Uri? = null
+    private var imageUri: Uri? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,12 +46,12 @@ class UserProfileFragment : Fragment() {
     private fun onClickHandler() {
         binding.apply {
             iwUserProfilePhoto.setOnClickListener {
-                Log.e("kontrol","fotoya tıklandı")
+                Log.e("kontrol", "fotoya tıklandı")
                 resultLauncher.launch("image/*")
             }
 
             btnUploadImage.setOnClickListener {
-                Log.e("kontrol","butona tıklandı")
+                Log.e("kontrol", "butona tıklandı")
                 runBlocking {
                     imageUri?.let { it1 -> storageViewModel.uploadImage(it1) }
                 }
@@ -60,7 +61,7 @@ class UserProfileFragment : Fragment() {
 
     private val resultLauncher = registerForActivityResult(
         ActivityResultContracts.GetContent()
-    ){
+    ) {
         imageUri = it
         binding.iwUserProfilePhoto.setImageURI(it)
     }
@@ -77,6 +78,9 @@ class UserProfileFragment : Fragment() {
                 findNavController().popBackStack()
             },
             endIconClick = {
+                val action =
+                    UserProfileFragmentDirections.actionUserProfileFragmentToSettingsFragmet()
+                findNavController().navigate(action)
             },
         )
     }

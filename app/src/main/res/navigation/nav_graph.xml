@@ -32,6 +32,9 @@
         <action
             android:id="@+id/action_executiveHomePage_to_userProfileFragment2"
             app:destination="@id/userProfileFragment" />
+        <action
+            android:id="@+id/action_executiveHomePage_to_settingsFragmet"
+            app:destination="@id/settingsFragmet" />
     </fragment>
     <fragment
         android:id="@+id/walletFragment"
@@ -40,6 +43,9 @@
         <action
             android:id="@+id/action_walletFragment_to_userProfileFragment2"
             app:destination="@id/userProfileFragment" />
+        <action
+            android:id="@+id/action_walletFragment_to_settingsFragmet"
+            app:destination="@id/settingsFragmet" />
     </fragment>
     <fragment
         android:id="@+id/conciergeFragment"
@@ -48,6 +54,9 @@
         <action
             android:id="@+id/action_conciergeFragment_to_userProfileFragment2"
             app:destination="@id/userProfileFragment" />
+        <action
+            android:id="@+id/action_conciergeFragment_to_settingsFragmet"
+            app:destination="@id/settingsFragmet" />
     </fragment>
     <fragment
         android:id="@+id/residentsInformationFragment"
@@ -59,6 +68,9 @@
         <action
             android:id="@+id/action_residentsInformationFragment_to_userProfileFragment2"
             app:destination="@id/userProfileFragment" />
+        <action
+            android:id="@+id/action_residentsInformationFragment_to_settingsFragmet"
+            app:destination="@id/settingsFragmet" />
     </fragment>
     <fragment
         android:id="@+id/residentInformationDetailsFragment"
@@ -79,5 +91,9 @@
     <fragment
         android:id="@+id/userProfileFragment"
         android:name="com.leventsurer.manager.ui.fragments.UserProfileFragment"
-        android:label="UserProfileFragment" />
+        android:label="UserProfileFragment" >
+        <action
+            android:id="@+id/action_userProfileFragment_to_settingsFragmet"
+            app:destination="@id/settingsFragmet" />
+    </fragment>
 </navigation>

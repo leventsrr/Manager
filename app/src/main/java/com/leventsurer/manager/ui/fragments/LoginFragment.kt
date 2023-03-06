@@ -44,7 +44,7 @@ class LoginFragment : Fragment() {
         (requireActivity() as MainActivity).hideBottomNavigation()
 
     }
-
+    //Giriş yapılırken girilen bilgiler doğrultusunda istek atılmasını ve gelen cevaba göre yönlendirme yapılmasını sağlar
     private fun observeFlow() {
         viewLifecycleOwner.lifecycleScope.launch{
                 viewModel.loginFlow.collect{
@@ -75,10 +75,12 @@ class LoginFragment : Fragment() {
 
         }
     }
+    //Giriş yapılırken gerekli bilgilerin shared preferencese kaydedilmesini sağlar.
     private fun writeDataToSharedPref(){
         sharedPrefViewModel.writeIsLogin(true)
-        sharedPrefViewModel.writeApartmentCode(binding.twUserApartmentName.text.toString())
+        sharedPrefViewModel.writeApartmentName(binding.twUserApartmentName.text.toString())
         sharedPrefViewModel.writeUserName(viewModel.currentUser?.displayName.toString())
+
 
     }
 
