@@ -50,7 +50,7 @@
 
                 <Button
                     android:id="@+id/btnUploadImage"
-                    android:layout_width="130dp"
+                    android:layout_width="120dp"
                     android:layout_height="40dp"
                     android:layout_marginStart="8dp"
                     android:layout_marginTop="5dp"
@@ -113,7 +113,7 @@
                     app:layout_constraintTop_toBottomOf="@+id/textView7" />
 
                 <TextView
-                    android:id="@+id/textView11"
+                    android:id="@+id/twUserCarPlate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="36dp"
@@ -121,6 +121,27 @@
                     android:text="06 ankara 06"
                     app:layout_constraintStart_toEndOf="@+id/textView8"
                     app:layout_constraintTop_toBottomOf="@+id/twUserPhoneNumber" />
+
+                <TextView
+                    android:id="@+id/textView11"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginTop="10dp"
+                    android:fontFamily="@font/titillium_web_bold"
+                    android:text="Kapı Numaram"
+                    app:layout_constraintStart_toEndOf="@+id/btnUploadImage"
+                    app:layout_constraintTop_toBottomOf="@+id/textView8" />
+
+                <TextView
+                    android:id="@+id/twUserDoorNumber"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="34dp"
+                    android:layout_marginTop="10dp"
+                    android:text="13"
+                    app:layout_constraintStart_toEndOf="@+id/textView11"
+                    app:layout_constraintTop_toBottomOf="@+id/twUserCarPlate" />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </com.google.android.material.card.MaterialCardView>
 

@@ -7,14 +7,20 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import com.bumptech.glide.Glide
 import com.leventsurer.manager.R
+import com.leventsurer.manager.data.model.Resource
 import com.leventsurer.manager.databinding.FragmentUserProfileBinding
 import com.leventsurer.manager.tools.helpers.HeaderHelper
+import com.leventsurer.manager.viewModels.DatabaseViewModel
 import com.leventsurer.manager.viewModels.FirebaseStorageViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
 @AndroidEntryPoint
@@ -22,6 +28,7 @@ class UserProfileFragment : Fragment() {
     private var _binding: FragmentUserProfileBinding? = null
     private val binding: FragmentUserProfileBinding get() = _binding!!
     private val storageViewModel by viewModels<FirebaseStorageViewModel>()
+    private val databaseViewModel by viewModels<DatabaseViewModel>()
     private var imageUri: Uri? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,18 +46,54 @@ class UserProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupUi()
+        getUserInfos()
         onClickHandler()
+    }
+
+    private fun getUserInfos() {
+        databaseViewModel.getUserInfo()
+        observeUserInfo()
+    }
+
+    private fun observeUserInfo() {
+        Log.e("kontrol","observe içine girdi")
+        viewLifecycleOwner.lifecycleScope.launch {
+            databaseViewModel.userInfoFlow.collect {
+                when (it) {
+                    is Resource.Failure -> {
+                        Toast.makeText(context, it.exception.message, Toast.LENGTH_LONG).show()
+                        Log.e("kontrol","Failure içine girdi")
+
+                    }
+                    is Resource.Loading -> {
+                        Log.e("kontrol","Loading içine girdi")
+                    }
+                    is Resource.Success -> {
+                        Log.e("kontrol","Success içine girdi")
+
+                        binding.twUserName.text = it.result.fullName
+                        binding.twUserPhoneNumber.text = it.result.phoneNumber
+                        binding.twUserCarPlate.text = it.result.carPlate
+                        binding.twUserDoorNumber.text = it.result.doorNumber
+                        Glide.with(requireContext()).load(it.result.imageLink).into(binding.iwUserProfilePhoto)
+
+                    }
+                    else -> {
+
+                    }
+                }
+            }
+
+        }
     }
 
     private fun onClickHandler() {
         binding.apply {
             iwUserProfilePhoto.setOnClickListener {
-                Log.e("kontrol","resme tıklandı")
                 resultLauncher.launch("image/*")
             }
 
             btnUploadImage.setOnClickListener {
-
                 runBlocking {
                     imageUri?.let { it1 -> storageViewModel.uploadImage(it1) }
                 }

@@ -44,6 +44,7 @@ class DatabaseRepositoryImpl @Inject constructor(
             Resource.Failure(e)
         }
     }
+
     //Kapıcı görevlerinin veri tabanından alınması
     override suspend fun getConciergeDuties(): Resource<ArrayList<ConciergeDutiesModel>> {
         val documentId = reachToDocumentIdFromSharedPref()
@@ -63,6 +64,7 @@ class DatabaseRepositoryImpl @Inject constructor(
             Resource.Failure(e)
         }
     }
+
     //Ekonomik işlemlerin veri tabanından alınması
     override suspend fun getRecentFinancialEvents(): Resource<ArrayList<FinancialEventModel>> {
         val documentId = reachToDocumentIdFromSharedPref()
@@ -82,6 +84,7 @@ class DatabaseRepositoryImpl @Inject constructor(
             Resource.Failure(e)
         }
     }
+
     //Apartman sakinlerinin isteklerinin veri tabanından alınması
     override suspend fun getResidentsRequests(): Resource<ArrayList<ResidentsRequestModel>> {
         val documentId = reachToDocumentIdFromSharedPref()
@@ -106,9 +109,23 @@ class DatabaseRepositoryImpl @Inject constructor(
         TODO("Not yet implemented")
     }
 
-    override suspend fun getAUser(fullName: String, doorNumber: String): UserModel {
-        TODO()
+    override suspend fun getAUser(): Resource<UserModel> {
+        return try {
+            val apartmentDocumentId = sharedRepository.readApartmentDocumentId(APARTMENT_DOCUMENT_ID)
+            val userDocumentId = sharedRepository.readUserDocumentId(USER_DOCUMENT_ID)
+            val userDocument: DocumentSnapshot =
+                database.collection(APARTMENT_COLLECTIONS).document(apartmentDocumentId!!)
+                    .collection(
+                        USER_COLLECTION
+                    ).document(userDocumentId!!).get().await()
+            val userInfoModel = userDocument.toObject(UserModel::class.java)!!
+            Log.e("kontrol"," kullanıcı adı ${userInfoModel.fullName}")
+            Resource.Success(userInfoModel)
+        } catch (e: Exception) {
+            Resource.Failure(e)
+        }
     }
+
     //Daha önce kaydedilen apartmana yeni kullanıcı eklenmesi
     override suspend fun addNewUser(
         name: String,
@@ -143,6 +160,7 @@ class DatabaseRepositoryImpl @Inject constructor(
         }
 
     }
+
     //Yeni açılan apartmana yeni kullanıcı kaydedilmesi
     override suspend fun addNewUserToNewApartment(
         name: String,
@@ -165,6 +183,7 @@ class DatabaseRepositoryImpl @Inject constructor(
         database.collection(documentPath).document(documentId).collection(USER_COLLECTION).add(user)
             .await()
     }
+
     //Veri tabanına yeni apartman kaydedilmesi
     override suspend fun addNewApartment(
         name: String,
@@ -194,11 +213,12 @@ class DatabaseRepositoryImpl @Inject constructor(
             }
 
         }
-        sharedRepository.writeApartmentDocumentId(APARTMENT_DOCUMENT_ID,documentId)
+        sharedRepository.writeApartmentDocumentId(APARTMENT_DOCUMENT_ID, documentId)
         return documentId
     }
+
     //Giriş yapan kullanıcın verilerini gösterebilmek için firestore document id verisi alınır.
-    override suspend fun getUserDocumentId(userName: String,apartmentCode: String): String {
+    override suspend fun getUserDocumentId(userName: String, apartmentCode: String): String {
         val apartmentsCollection: QuerySnapshot =
             database.collection(APARTMENT_COLLECTIONS).get().await()
         var apartmentDocumentId = ""
@@ -207,13 +227,19 @@ class DatabaseRepositoryImpl @Inject constructor(
             runBlocking {
                 if (apartmentDocument.data?.get("apartmentName") as String == apartmentCode) {
                     apartmentDocumentId = apartmentDocument.reference.id
-                    val users :QuerySnapshot= database.collection(APARTMENT_COLLECTIONS).document(apartmentDocumentId).collection(
-                        USER_COLLECTION).get().await()
-                    for(userDocument:DocumentSnapshot in users){
+                    val users: QuerySnapshot =
+                        database.collection(APARTMENT_COLLECTIONS).document(apartmentDocumentId)
+                            .collection(
+                                USER_COLLECTION
+                            ).get().await()
+                    for (userDocument: DocumentSnapshot in users) {
                         runBlocking {
-                            if(userDocument.data?.get("fullName") as String == userName){
+                            if (userDocument.data?.get("fullName") as String == userName) {
                                 userDocumentId = userDocument.reference.id
-                                sharedRepository.writeUserDocumentId(USER_DOCUMENT_ID,userDocumentId)
+                                sharedRepository.writeUserDocumentId(
+                                    USER_DOCUMENT_ID,
+                                    userDocumentId
+                                )
                             }
                         }
                     }

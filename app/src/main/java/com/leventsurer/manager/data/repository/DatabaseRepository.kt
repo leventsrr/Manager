@@ -10,7 +10,7 @@ interface DatabaseRepository {
     suspend fun getRecentFinancialEvents(): Resource<ArrayList<FinancialEventModel>>
     suspend fun getResidentsRequests(): Resource<ArrayList<ResidentsRequestModel>>
     suspend fun getUsers(): ArrayList<UserModel>
-    suspend fun getAUser(fullName: String, doorNumber: String): UserModel
+    suspend fun getAUser(): Resource<UserModel>
     suspend fun getApartmentDocumentId(apartmentCode: String):String
     suspend fun getUserDocumentId(userName:String,apartmentCode: String):String
     //Set

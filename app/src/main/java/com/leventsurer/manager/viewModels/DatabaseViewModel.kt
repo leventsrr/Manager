@@ -30,6 +30,18 @@ class DatabaseViewModel @Inject constructor(
     private val _financialEventsFlow = MutableStateFlow<Resource<ArrayList<FinancialEventModel>>?>(null)
     val financialEventsFlow : StateFlow<Resource<ArrayList<FinancialEventModel>>?> = _financialEventsFlow
 
+    private val _userInfoFlow = MutableStateFlow<Resource<UserModel>?>(null)
+    val userInfoFlow : StateFlow<Resource<UserModel>?> = _userInfoFlow
+
+    fun getUserInfo() = viewModelScope.launch {
+
+        _userInfoFlow.value = Resource.Loading
+        val result = databaseRepository.getAUser()
+        Log.e("kontrol","ViewModel içinde result:$result")
+        _userInfoFlow.value = result
+    }
+
+
     fun getFinancialEvents()= viewModelScope.launch {
         _financialEventsFlow.value = Resource.Loading
         val result = databaseRepository.getRecentFinancialEvents()
