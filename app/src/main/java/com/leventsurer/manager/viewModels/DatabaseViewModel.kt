@@ -39,7 +39,6 @@ class DatabaseViewModel @Inject constructor(
     fun getConciergeAnnouncement()= viewModelScope.launch {
         _conciergeAnnouncementFlow.value = Resource.Loading
         val result = databaseRepository.getConciergeAnnouncements()
-
         _conciergeAnnouncementFlow.value = result
 
     }
@@ -47,7 +46,6 @@ class DatabaseViewModel @Inject constructor(
     fun getResidentRequests() = viewModelScope.launch {
         _residentRequestFlow.value = Resource.Loading
         val result = databaseRepository.getResidentsRequests()
-
         _residentRequestFlow.value = result
 
     }
@@ -58,8 +56,13 @@ class DatabaseViewModel @Inject constructor(
         _conciergeDutiesFlow.value = result
     }
 
+
     fun addNewUser(name:String,apartmentCode:String,carPlate:String,doorNumber:String,role:String) = viewModelScope.launch {
         databaseRepository.addNewUser(name, apartmentCode, carPlate , doorNumber,role)
+    }
+
+    fun getUserDocumentId(userName:String,apartmentCode: String)  = viewModelScope.launch {
+        databaseRepository.getUserDocumentId(userName,apartmentCode)
     }
 
     fun addNewApartment(name: String,

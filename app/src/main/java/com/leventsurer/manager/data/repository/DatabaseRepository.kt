@@ -12,7 +12,7 @@ interface DatabaseRepository {
     suspend fun getUsers(): ArrayList<UserModel>
     suspend fun getAUser(fullName: String, doorNumber: String): UserModel
     suspend fun getApartmentDocumentId(apartmentCode: String):String
-    suspend fun getUserDocumentId(userName:String):String
+    suspend fun getUserDocumentId(userName:String,apartmentCode: String):String
     //Set
     suspend fun addNewUser(
         name: String,

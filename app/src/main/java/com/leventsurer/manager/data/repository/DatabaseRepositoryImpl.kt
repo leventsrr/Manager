@@ -1,7 +1,5 @@
 package com.leventsurer.manager.data.repository
 
-import android.content.Context
-import android.content.SharedPreferences
 import android.util.Log
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
@@ -14,6 +12,7 @@ import com.leventsurer.manager.tools.constants.FirebaseConstants.FINANCIAL_EVENT
 import com.leventsurer.manager.tools.constants.FirebaseConstants.RESIDENT_REQUESTS
 import com.leventsurer.manager.tools.constants.FirebaseConstants.USER_COLLECTION
 import com.leventsurer.manager.tools.constants.SharedPreferencesConstants.APARTMENT_NAME
+import com.leventsurer.manager.tools.constants.SharedPreferencesConstants.USER_DOCUMENT_ID
 import kotlinx.coroutines.runBlocking
 
 import kotlinx.coroutines.tasks.await
@@ -188,17 +187,38 @@ class DatabaseRepositoryImpl @Inject constructor(
             runBlocking {
                 if (apartmentDocument.data?.get("apartmentName") as String == apartmentCode) {
                     documentId = apartmentDocument.reference.id
-
-
                 }
             }
 
         }
         return documentId
     }
+    //Giriş yapan kullanıcın verilerini gösterebilmek için firestore document id verisi alınır.
+    override suspend fun getUserDocumentId(userName: String,apartmentCode: String): String {
+        val apartmentsCollection: QuerySnapshot =
+            database.collection(APARTMENT_COLLECTIONS).get().await()
+        var apartmentDocumentId = ""
+        var userDocumentId = ""
+        for (apartmentDocument: DocumentSnapshot in apartmentsCollection) {
+            runBlocking {
+                if (apartmentDocument.data?.get("apartmentName") as String == apartmentCode) {
+                    apartmentDocumentId = apartmentDocument.reference.id
+                    val users :QuerySnapshot= database.collection(APARTMENT_COLLECTIONS).document(apartmentDocumentId).collection(
+                        USER_COLLECTION).get().await()
+                    for(userDocument:DocumentSnapshot in users){
+                        runBlocking {
+                            if(userDocument.data?.get("fullName") as String == userName){
+                                userDocumentId = userDocument.reference.id
+                                sharedRepository.writeUserDocumentId(USER_DOCUMENT_ID,userDocumentId)
+                            }
+                        }
+                    }
 
-    override suspend fun getUserDocumentId(userName: String): String {
-        TODO("Not yet implemented")
+                }
+            }
+
+        }
+        return userDocumentId
     }
 
     //Apartman id sine ulaşmak için kullanılacak apartman adının shared preferencesten çekilmesi.
