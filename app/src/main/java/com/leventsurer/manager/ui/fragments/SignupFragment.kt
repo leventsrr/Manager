@@ -91,7 +91,6 @@ class SignupFragment : Fragment() {
         if(newUserRole == "yonetici"){
             databaseViewModel.addNewApartment(name,apartmentCode,carPlate,doorNumber,role,apartmentCode)
         }else{
-            Log.e("kontrol",newUserRole)
             databaseViewModel.addNewUser(name,apartmentCode,carPlate,doorNumber,role)
         }
         authViewModel.signup(name,email,password)

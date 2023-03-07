@@ -75,7 +75,6 @@ class ExecutiveHomePageFragment : Fragment() {
         val apartmentName = sharedPrefViewModel.readApartmentName()
         val userName = sharedPrefViewModel.readUserName()
         val userDocumentId = sharedPrefViewModel.readUserDocumentId()
-        Log.e("kontrol", "isLogin:$isLogin , apartment:$apartmentName  userName:$userName, userDocumentId:$userDocumentId")
     }
 
     //Veri tabanından kapıcı duyurularının listesinin çekilmesi sağlanır

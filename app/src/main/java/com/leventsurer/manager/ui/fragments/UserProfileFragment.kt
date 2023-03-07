@@ -15,6 +15,7 @@ import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.leventsurer.manager.R
 import com.leventsurer.manager.data.model.Resource
+import com.leventsurer.manager.data.model.UserModel
 import com.leventsurer.manager.databinding.FragmentUserProfileBinding
 import com.leventsurer.manager.tools.helpers.HeaderHelper
 import com.leventsurer.manager.viewModels.DatabaseViewModel
@@ -46,45 +47,40 @@ class UserProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupUi()
-        getUserInfos()
+        getUserInfo()
         onClickHandler()
     }
-
-    private fun getUserInfos() {
+    //Giriş yapan kullanıcının verilerini veritabanından çeker
+    private fun getUserInfo() {
         databaseViewModel.getUserInfo()
         observeUserInfo()
     }
 
     private fun observeUserInfo() {
-        Log.e("kontrol","observe içine girdi")
         viewLifecycleOwner.lifecycleScope.launch {
             databaseViewModel.userInfoFlow.collect {
                 when (it) {
                     is Resource.Failure -> {
                         Toast.makeText(context, it.exception.message, Toast.LENGTH_LONG).show()
-                        Log.e("kontrol","Failure içine girdi")
-
                     }
-                    is Resource.Loading -> {
-                        Log.e("kontrol","Loading içine girdi")
-                    }
+                    is Resource.Loading -> {}
                     is Resource.Success -> {
-                        Log.e("kontrol","Success içine girdi")
-
-                        binding.twUserName.text = it.result.fullName
-                        binding.twUserPhoneNumber.text = it.result.phoneNumber
-                        binding.twUserCarPlate.text = it.result.carPlate
-                        binding.twUserDoorNumber.text = it.result.doorNumber
-                        Glide.with(requireContext()).load(it.result.imageLink).into(binding.iwUserProfilePhoto)
-
+                        bindUserInfoToUi(it.result)
                     }
-                    else -> {
-
-                    }
+                    else -> { }
                 }
             }
 
         }
+    }
+    //Gelene kullanıcı bilgilerini arayüzde gerekli yerlere yerleştirir
+    private fun bindUserInfoToUi(model: UserModel) {
+        binding.twUserName.text = model.fullName
+        binding.twUserPhoneNumber.text = model.phoneNumber
+        binding.twUserCarPlate.text = model.carPlate
+        binding.twUserDoorNumber.text = model.doorNumber
+        Glide.with(requireContext()).load(model.imageLink).into(binding.iwUserProfilePhoto)
+        binding.cbUserPaymentStatus.isChecked = model.duesPaymentStatus
     }
 
     private fun onClickHandler() {
@@ -97,6 +93,17 @@ class UserProfileFragment : Fragment() {
                 runBlocking {
                     imageUri?.let { it1 -> storageViewModel.uploadImage(it1) }
                 }
+            }
+
+            cbUserPaymentStatus.setOnClickListener {
+                val currentStatus: Boolean = cbUserPaymentStatus.isChecked
+                Log.e("kontrol", "fragment içinde $currentStatus")
+                databaseViewModel.setUserDuesPaymentStatus(currentStatus)
+            }
+
+            btnSendRequest.setOnClickListener {
+                val userRequest = etUserRequest.text.toString()
+                databaseViewModel.addNewRequest(userRequest)
             }
         }
     }

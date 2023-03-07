@@ -37,4 +37,8 @@ interface DatabaseRepository {
         doorNumber: String,
         role: String, apartmentName: String
     )
+
+    suspend fun changeUserDuesPaymentStatus(currentStatus:Boolean)
+
+    suspend fun addNewRequest(request:String)
 }

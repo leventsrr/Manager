@@ -18,8 +18,10 @@ class FirebaseStorageRepositoryImpl @Inject constructor(
 
     @Inject
     lateinit var firebaseFireStore: FirebaseFirestore
+
     @Inject
-    lateinit var sharedRepository : SharedRepositoryImpl
+    lateinit var sharedRepository: SharedRepositoryImpl
+
     //Storage a yeni fotoğraf eklenmesi
     override suspend fun uploadImage(imageUri: Uri) {
         val storageRef = firebaseStorage.reference.child(System.currentTimeMillis().toString())
@@ -31,31 +33,22 @@ class FirebaseStorageRepositoryImpl @Inject constructor(
                         val map = HashMap<String, Any>()
                         map["images"] = uri.toString()
                         val apartmentDocumentId = sharedRepository.readApartmentDocumentId(
-                            APARTMENT_DOCUMENT_ID)
+                            APARTMENT_DOCUMENT_ID
+                        )
                         val userDocumentId = sharedRepository.readUserDocumentId(USER_DOCUMENT_ID)
-                        Log.e("kontrol","apartment:$apartmentDocumentId, user:$userDocumentId")
-                        firebaseFireStore.collection(APARTMENT_COLLECTIONS).document(apartmentDocumentId!!).collection(
-                            USER_COLLECTION).document(userDocumentId!!).update("imageLink",uri.toString())
-                        /*sharedRepository.readApartmentDocumentId(APARTMENT_DOCUMENT_ID)
-                            ?.let { it1 ->
-                                firebaseFireStore.collection(APARTMENT_COLLECTIONS)
-                                    .document(it1)
-                                    .collection(USER_COLLECTION)
-                                    .document(sharedRepository.readUserDocumentId(USER_DOCUMENT_ID)!!)
-                                    .update(
-                                        "imageLink",
-                                        uri.toString()
-                                    ).addOnSuccessListener {
-                                        Log.e("kontrol","resim eklendi")
-                                    }
-                            }*/
-                        firebaseFireStore.collection("images").add(map).addOnCompleteListener { firestoreTask ->
-                             if(firestoreTask.isSuccessful){
-                                Log.e("kontrol","resim veritabanına yüklendi")
-                             }else{
-                                 Log.e("kontrol","resim veritabanına yüklenmedi")
-                             }
-                         }
+                        firebaseFireStore.collection(APARTMENT_COLLECTIONS)
+                            .document(apartmentDocumentId!!).collection(
+                            USER_COLLECTION
+                        ).document(userDocumentId!!).update("imageLink", uri.toString())
+
+                        firebaseFireStore.collection("images").add(map)
+                            .addOnCompleteListener { firestoreTask ->
+                                if (firestoreTask.isSuccessful) {
+                                    Log.e("kontrol", "resim veritabanına yüklendi")
+                                } else {
+                                    Log.e("kontrol", "resim veritabanına yüklenmedi")
+                                }
+                            }
                     }
                 } else {
                     Log.e("kontrol", "yükleme hatası")

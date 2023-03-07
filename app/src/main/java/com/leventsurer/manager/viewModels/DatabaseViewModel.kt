@@ -37,7 +37,6 @@ class DatabaseViewModel @Inject constructor(
 
         _userInfoFlow.value = Resource.Loading
         val result = databaseRepository.getAUser()
-        Log.e("kontrol","ViewModel içinde result:$result")
         _userInfoFlow.value = result
     }
 
@@ -83,5 +82,14 @@ class DatabaseViewModel @Inject constructor(
                         doorNumber: String,
                         role: String, apartmentName: String) = viewModelScope.launch {
         databaseRepository.addNewApartment(name,apartmentCode,carPlate,doorNumber, role, apartmentName)
+    }
+
+    fun addNewRequest(request:String) = viewModelScope.launch {
+        databaseRepository.addNewRequest(request)
+    }
+
+    fun setUserDuesPaymentStatus(currentStats:Boolean) = viewModelScope.launch {
+        Log.e("kontrol","viewmodel içinde $currentStats")
+        databaseRepository.changeUserDuesPaymentStatus(currentStats)
     }
 }

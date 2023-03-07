@@ -111,7 +111,8 @@ class DatabaseRepositoryImpl @Inject constructor(
 
     override suspend fun getAUser(): Resource<UserModel> {
         return try {
-            val apartmentDocumentId = sharedRepository.readApartmentDocumentId(APARTMENT_DOCUMENT_ID)
+            val apartmentDocumentId =
+                sharedRepository.readApartmentDocumentId(APARTMENT_DOCUMENT_ID)
             val userDocumentId = sharedRepository.readUserDocumentId(USER_DOCUMENT_ID)
             val userDocument: DocumentSnapshot =
                 database.collection(APARTMENT_COLLECTIONS).document(apartmentDocumentId!!)
@@ -119,7 +120,6 @@ class DatabaseRepositoryImpl @Inject constructor(
                         USER_COLLECTION
                     ).document(userDocumentId!!).get().await()
             val userInfoModel = userDocument.toObject(UserModel::class.java)!!
-            Log.e("kontrol"," kullanıcı adı ${userInfoModel.fullName}")
             Resource.Success(userInfoModel)
         } catch (e: Exception) {
             Resource.Failure(e)
@@ -156,7 +156,6 @@ class DatabaseRepositoryImpl @Inject constructor(
                         .collection(USER_COLLECTION).add(user).await()
                 }
             }
-
         }
 
     }
@@ -198,6 +197,18 @@ class DatabaseRepositoryImpl @Inject constructor(
             )
         ).await().id
         addNewUserToNewApartment(name, apartmentCode, carPlate, doorNumber, role, result)
+    }
+
+    override suspend fun changeUserDuesPaymentStatus(currentStatus: Boolean) {
+        val apartmentDocumentId = sharedRepository.readApartmentDocumentId(APARTMENT_DOCUMENT_ID)
+        val userDocumentId = sharedRepository.readUserDocumentId(USER_DOCUMENT_ID)
+        Log.e(
+            "kontrol",
+            "repository içinde. apartment:$apartmentDocumentId, user:$userDocumentId, status:$currentStatus"
+        )
+        database.collection(APARTMENT_COLLECTIONS).document(apartmentDocumentId!!).collection(
+            USER_COLLECTION
+        ).document(userDocumentId!!).update("duesPaymentStatus", currentStatus).await()
     }
 
     //Grilen apartman adına göre apartmanın veri tabanındaki id sinin getirilmesi ve sharedPreferences a kaydedilmesi
@@ -249,6 +260,18 @@ class DatabaseRepositoryImpl @Inject constructor(
 
         }
         return userDocumentId
+    }
+
+    override suspend fun addNewRequest(request: String) {
+        val apartmentDocumentId = sharedRepository.readApartmentDocumentId(APARTMENT_DOCUMENT_ID)
+        val userDocumentId = sharedRepository.readUserDocumentId(USER_DOCUMENT_ID)
+
+        val request = hashMapOf(
+            "request" to request,
+            "requestDate" to ""
+        )
+        database.collection(APARTMENT_COLLECTIONS).document(apartmentDocumentId!!)
+            .collection(RESIDENT_REQUESTS).add(request).await()
     }
 
     //Apartman id sine ulaşmak için kullanılacak apartman adının shared preferencesten çekilmesi.
