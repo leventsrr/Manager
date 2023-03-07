@@ -11,6 +11,7 @@ import com.leventsurer.manager.tools.constants.FirebaseConstants.DUTIES
 import com.leventsurer.manager.tools.constants.FirebaseConstants.FINANCIAL_EVENTS
 import com.leventsurer.manager.tools.constants.FirebaseConstants.RESIDENT_REQUESTS
 import com.leventsurer.manager.tools.constants.FirebaseConstants.USER_COLLECTION
+import com.leventsurer.manager.tools.constants.SharedPreferencesConstants.APARTMENT_DOCUMENT_ID
 import com.leventsurer.manager.tools.constants.SharedPreferencesConstants.APARTMENT_NAME
 import com.leventsurer.manager.tools.constants.SharedPreferencesConstants.USER_DOCUMENT_ID
 import kotlinx.coroutines.runBlocking
@@ -122,7 +123,8 @@ class DatabaseRepositoryImpl @Inject constructor(
             "duesPaymentStatus" to false,
             "fullName" to name,
             "phoneNumber" to "",
-            "role" to role
+            "role" to role,
+            "imageLink" to ""
         )
 
         val apartmentsCollection: QuerySnapshot =
@@ -156,7 +158,8 @@ class DatabaseRepositoryImpl @Inject constructor(
             "duesPaymentStatus" to false,
             "fullName" to name,
             "phoneNumber" to "",
-            "role" to role
+            "role" to role,
+            "imageLink" to ""
         )
         val documentPath = "apartments"
         database.collection(documentPath).document(documentId).collection(USER_COLLECTION).add(user)
@@ -178,7 +181,7 @@ class DatabaseRepositoryImpl @Inject constructor(
         addNewUserToNewApartment(name, apartmentCode, carPlate, doorNumber, role, result)
     }
 
-    //Grilen apartman adına göre apartmanın veri tabanındaki id sinin getirilmesi
+    //Grilen apartman adına göre apartmanın veri tabanındaki id sinin getirilmesi ve sharedPreferences a kaydedilmesi
     override suspend fun getApartmentDocumentId(apartmentCode: String): String {
         val apartmentsCollection: QuerySnapshot =
             database.collection(APARTMENT_COLLECTIONS).get().await()
@@ -191,6 +194,7 @@ class DatabaseRepositoryImpl @Inject constructor(
             }
 
         }
+        sharedRepository.writeApartmentDocumentId(APARTMENT_DOCUMENT_ID,documentId)
         return documentId
     }
     //Giriş yapan kullanıcın verilerini gösterebilmek için firestore document id verisi alınır.

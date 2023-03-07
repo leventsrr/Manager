@@ -1,4 +1,5 @@
 package com.leventsurer.manager.di
+import android.content.Context
 import android.content.SharedPreferences
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
@@ -7,9 +8,11 @@ import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.leventsurer.manager.data.repository.*
 import com.leventsurer.manager.tools.constants.FirebaseConstants
+import com.leventsurer.manager.tools.constants.SharedPreferencesConstants.PREFERENCES_NAME
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.android.scopes.ViewModelScoped
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
@@ -58,4 +61,9 @@ class AppModule {
     fun provideSharedPreferences(
         sharedPrefManager: SharedPrefManager
     ): SharedPreferences = sharedPrefManager.getSharedPref()
+
+   /* @Singleton
+    @Provides
+    fun provideSharedPreferences(@ApplicationContext context: Context): SharedPreferences =
+        context.getSharedPreferences(PREFERENCES_NAME, Context.MODE_PRIVATE)*/
 }

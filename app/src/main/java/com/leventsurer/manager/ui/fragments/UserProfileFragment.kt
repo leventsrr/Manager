@@ -23,7 +23,6 @@ class UserProfileFragment : Fragment() {
     private val binding: FragmentUserProfileBinding get() = _binding!!
     private val storageViewModel by viewModels<FirebaseStorageViewModel>()
     private var imageUri: Uri? = null
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -46,12 +45,12 @@ class UserProfileFragment : Fragment() {
     private fun onClickHandler() {
         binding.apply {
             iwUserProfilePhoto.setOnClickListener {
-                Log.e("kontrol", "fotoya tıklandı")
+                Log.e("kontrol","resme tıklandı")
                 resultLauncher.launch("image/*")
             }
 
             btnUploadImage.setOnClickListener {
-                Log.e("kontrol", "butona tıklandı")
+
                 runBlocking {
                     imageUri?.let { it1 -> storageViewModel.uploadImage(it1) }
                 }
@@ -64,6 +63,7 @@ class UserProfileFragment : Fragment() {
     ) {
         imageUri = it
         binding.iwUserProfilePhoto.setImageURI(it)
+        binding.btnUploadImage.text = "Resmi Kaydet"
     }
 
     private fun setupUi() {
@@ -72,7 +72,7 @@ class UserProfileFragment : Fragment() {
             title = "Profiliniz",
             startIconVisibility = true,
             endIconVisibility = true,
-            startIcon = R.drawable.ic_baseline_arrow_back_24,
+            startIcon = R.drawable.ic_baseline_sensor_door_24,
             endIcon = R.drawable.ic_baseline_settings_24,
             startIconClick = {
                 findNavController().popBackStack()
@@ -83,6 +83,8 @@ class UserProfileFragment : Fragment() {
                 findNavController().navigate(action)
             },
         )
+
+        binding.btnUploadImage.text = "Resim Seç"
     }
 
 }
