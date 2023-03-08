@@ -20,6 +20,7 @@ import com.leventsurer.manager.databinding.FragmentUserProfileBinding
 import com.leventsurer.manager.tools.helpers.HeaderHelper
 import com.leventsurer.manager.viewModels.DatabaseViewModel
 import com.leventsurer.manager.viewModels.FirebaseStorageViewModel
+import com.leventsurer.manager.viewModels.SharedPreferencesViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -30,7 +31,9 @@ class UserProfileFragment : Fragment() {
     private val binding: FragmentUserProfileBinding get() = _binding!!
     private val storageViewModel by viewModels<FirebaseStorageViewModel>()
     private val databaseViewModel by viewModels<DatabaseViewModel>()
+    private val sharedPreferencesViewModel by viewModels<SharedPreferencesViewModel>()
     private var imageUri: Uri? = null
+    private var apartmentCode:String? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -52,8 +55,10 @@ class UserProfileFragment : Fragment() {
     }
     //Giriş yapan kullanıcının verilerini veritabanından çeker
     private fun getUserInfo() {
+        apartmentCode = sharedPreferencesViewModel.readApartmentName()
         databaseViewModel.getUserInfo()
         observeUserInfo()
+
     }
 
     private fun observeUserInfo() {
@@ -81,6 +86,7 @@ class UserProfileFragment : Fragment() {
         binding.twUserDoorNumber.text = model.doorNumber
         Glide.with(requireContext()).load(model.imageLink).into(binding.iwUserProfilePhoto)
         binding.cbUserPaymentStatus.isChecked = model.duesPaymentStatus
+        binding.twApartmentCode.text = apartmentCode
     }
 
     private fun onClickHandler() {
@@ -104,6 +110,7 @@ class UserProfileFragment : Fragment() {
             btnSendRequest.setOnClickListener {
                 val userRequest = etUserRequest.text.toString()
                 databaseViewModel.addNewRequest(userRequest)
+                etUserRequest.text?.clear()
             }
         }
     }

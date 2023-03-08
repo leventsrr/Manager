@@ -98,7 +98,7 @@ class ConciergeFragment : Fragment() {
                     }
                     is Resource.Success ->{
                         binding.pbDutiesDo.visibility = View.GONE
-                        binding.pbDutiesDone.visibility = View.VISIBLE
+                        binding.pbDutiesDone.visibility = View.GONE
                         for(duty in it.result){
                             if(duty.isDone) conciergeDutyDoneAdapterList.add(duty) else conciergeDutyDoAdapterList.add(duty)
                         }

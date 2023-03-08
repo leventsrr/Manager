@@ -5,10 +5,7 @@
         android:id="@+id/walletFragment"
         android:icon="@drawable/ic_baseline_account_balance_wallet_24"
         android:title="Cüzdan" />
-
-
-
-
+    
     <item
         android:id="@+id/residentsInformationFragment"
         android:icon="@drawable/ic_baseline_people_24"

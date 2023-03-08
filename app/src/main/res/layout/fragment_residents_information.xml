@@ -23,6 +23,7 @@
             android:id="@+id/rwResidentsInformation"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:layout_marginBottom="70dp"
             android:layout_gravity="center_horizontal">
 
         </androidx.recyclerview.widget.RecyclerView>
