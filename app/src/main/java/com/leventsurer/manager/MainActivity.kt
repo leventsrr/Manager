@@ -2,9 +2,11 @@ package com.leventsurer.manager
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.MenuItem
 import android.view.View
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.onNavDestinationSelected
 import androidx.navigation.ui.setupWithNavController
 import com.leventsurer.manager.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -20,6 +22,7 @@ class MainActivity : AppCompatActivity() {
         setupBottomNav()
 
     }
+
 
     private fun setupBottomNav() {
         val navHostFragment =

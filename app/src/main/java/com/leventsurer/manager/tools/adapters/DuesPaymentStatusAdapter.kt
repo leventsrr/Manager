@@ -3,6 +3,7 @@ package com.leventsurer.manager.tools.adapters
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.leventsurer.manager.data.model.UserModel
 import com.leventsurer.manager.databinding.DuesPaymentStatusRowBinding
 
 
@@ -14,7 +15,7 @@ class DuesPaymentStatusAdapter : RecyclerView.Adapter<DuesPaymentStatusAdapter.D
 
     }
 
-    var list = ArrayList<String>()
+    var list = ArrayList<UserModel>()
         set(value) {
             field = value
             notifyDataSetChanged()
@@ -30,12 +31,14 @@ class DuesPaymentStatusAdapter : RecyclerView.Adapter<DuesPaymentStatusAdapter.D
     //Bağlanma olduktan sonra ne olacak
     override fun onBindViewHolder(holder: DuesPaymentStatusHolder, position: Int) {
         holder.binding.apply {
-            twApartmentDweller.text = "Levent Sürer"
+            val currentItem = list[position]
+            twApartmentDweller.text = currentItem.fullName
+            cbPaymentStatus.isChecked = currentItem.duesPaymentStatus
         }
     }
 
     //Kaç tane olacak
     override fun getItemCount(): Int {
-        return 32
+        return list.size
     }
 }

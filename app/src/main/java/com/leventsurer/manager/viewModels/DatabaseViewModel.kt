@@ -33,6 +33,8 @@ class DatabaseViewModel @Inject constructor(
     private val _userInfoFlow = MutableStateFlow<Resource<UserModel>?>(null)
     val userInfoFlow : StateFlow<Resource<UserModel>?> = _userInfoFlow
 
+    private val _users = MutableStateFlow<Resource<ArrayList<UserModel>>?>(null)
+    val users : StateFlow<Resource<ArrayList<UserModel>>?> = _users
     fun getUserInfo() = viewModelScope.launch {
 
         _userInfoFlow.value = Resource.Loading
@@ -40,6 +42,11 @@ class DatabaseViewModel @Inject constructor(
         _userInfoFlow.value = result
     }
 
+    fun getAllApartmentUsers() = viewModelScope.launch {
+        _users.value = Resource.Loading
+        val result = databaseRepository.getUsers()
+        _users.value = result
+    }
 
     fun getFinancialEvents()= viewModelScope.launch {
         _financialEventsFlow.value = Resource.Loading
@@ -89,7 +96,7 @@ class DatabaseViewModel @Inject constructor(
     }
 
     fun setUserDuesPaymentStatus(currentStats:Boolean) = viewModelScope.launch {
-        Log.e("kontrol","viewmodel içinde $currentStats")
         databaseRepository.changeUserDuesPaymentStatus(currentStats)
     }
+
 }

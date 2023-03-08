@@ -83,11 +83,7 @@
     <fragment
         android:id="@+id/settingsFragmet"
         android:name="com.leventsurer.manager.ui.fragments.SettingsFragmet"
-        android:label="SettingsFragmet" >
-        <action
-            android:id="@+id/action_settingsFragmet_to_userProfileFragment2"
-            app:destination="@id/userProfileFragment" />
-    </fragment>
+        android:label="SettingsFragmet" />
     <fragment
         android:id="@+id/userProfileFragment"
         android:name="com.leventsurer.manager.ui.fragments.UserProfileFragment"

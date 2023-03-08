@@ -8,12 +8,13 @@
         <entry key="..\:/Users/leven/AndroidStudioProjects/Manager/app/src/main/res/drawable/ic_baseline_expense_arrow.xml" value="0.1915" />
         <entry key="..\:/Users/leven/AndroidStudioProjects/Manager/app/src/main/res/drawable/ic_baseline_sensor_door_24.xml" value="0.264" />
         <entry key="..\:/Users/leven/AndroidStudioProjects/Manager/app/src/main/res/drawable/ic_baseline_settings_24.xml" value="0.16" />
-        <entry key="..\:/Users/leven/AndroidStudioProjects/Manager/app/src/main/res/layout/activity_main.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/leven/AndroidStudioProjects/Manager/app/src/main/res/layout/activity_main.xml" value="0.1" />
         <entry key="..\:/Users/leven/AndroidStudioProjects/Manager/app/src/main/res/layout/concierge_announcement_row.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/leven/AndroidStudioProjects/Manager/app/src/main/res/layout/concierge_duty_row.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/leven/AndroidStudioProjects/Manager/app/src/main/res/layout/custoheader.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/leven/AndroidStudioProjects/Manager/app/src/main/res/layout/custom_header.xml" value="0.2" />
         <entry key="..\:/Users/leven/AndroidStudioProjects/Manager/app/src/main/res/layout/duepayment_status_row.xml" value="0.365625" />
+        <entry key="..\:/Users/leven/AndroidStudioProjects/Manager/app/src/main/res/layout/dues_payment_status_row.xml" value="0.33611111111111114" />
         <entry key="..\:/Users/leven/AndroidStudioProjects/Manager/app/src/main/res/layout/fragment_concierge.xml" value="0.3453703703703704" />
         <entry key="..\:/Users/leven/AndroidStudioProjects/Manager/app/src/main/res/layout/fragment_executive_home_page.xml" value="0.228125" />
         <entry key="..\:/Users/leven/AndroidStudioProjects/Manager/app/src/main/res/layout/fragment_login.xml" value="0.2786458333333333" />

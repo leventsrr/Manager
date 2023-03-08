@@ -105,8 +105,21 @@ class DatabaseRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getUsers(): ArrayList<UserModel> {
-        TODO("Not yet implemented")
+    override suspend fun getUsers(): Resource<ArrayList<UserModel>> {
+        return try {
+            val apartmentDocumentId =
+                sharedRepository.readApartmentDocumentId(APARTMENT_DOCUMENT_ID)
+            val usersDocuments = database.collection(APARTMENT_COLLECTIONS).document(apartmentDocumentId!!).collection(
+                USER_COLLECTION).get().await()
+            val users = arrayListOf<UserModel>()
+            for (user in usersDocuments){
+                val userModel = user.toObject(UserModel::class.java)!!
+                users.add(userModel)
+            }
+            Resource.Success(users)
+        }catch (e:Exception){
+            Resource.Failure(e)
+        }
     }
 
     override suspend fun getAUser(): Resource<UserModel> {
@@ -273,6 +286,7 @@ class DatabaseRepositoryImpl @Inject constructor(
         database.collection(APARTMENT_COLLECTIONS).document(apartmentDocumentId!!)
             .collection(RESIDENT_REQUESTS).add(request).await()
     }
+
 
     //Apartman id sine ulaşmak için kullanılacak apartman adının shared preferencesten çekilmesi.
     private suspend fun reachToDocumentIdFromSharedPref(): String {
