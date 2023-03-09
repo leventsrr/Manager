@@ -26,6 +26,7 @@ class ResidentsInformationFragment : Fragment() {
     private var _binding: FragmentResidentsInformationBinding? = null
     private val binding: FragmentResidentsInformationBinding get() = _binding!!
     private val databaseViewModel by viewModels<DatabaseViewModel>()
+
     //Adapter list
     private var residentsInformationAdapterList = ArrayList<UserModel>()
     //Adapters
@@ -105,6 +106,10 @@ class ResidentsInformationFragment : Fragment() {
         binding.rwResidentsInformation.layoutManager = GridLayoutManager(requireContext(), 3)
         residentsInformationAdapter = ResidentsInformationAdapter()
         binding.rwResidentsInformation.adapter = residentsInformationAdapter
+        residentsInformationAdapter.moveDetailPage {
+            val action = ResidentsInformationFragmentDirections.actionResidentsInformationFragmentToResidentInformationDetailsFragment(it)
+            findNavController().navigate(action)
+        }
     }
 
 

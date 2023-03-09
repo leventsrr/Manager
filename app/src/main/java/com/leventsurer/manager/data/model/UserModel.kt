@@ -1,6 +1,9 @@
 package com.leventsurer.manager.data.model
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
 
+@Parcelize
 data class UserModel(
     val carPlate: String = "",
     val doorNumber:String = "",
@@ -9,5 +12,5 @@ data class UserModel(
     val phoneNumber:String = "",
     val role:String = "",
     val imageLink:String = ""
-)
+) : Parcelable
 

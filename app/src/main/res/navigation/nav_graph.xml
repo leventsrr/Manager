@@ -79,6 +79,9 @@
         <action
             android:id="@+id/action_residentInformationDetailsFragment_to_userProfileFragment"
             app:destination="@id/userProfileFragment" />
+        <argument
+            android:name="userModel"
+            app:argType="com.leventsurer.manager.data.model.UserModel" />
     </fragment>
     <fragment
         android:id="@+id/settingsFragmet"

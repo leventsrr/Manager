@@ -42,6 +42,12 @@ class DatabaseViewModel @Inject constructor(
         _userInfoFlow.value = result
     }
 
+    fun getAUserByNameAndDoorNumber(userName: String,doorNumber: String) = viewModelScope.launch {
+        _userInfoFlow.value = Resource.Loading
+        val result = databaseRepository.getAUserByNameAndDoorNumber(userName,doorNumber)
+        _userInfoFlow.value = result
+    }
+
     fun getAllApartmentUsers() = viewModelScope.launch {
         _users.value = Resource.Loading
         val result = databaseRepository.getUsers()

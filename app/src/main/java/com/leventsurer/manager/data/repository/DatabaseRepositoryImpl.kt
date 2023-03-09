@@ -121,7 +121,7 @@ class DatabaseRepositoryImpl @Inject constructor(
             Resource.Failure(e)
         }
     }
-
+    //Giriş yapan kullanıcın bilgilerini veri tabanından getirir
     override suspend fun getAUser(): Resource<UserModel> {
         return try {
             val apartmentDocumentId =
@@ -135,6 +135,20 @@ class DatabaseRepositoryImpl @Inject constructor(
             val userInfoModel = userDocument.toObject(UserModel::class.java)!!
             Resource.Success(userInfoModel)
         } catch (e: Exception) {
+            Resource.Failure(e)
+        }
+    }
+    //Uygulama içinde seçilen kullanıcının bilgilerini veritabanından getirir
+    override suspend fun getAUserByNameAndDoorNumber(userName: String,doorNumber: String): Resource<UserModel> {
+        return try {
+            val apartmentDocumentId =
+                sharedRepository.readApartmentDocumentId(APARTMENT_DOCUMENT_ID)
+            val users: QuerySnapshot? = database.collection(APARTMENT_COLLECTIONS).document(apartmentDocumentId!!).collection(
+                USER_COLLECTION).whereEqualTo("doorNumber",doorNumber).whereEqualTo("fullName",userName).get().await()
+            val user:DocumentSnapshot = users!!.documents[0]
+            val userInfoModel = user.toObject(UserModel::class.java)!!
+            Resource.Success(userInfoModel)
+        }catch (e:Exception){
             Resource.Failure(e)
         }
     }

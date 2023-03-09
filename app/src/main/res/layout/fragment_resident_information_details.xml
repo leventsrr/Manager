@@ -38,6 +38,7 @@
                 app:strokeWidth="1dp">
 
                 <ImageView
+                    android:id="@+id/iwUserProfilePhoto"
                     android:layout_width="120dp"
                     android:layout_height="120dp"
                     android:src="@drawable/ben" />
@@ -64,6 +65,7 @@
                         android:text="Daire Sakini Adı :" />
 
                     <TextView
+                        android:id="@+id/twUserName"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -85,6 +87,7 @@
                         android:text="Daire Numarası :" />
 
                     <TextView
+                        android:id="@+id/twDoorNumber"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -106,6 +109,49 @@
                         android:text="Gecikmiş Aidat Adeti :" />
 
                     <TextView
+                        android:id="@+id/twPaymentStatus"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/titillium_web_bold"
+                        android:text=" 3" />
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/titillium_web_bold"
+                        android:text="Araç Plakası :" />
+
+                    <TextView
+                        android:id="@+id/twUserCarPlate"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/titillium_web_bold"
+                        android:text=" 3" />
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/titillium_web_bold"
+                        android:text="Telefon Numarası :" />
+
+                    <TextView
+                        android:id="@+id/twUserPhoneNumber"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"

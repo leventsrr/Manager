@@ -1,6 +1,7 @@
 package com.leventsurer.manager.tools.adapters
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.navigation.findNavController
@@ -44,10 +45,22 @@ class ResidentsInformationAdapter : RecyclerView.Adapter<ResidentsInformationAda
         }
 
         holder.itemView.setOnClickListener{
-            val action = ResidentsInformationFragmentDirections.actionResidentsInformationFragmentToResidentInformationDetailsFragment()
-            it?.findNavController()?.navigate(action)
+            moveDetailPage.let {
+                if (it != null) {
+                    it(list[position])
+                }
+            }
+           /* val action = ResidentsInformationFragmentDirections.actionResidentsInformationFragmentToResidentInformationDetailsFragment()
+            it?.findNavController()?.navigate(action)*/
         }
 
+    }
+
+    //move to product's detail page
+    private var moveDetailPage: ((userModel: UserModel) -> Unit)? = null
+    fun moveDetailPage(f: ((userModel: UserModel) -> Unit)) {
+        Log.e("TAG", "setOnClickListenerCustom: ")
+        moveDetailPage = f
     }
 
     //Kaç tane olacak
