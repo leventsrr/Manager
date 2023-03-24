@@ -11,6 +11,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
+import com.leventsurer.manager.MainActivity
 import com.leventsurer.manager.R
 import com.leventsurer.manager.data.model.Resource
 import com.leventsurer.manager.data.model.UserModel
@@ -97,6 +98,7 @@ class ResidentInformationDetailsFragment : Fragment() {
                 findNavController().navigate(action)
             },
         )
+        (requireActivity() as MainActivity).hideBottomNavigation()
     }
     //İncelenen kullanıcının geçmiş isteklerinin listeleneceği adapter ın kurulumunu yapar
     private fun setupResidentPastRequestAdapter() {

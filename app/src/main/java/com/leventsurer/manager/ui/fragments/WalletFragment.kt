@@ -11,6 +11,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.leventsurer.manager.MainActivity
 import com.leventsurer.manager.R
 import com.leventsurer.manager.data.model.Resource
 import com.leventsurer.manager.data.model.UserModel
@@ -106,6 +107,7 @@ class WalletFragment : Fragment() {
                 findNavController().navigate(action)
             },
         )
+        (requireActivity() as MainActivity).showBottomNavigation()
     }
 
 }

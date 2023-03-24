@@ -26,8 +26,7 @@
                 android:id="@+id/iwResidentPhoto"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="2"
-                android:src="@drawable/ben" />
+                android:layout_weight="2" />
 
             <TextView
                 android:id="@+id/twResidentFullName"
@@ -35,8 +34,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:fontFamily="@font/titillium_web_bold"
-                android:gravity="center"
-                android:text="Levent Sürer" />
+                android:gravity="center" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -55,7 +53,6 @@
                     android:id="@+id/twResidentDoorNumber"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="13"
                     android:fontFamily="@font/titillium_web_bold" />
             </LinearLayout>
 

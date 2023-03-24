@@ -11,6 +11,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.leventsurer.manager.MainActivity
 import com.leventsurer.manager.R
 import com.leventsurer.manager.data.model.ConciergeDutiesModel
 import com.leventsurer.manager.data.model.FinancialEventModel
@@ -73,6 +74,7 @@ class ConciergeFragment : Fragment() {
                 findNavController().navigate(action)
             },
         )
+        (requireActivity() as MainActivity).showBottomNavigation()
     }
     //Veri tabanından kapıcı görevlerinin getirilmesi sağlanır
     private fun getConciergeDuties(){

@@ -13,6 +13,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
+import com.leventsurer.manager.MainActivity
 import com.leventsurer.manager.R
 import com.leventsurer.manager.data.model.Resource
 import com.leventsurer.manager.data.model.UserModel
@@ -140,7 +141,7 @@ class UserProfileFragment : Fragment() {
                 findNavController().navigate(action)
             },
         )
-
+        (requireActivity() as MainActivity).showBottomNavigation()
         binding.btnUploadImage.text = "Resim Seç"
     }
 

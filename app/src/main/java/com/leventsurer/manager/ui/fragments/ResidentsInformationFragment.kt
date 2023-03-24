@@ -11,6 +11,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
+import com.leventsurer.manager.MainActivity
 import com.leventsurer.manager.R
 import com.leventsurer.manager.data.model.Resource
 import com.leventsurer.manager.data.model.UserModel
@@ -49,6 +50,16 @@ class ResidentsInformationFragment : Fragment() {
         setupUi()
         setupConciergeDutyToDoAdapter()
         getUsers()
+        onClickHandler()
+    }
+
+    private fun onClickHandler() {
+        binding.apply {
+            btnMoveChatScreen.setOnClickListener {
+                val action = ResidentsInformationFragmentDirections.actionResidentsInformationFragmentToChatFragment()
+                findNavController().navigate(action)
+            }
+        }
     }
 
     private fun getUsers() {
@@ -100,6 +111,8 @@ class ResidentsInformationFragment : Fragment() {
                 findNavController().navigate(action)
             },
         )
+
+        (requireActivity() as MainActivity).showBottomNavigation()
     }
     //apartman sakinlerinin listeleneceği adapter ın kurulumunu yapar
     private fun setupConciergeDutyToDoAdapter() {

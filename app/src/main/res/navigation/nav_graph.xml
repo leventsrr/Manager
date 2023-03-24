@@ -71,6 +71,9 @@
         <action
             android:id="@+id/action_residentsInformationFragment_to_settingsFragmet"
             app:destination="@id/settingsFragmet" />
+        <action
+            android:id="@+id/action_residentsInformationFragment_to_chatFragment"
+            app:destination="@id/chatFragment" />
     </fragment>
     <fragment
         android:id="@+id/residentInformationDetailsFragment"
@@ -93,6 +96,14 @@
         android:label="UserProfileFragment" >
         <action
             android:id="@+id/action_userProfileFragment_to_settingsFragmet"
+            app:destination="@id/settingsFragmet" />
+    </fragment>
+    <fragment
+        android:id="@+id/chatFragment"
+        android:name="com.leventsurer.manager.ui.fragments.ChatFragment"
+        android:label="ChatFragment" >
+        <action
+            android:id="@+id/action_chatFragment_to_settingsFragmet"
             app:destination="@id/settingsFragmet" />
     </fragment>
 </navigation>

@@ -41,8 +41,7 @@
                     android:id="@+id/iwUserProfilePhoto"
                     android:layout_width="120dp"
                     android:layout_height="120dp"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/ben" />
+                    android:scaleType="centerCrop"/>
             </com.google.android.material.card.MaterialCardView>
 
             <LinearLayout
@@ -70,8 +69,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:fontFamily="@font/titillium_web_bold"
-                        android:text=" Levent Sürer" />
+                        android:fontFamily="@font/titillium_web_bold" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -92,8 +90,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:fontFamily="@font/titillium_web_bold"
-                        android:text=" 13" />
+                        android:fontFamily="@font/titillium_web_bold" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -114,8 +111,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:fontFamily="@font/titillium_web_bold"
-                        android:text=" 3" />
+                        android:fontFamily="@font/titillium_web_bold" />
                 </LinearLayout>
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -135,8 +131,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:fontFamily="@font/titillium_web_bold"
-                        android:text=" 3" />
+                        android:fontFamily="@font/titillium_web_bold" />
                 </LinearLayout>
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -156,8 +151,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:fontFamily="@font/titillium_web_bold"
-                        android:text=" 3" />
+                        android:fontFamily="@font/titillium_web_bold" />
                 </LinearLayout>
 
             </LinearLayout>

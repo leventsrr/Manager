@@ -1,11 +1,10 @@
 package com.leventsurer.manager.data.repository
 
 import android.util.Log
-import com.google.firebase.firestore.DocumentSnapshot
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.QuerySnapshot
+import com.google.firebase.firestore.*
 import com.leventsurer.manager.data.model.*
 import com.leventsurer.manager.tools.constants.FirebaseConstants.APARTMENT_COLLECTIONS
+import com.leventsurer.manager.tools.constants.FirebaseConstants.CHAT_COLLECTION
 import com.leventsurer.manager.tools.constants.FirebaseConstants.CONCIERGE_ANNOUNCEMENT
 import com.leventsurer.manager.tools.constants.FirebaseConstants.DUTIES
 import com.leventsurer.manager.tools.constants.FirebaseConstants.FINANCIAL_EVENTS
@@ -109,18 +108,22 @@ class DatabaseRepositoryImpl @Inject constructor(
         return try {
             val apartmentDocumentId =
                 sharedRepository.readApartmentDocumentId(APARTMENT_DOCUMENT_ID)
-            val usersDocuments = database.collection(APARTMENT_COLLECTIONS).document(apartmentDocumentId!!).collection(
-                USER_COLLECTION).get().await()
+            val usersDocuments =
+                database.collection(APARTMENT_COLLECTIONS).document(apartmentDocumentId!!)
+                    .collection(
+                        USER_COLLECTION
+                    ).get().await()
             val users = arrayListOf<UserModel>()
-            for (user in usersDocuments){
+            for (user in usersDocuments) {
                 val userModel = user.toObject(UserModel::class.java)!!
                 users.add(userModel)
             }
             Resource.Success(users)
-        }catch (e:Exception){
+        } catch (e: Exception) {
             Resource.Failure(e)
         }
     }
+
     //Giriş yapan kullanıcın bilgilerini veri tabanından getirir
     override suspend fun getAUser(): Resource<UserModel> {
         return try {
@@ -138,17 +141,25 @@ class DatabaseRepositoryImpl @Inject constructor(
             Resource.Failure(e)
         }
     }
+
     //Uygulama içinde seçilen kullanıcının bilgilerini veritabanından getirir
-    override suspend fun getAUserByNameAndDoorNumber(userName: String,doorNumber: String): Resource<UserModel> {
+    override suspend fun getAUserByNameAndDoorNumber(
+        userName: String,
+        doorNumber: String
+    ): Resource<UserModel> {
         return try {
             val apartmentDocumentId =
                 sharedRepository.readApartmentDocumentId(APARTMENT_DOCUMENT_ID)
-            val users: QuerySnapshot? = database.collection(APARTMENT_COLLECTIONS).document(apartmentDocumentId!!).collection(
-                USER_COLLECTION).whereEqualTo("doorNumber",doorNumber).whereEqualTo("fullName",userName).get().await()
-            val user:DocumentSnapshot = users!!.documents[0]
+            val users: QuerySnapshot? =
+                database.collection(APARTMENT_COLLECTIONS).document(apartmentDocumentId!!)
+                    .collection(
+                        USER_COLLECTION
+                    ).whereEqualTo("doorNumber", doorNumber).whereEqualTo("fullName", userName)
+                    .get().await()
+            val user: DocumentSnapshot = users!!.documents[0]
             val userInfoModel = user.toObject(UserModel::class.java)!!
             Resource.Success(userInfoModel)
-        }catch (e:Exception){
+        } catch (e: Exception) {
             Resource.Failure(e)
         }
     }
@@ -291,7 +302,7 @@ class DatabaseRepositoryImpl @Inject constructor(
 
     override suspend fun addNewRequest(request: String) {
         val apartmentDocumentId = sharedRepository.readApartmentDocumentId(APARTMENT_DOCUMENT_ID)
-        val userDocumentId = sharedRepository.readUserDocumentId(USER_DOCUMENT_ID)
+
 
         val request = hashMapOf(
             "request" to request,
@@ -301,6 +312,63 @@ class DatabaseRepositoryImpl @Inject constructor(
             .collection(RESIDENT_REQUESTS).add(request).await()
     }
 
+    override suspend fun sendNewMessageInChat(message: String, userName: String, time: FieldValue) {
+        val message = hashMapOf(
+            "userName" to userName,
+            "message" to message,
+            "time" to time
+        )
+
+        val apartmentDocumentId = sharedRepository.readApartmentDocumentId(APARTMENT_DOCUMENT_ID)
+        database.collection(APARTMENT_COLLECTIONS).document(apartmentDocumentId!!)
+            .collection(CHAT_COLLECTION).add(
+            message
+        )
+            .await()
+    }
+
+    override suspend fun getChatMessages(): Resource<List<ChatMessageModel>> {
+        val apartmentDocumentId = sharedRepository.readApartmentDocumentId(APARTMENT_DOCUMENT_ID)
+        val messages = arrayListOf<ChatMessageModel>()
+        return try {
+            val documentSnapshots = database.collection(APARTMENT_COLLECTIONS).document(apartmentDocumentId!!).collection(
+                CHAT_COLLECTION
+            ).orderBy("time", Query.Direction.ASCENDING).get().await()
+            for(document in documentSnapshots){
+                messages.add(document.toObject(ChatMessageModel::class.java))
+            }
+            Resource.Success(messages)
+        }catch (e:Exception){
+            Resource.Failure(e)
+        }
+
+
+
+        /*database.collection(APARTMENT_COLLECTIONS).document(apartmentDocumentId!!).collection(
+            CHAT_COLLECTION
+        ).orderBy("time", Query.Direction.ASCENDING).addSnapshotListener { value, error ->
+
+
+            if (error != null) {
+                Log.e("kontrol", "hata geldi.")
+            } else {
+                if (value != null) {
+                    if (value.isEmpty) {
+                        Log.e("kontrol", "mesaj yok")
+                    } else {
+
+                        val messageDocuments = value.documents
+
+                        for (message in messageDocuments) {
+                            message.toObject(ChatMessageModel::class.java)?.let { messages.add(it) }
+                        }
+                        Log.e("kontrol","obje halindeki mesajlar $messages")
+                        return@addSnapshotListener
+                    }
+                }
+            }
+        }*/
+    }
 
     //Apartman id sine ulaşmak için kullanılacak apartman adının shared preferencesten çekilmesi.
     private suspend fun reachToDocumentIdFromSharedPref(): String {

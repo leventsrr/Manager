@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
+import com.leventsurer.manager.MainActivity
 import com.leventsurer.manager.R
 import com.leventsurer.manager.databinding.FragmentSettingsFragmetBinding
 import com.leventsurer.manager.tools.helpers.HeaderHelper
@@ -39,7 +40,7 @@ class SettingsFragmet : Fragment() {
             title = "Ayarlar",
             startIconVisibility = true,
             endIconVisibility = true,
-            startIcon = R.drawable.ic_baseline_sensor_door_24,
+            startIcon = R.drawable.ic_baseline_arrow_back_24,
             endIcon = R.drawable.ic_baseline_settings_24,
             startIconClick = {
                 findNavController().popBackStack()
@@ -49,6 +50,8 @@ class SettingsFragmet : Fragment() {
                 findNavController().navigate(action)*/
             },
         )
+
+        (requireActivity() as MainActivity).hideBottomNavigation()
     }
 
 }

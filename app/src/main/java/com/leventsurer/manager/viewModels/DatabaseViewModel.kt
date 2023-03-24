@@ -1,11 +1,21 @@
 package com.leventsurer.manager.viewModels
 
+import android.content.SharedPreferences
 import android.util.Log
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.firestore.FieldValue
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import com.leventsurer.manager.data.model.*
 import com.leventsurer.manager.data.repository.DatabaseRepository
+import com.leventsurer.manager.data.repository.SharedRepositoryImpl
+import com.leventsurer.manager.tools.constants.FirebaseConstants.APARTMENT_COLLECTIONS
+import com.leventsurer.manager.tools.constants.FirebaseConstants.CHAT_COLLECTION
+import com.leventsurer.manager.tools.constants.SharedPreferencesConstants.APARTMENT_DOCUMENT_ID
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -17,6 +27,8 @@ import javax.inject.Inject
 class DatabaseViewModel @Inject constructor(
     private val databaseRepository: DatabaseRepository
 ): ViewModel(){
+    @Inject
+    lateinit var sharedRepository: SharedRepositoryImpl
 
     private val _conciergeAnnouncementFlow = MutableStateFlow<Resource<ArrayList<ConciergeAnnouncementModel>>?>(null)
     val conciergeAnnouncementFlow : StateFlow<Resource<ArrayList<ConciergeAnnouncementModel>>?> = _conciergeAnnouncementFlow
@@ -35,8 +47,23 @@ class DatabaseViewModel @Inject constructor(
 
     private val _users = MutableStateFlow<Resource<ArrayList<UserModel>>?>(null)
     val users : StateFlow<Resource<ArrayList<UserModel>>?> = _users
-    fun getUserInfo() = viewModelScope.launch {
 
+    private val _chatMessagesFlow = MutableLiveData<Resource<List<ChatMessageModel>>?>(null)
+    val chatMessagesFlow : LiveData<Resource<List<ChatMessageModel>>?> = _chatMessagesFlow
+
+    fun getChatMessages()= viewModelScope.launch {
+        _chatMessagesFlow.value = Resource.Loading
+        val result = databaseRepository.getChatMessages()
+        Log.e("kontrol","mesajlar viewmodel $result")
+        _chatMessagesFlow.postValue(result)
+
+    }
+
+    fun sendChatMessage(message:String,userName: String,time:FieldValue) = viewModelScope.launch {
+        databaseRepository.sendNewMessageInChat(message,userName,time)
+    }
+
+    fun getUserInfo() = viewModelScope.launch {
         _userInfoFlow.value = Resource.Loading
         val result = databaseRepository.getAUser()
         _userInfoFlow.value = result
