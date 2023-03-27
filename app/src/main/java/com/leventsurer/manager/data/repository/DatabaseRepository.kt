@@ -1,5 +1,6 @@
 package com.leventsurer.manager.data.repository
 
+import androidx.lifecycle.LiveData
 import com.google.firebase.firestore.FieldValue
 import com.leventsurer.manager.data.model.*
 
@@ -15,7 +16,7 @@ interface DatabaseRepository {
     suspend fun getAUserByNameAndDoorNumber(userName:String,doorNumber:String): Resource<UserModel>
     suspend fun getApartmentDocumentId(apartmentCode: String):String
     suspend fun getUserDocumentId(userName:String,apartmentCode: String):String
-    suspend fun getChatMessages():Resource<List<ChatMessageModel>>
+    fun getChatMessages():LiveData<Resource<List<ChatMessageModel>>>
 
     //Set
     suspend fun addNewUser(

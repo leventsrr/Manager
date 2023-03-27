@@ -77,7 +77,7 @@ class ChatFragment : Fragment() {
     }
 
     private fun observeChatMessages() {
-        databaseViewModel.chatMessagesFlow.observe(viewLifecycleOwner) {
+        databaseViewModel.getChatMessages().observe(viewLifecycleOwner) {
             when (it) {
                 is Resource.Failure -> {
                     Toast.makeText(requireContext(), it.exception.message, Toast.LENGTH_LONG).show()
@@ -85,6 +85,7 @@ class ChatFragment : Fragment() {
                 is Resource.Loading -> {
                 }
                 is Resource.Success -> {
+                    chatMessagesAdapterList.clear()
                     chatMessagesAdapterList.addAll(it.result)
                     chatMessageAdapter.list = chatMessagesAdapterList
 

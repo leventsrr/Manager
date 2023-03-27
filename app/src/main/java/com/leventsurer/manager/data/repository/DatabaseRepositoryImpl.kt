@@ -1,7 +1,10 @@
 package com.leventsurer.manager.data.repository
 
 import android.util.Log
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.google.firebase.firestore.*
+import com.google.firebase.firestore.ktx.toObject
 import com.leventsurer.manager.data.model.*
 import com.leventsurer.manager.tools.constants.FirebaseConstants.APARTMENT_COLLECTIONS
 import com.leventsurer.manager.tools.constants.FirebaseConstants.CHAT_COLLECTION
@@ -327,8 +330,8 @@ class DatabaseRepositoryImpl @Inject constructor(
             .await()
     }
 
-    override suspend fun getChatMessages(): Resource<List<ChatMessageModel>> {
-        val apartmentDocumentId = sharedRepository.readApartmentDocumentId(APARTMENT_DOCUMENT_ID)
+    override fun getChatMessages(): LiveData<Resource<List<ChatMessageModel>>> {
+        /*val apartmentDocumentId = sharedRepository.readApartmentDocumentId(APARTMENT_DOCUMENT_ID)
         val messages = arrayListOf<ChatMessageModel>()
         return try {
             val documentSnapshots = database.collection(APARTMENT_COLLECTIONS).document(apartmentDocumentId!!).collection(
@@ -340,7 +343,31 @@ class DatabaseRepositoryImpl @Inject constructor(
             Resource.Success(messages)
         }catch (e:Exception){
             Resource.Failure(e)
+        }*/
+        val apartmentDocumentId = sharedRepository.readApartmentDocumentId(APARTMENT_DOCUMENT_ID)
+        val liveData = MutableLiveData<Resource<List<ChatMessageModel>>>()
+        liveData.value = Resource.Loading
+
+        database.collection(APARTMENT_COLLECTIONS).document(apartmentDocumentId!!).collection(
+            CHAT_COLLECTION
+        ).orderBy("time", Query.Direction.ASCENDING).addSnapshotListener{value,error ->
+            if(error!=null){
+                liveData.value = Resource.Failure(error)
+            }else if(value!=null){
+                val messages = mutableListOf<ChatMessageModel>()
+                for(doc in value){
+                    val data = doc.toObject(ChatMessageModel::class.java)
+
+                    messages.add(data)
+                }
+                liveData.value = Resource.Success(messages)
+            }
         }
+        return  liveData
+
+
+
+
 
 
 
