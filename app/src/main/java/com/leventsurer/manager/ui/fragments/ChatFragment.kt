@@ -69,6 +69,10 @@ class ChatFragment : Fragment() {
         binding.rwChatMessages.layoutManager = LinearLayoutManager(requireContext())
         chatMessageAdapter = ChatMessagesAdapter(authViewModel)
         binding.rwChatMessages.adapter = chatMessageAdapter
+        binding.rwChatMessages.layoutManager = LinearLayoutManager(requireContext()).apply {
+            stackFromEnd = true
+            reverseLayout = false
+        }
 
     }
 
