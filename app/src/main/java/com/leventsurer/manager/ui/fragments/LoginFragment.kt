@@ -44,8 +44,19 @@ class LoginFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         onClickHandler()
+        checkIsLoginInfo()
         (requireActivity() as MainActivity).hideBottomNavigation()
 
+    }
+
+    private fun checkIsLoginInfo() {
+        val isLogin = sharedPrefViewModel.readIsLogin()
+        if(isLogin == true){
+            val action =
+                LoginFragmentDirections.actionLoginFragmentToExecutiveHomePage()
+            findNavController().navigate(action)
+            binding.pbProgressBar.visibility = View.GONE
+        }
     }
 
     //Giriş yapılırken girilen bilgiler doğrultusunda istek atılmasını ve gelen cevaba göre yönlendirme yapılmasını sağlar
@@ -87,10 +98,10 @@ class LoginFragment : Fragment() {
         sharedPrefViewModel.writeIsLogin(true)
         sharedPrefViewModel.writeApartmentName(binding.twUserApartmentName.text.toString())
         sharedPrefViewModel.writeUserName(viewModel.currentUser?.displayName.toString())
-        databaseViewModel.getUserDocumentId(
+        /*databaseViewModel.getUserDocumentId(
             viewModel.currentUser!!.displayName.toString(),
             binding.twUserApartmentName.text.toString()
-        )
+        )*/
     }
 
 

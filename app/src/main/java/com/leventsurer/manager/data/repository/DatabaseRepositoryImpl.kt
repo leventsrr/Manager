@@ -314,7 +314,7 @@ class DatabaseRepositoryImpl @Inject constructor(
         database.collection(APARTMENT_COLLECTIONS).document(apartmentDocumentId!!)
             .collection(RESIDENT_REQUESTS).add(request).await()
     }
-
+    //Kullanıcın ait olduğu apartmana yeni mesaj eklenmesi
     override suspend fun sendNewMessageInChat(message: String, userName: String, time: FieldValue) {
         val message = hashMapOf(
             "userName" to userName,
@@ -329,21 +329,9 @@ class DatabaseRepositoryImpl @Inject constructor(
         )
             .await()
     }
-
+    //Kullanıcının ait olduğu apartmana ait mesajları canlı olarak getirilimesi
     override fun getChatMessages(): LiveData<Resource<List<ChatMessageModel>>> {
-        /*val apartmentDocumentId = sharedRepository.readApartmentDocumentId(APARTMENT_DOCUMENT_ID)
-        val messages = arrayListOf<ChatMessageModel>()
-        return try {
-            val documentSnapshots = database.collection(APARTMENT_COLLECTIONS).document(apartmentDocumentId!!).collection(
-                CHAT_COLLECTION
-            ).orderBy("time", Query.Direction.ASCENDING).get().await()
-            for(document in documentSnapshots){
-                messages.add(document.toObject(ChatMessageModel::class.java))
-            }
-            Resource.Success(messages)
-        }catch (e:Exception){
-            Resource.Failure(e)
-        }*/
+
         val apartmentDocumentId = sharedRepository.readApartmentDocumentId(APARTMENT_DOCUMENT_ID)
         val liveData = MutableLiveData<Resource<List<ChatMessageModel>>>()
         liveData.value = Resource.Loading
@@ -364,37 +352,6 @@ class DatabaseRepositoryImpl @Inject constructor(
             }
         }
         return  liveData
-
-
-
-
-
-
-
-        /*database.collection(APARTMENT_COLLECTIONS).document(apartmentDocumentId!!).collection(
-            CHAT_COLLECTION
-        ).orderBy("time", Query.Direction.ASCENDING).addSnapshotListener { value, error ->
-
-
-            if (error != null) {
-                Log.e("kontrol", "hata geldi.")
-            } else {
-                if (value != null) {
-                    if (value.isEmpty) {
-                        Log.e("kontrol", "mesaj yok")
-                    } else {
-
-                        val messageDocuments = value.documents
-
-                        for (message in messageDocuments) {
-                            message.toObject(ChatMessageModel::class.java)?.let { messages.add(it) }
-                        }
-                        Log.e("kontrol","obje halindeki mesajlar $messages")
-                        return@addSnapshotListener
-                    }
-                }
-            }
-        }*/
     }
 
     //Apartman id sine ulaşmak için kullanılacak apartman adının shared preferencesten çekilmesi.

@@ -39,9 +39,9 @@ class ChatFragment : Fragment() {
     private val sharedPrefViewModel by viewModels<SharedPreferencesViewModel>()
     private val databaseViewModel by viewModels<DatabaseViewModel>()
     private val authViewModel by viewModels<AuthViewModel>()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
     }
 
     override fun onCreateView(
@@ -65,7 +65,6 @@ class ChatFragment : Fragment() {
     }
 
     private fun setupChatMessagesAdapter() {
-
         binding.rwChatMessages.layoutManager = LinearLayoutManager(requireContext())
         chatMessageAdapter = ChatMessagesAdapter(authViewModel)
         binding.rwChatMessages.adapter = chatMessageAdapter
@@ -92,10 +91,9 @@ class ChatFragment : Fragment() {
                     chatMessagesAdapterList.clear()
                     chatMessagesAdapterList.addAll(it.result)
                     chatMessageAdapter.list = chatMessagesAdapterList
-
                 }
                 else -> {
-                    Log.e("control", "location observe function in else HomeFragment")
+                    Log.e("control", "location observe function in else ChatFragment")
                 }
             }
         }
@@ -117,7 +115,6 @@ class ChatFragment : Fragment() {
     private fun readSharedPref() {
         apartmentName = sharedPrefViewModel.readApartmentName().toString()
         userName = sharedPrefViewModel.readUserName().toString()
-        val userDocumentId = sharedPrefViewModel.readUserDocumentId()
     }
 
     private fun setupUi() {
@@ -130,7 +127,6 @@ class ChatFragment : Fragment() {
             endIcon = R.drawable.ic_baseline_settings_24,
             startIconClick = {
                 findNavController().popBackStack()
-
             },
             endIconClick = {
                 val action = ChatFragmentDirections.actionChatFragmentToSettingsFragmet()
