@@ -125,4 +125,8 @@ class DatabaseViewModel @Inject constructor(
         databaseRepository.addNewFinancialEvent(amount,isExpense,time,eventName)
     }
 
+    fun setApartmentMonthlyPayment(amount:Double) = viewModelScope.launch {
+        databaseRepository.setApartmentMonthlyPayment(amount)
+    }
+
 }

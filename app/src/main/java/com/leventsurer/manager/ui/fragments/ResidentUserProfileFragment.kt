@@ -164,7 +164,16 @@ class ResidentUserProfileFragment : Fragment() {
 
 
             }
+
+            btnNewMonthlyPayment.setOnClickListener {
+                val amount:Double = etMonthlyPaymentAmount.text.toString().toDouble()
+                databaseViewModel.setApartmentMonthlyPayment(amount)
+                etMonthlyPaymentAmount.text?.clear()
+                Toast.makeText(requireContext(),"Aidat Güncellendi",Toast.LENGTH_LONG).show()
+            }
         }
+
+
     }
 
     private val resultLauncher = registerForActivityResult(

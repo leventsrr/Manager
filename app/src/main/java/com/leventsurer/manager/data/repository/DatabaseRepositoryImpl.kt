@@ -77,7 +77,7 @@ class DatabaseRepositoryImpl @Inject constructor(
                 database.collection(APARTMENT_COLLECTIONS).document(documentId)
                     .collection(
                         FINANCIAL_EVENTS
-                    ).orderBy("time", Query.Direction.DESCENDING).get().await()
+                    ).orderBy("date", Query.Direction.DESCENDING).get().await()
 
             for (document in result) {
                 financialEvents.add(document.toObject(FinancialEventModel::class.java))
@@ -393,6 +393,19 @@ class DatabaseRepositoryImpl @Inject constructor(
         return liveData
     }
 
+    override suspend fun setApartmentMonthlyPayment(amount: Double) {
+        val apartmentDocumentId = sharedRepository.readApartmentDocumentId(APARTMENT_DOCUMENT_ID)
+        val apartment =
+            database.collection(APARTMENT_COLLECTIONS).document(apartmentDocumentId!!).get().await()
+        val apartmentModel = apartment.toObject(Aparment::class.java)
+        val newApartmentValues = hashMapOf(
+            "apartmentName" to apartmentModel?.apartmentName,
+            "budget" to apartmentModel?.budget,
+            "monthlyPayment" to amount
+        )
+        database.collection(APARTMENT_COLLECTIONS).document(apartmentDocumentId!!)
+            .set(newApartmentValues)
+    }
     //Apartman id sine ulaşmak için kullanılacak apartman adının shared preferencesten çekilmesi.
     private suspend fun reachToDocumentIdFromSharedPref(): String {
         val apartmentName = sharedRepository.readApartmentName(APARTMENT_NAME)
