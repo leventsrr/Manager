@@ -43,13 +43,6 @@ class DatabaseViewModel @Inject constructor(
     private val _chatMessagesFlow = MutableLiveData<Resource<List<ChatMessageModel>>?>(null)
     val chatMessagesFlow : LiveData<Resource<List<ChatMessageModel>>?> = _chatMessagesFlow
 
-    /*fun getChatMessages()= viewModelScope.launch {
-        _chatMessagesFlow.value = Resource.Loading
-        val result = databaseRepository.getChatMessages()
-        Log.e("kontrol","mesajlar viewmodel $result")
-        _chatMessagesFlow.postValue(result)
-
-    }*/
 
     fun getChatMessages(): LiveData<Resource<List<ChatMessageModel>>>{
         return  databaseRepository.getChatMessages()
@@ -128,8 +121,8 @@ class DatabaseViewModel @Inject constructor(
         databaseRepository.changeUserDuesPaymentStatus(currentStats)
     }
 
-    fun addBudgetMovement(amount:Double,isExpense:Boolean,time:FieldValue) = viewModelScope.launch{
-        databaseRepository.addBudgetMovement(amount,isExpense,time)
+    fun addBudgetMovement(amount:Double,isExpense:Boolean,time:FieldValue,eventName:String) = viewModelScope.launch{
+        databaseRepository.addNewFinancialEvent(amount,isExpense,time,eventName)
     }
 
 }

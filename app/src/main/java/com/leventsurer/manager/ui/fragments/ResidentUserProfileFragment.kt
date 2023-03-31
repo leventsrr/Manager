@@ -145,7 +145,8 @@ class ResidentUserProfileFragment : Fragment() {
                         }
                         val amount = etAmount.text.toString().toDouble()
                         val time = FieldValue.serverTimestamp()
-                        databaseViewModel.addBudgetMovement(amount,isExpense!!,time)
+                        val eventName = etAmountName.text.toString()
+                        databaseViewModel.addBudgetMovement(amount,isExpense!!,time,eventName)
 
                 }else if(!(radioButton1.isChecked || radioButton2.isChecked)){
                     Toast.makeText(requireContext(),"Lütfen Bir Tip Seçiniz",Toast.LENGTH_LONG).show()
@@ -156,7 +157,10 @@ class ResidentUserProfileFragment : Fragment() {
                     Toast.makeText(requireContext(),"Lütfen İşlemi Tutarı Giriniz",Toast.LENGTH_LONG).show()
                 }
 
-
+                radioButton1.isChecked = false
+                radioButton2.isChecked = false
+                etAmountName.text?.clear()
+                etAmount.text?.clear()
 
 
             }

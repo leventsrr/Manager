@@ -46,7 +46,7 @@ interface DatabaseRepository {
     suspend fun changeUserDuesPaymentStatus(currentStatus:Boolean)
 
     suspend fun addNewRequest(request:String,time:FieldValue)
-    suspend fun addBudgetMovement(amount:Double,isExpense:Boolean, time:FieldValue)
+    suspend fun addNewFinancialEvent(amount:Double, isExpense:Boolean, time:FieldValue,eventName:String)
     suspend fun sendNewMessageInChat(message:String,userName:String,time:FieldValue)
 
 }

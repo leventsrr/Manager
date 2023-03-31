@@ -77,7 +77,7 @@ class DatabaseRepositoryImpl @Inject constructor(
                 database.collection(APARTMENT_COLLECTIONS).document(documentId)
                     .collection(
                         FINANCIAL_EVENTS
-                    ).get().await()
+                    ).orderBy("time", Query.Direction.DESCENDING).get().await()
 
             for (document in result) {
                 financialEvents.add(document.toObject(FinancialEventModel::class.java))
@@ -253,6 +253,7 @@ class DatabaseRepositoryImpl @Inject constructor(
         database.collection(APARTMENT_COLLECTIONS).document(apartmentDocumentId!!).collection(
             USER_COLLECTION
         ).document(userDocumentId!!).update("duesPaymentStatus", currentStatus).await()
+
     }
 
     //Grilen apartman adına göre apartmanın veri tabanındaki id sinin getirilmesi ve sharedPreferences a kaydedilmesi
@@ -322,7 +323,7 @@ class DatabaseRepositoryImpl @Inject constructor(
             .collection(RESIDENT_REQUESTS).add(request).await()
     }
 
-    override suspend fun addBudgetMovement(amount: Double, isExpense: Boolean, time: FieldValue) {
+    override suspend fun addNewFinancialEvent(amount: Double, isExpense: Boolean, time: FieldValue,eventName:String) {
         val apartmentDocumentId = sharedRepository.readApartmentDocumentId(APARTMENT_DOCUMENT_ID)
         val apartment =
             database.collection(APARTMENT_COLLECTIONS).document(apartmentDocumentId!!).get().await()
@@ -341,6 +342,14 @@ class DatabaseRepositoryImpl @Inject constructor(
         )
         database.collection(APARTMENT_COLLECTIONS).document(apartmentDocumentId)
             .set(newApartmentDocument)
+
+        val newFinancialEvent = hashMapOf(
+            "amount" to amount,
+            "date" to time,
+            "eventName" to eventName,
+            "isExpense" to isExpense
+        )
+        database.collection(APARTMENT_COLLECTIONS).document(apartmentDocumentId).collection(FINANCIAL_EVENTS).add(newFinancialEvent)
     }
 
     //Kullanıcın ait olduğu apartmana yeni mesaj eklenmesi
