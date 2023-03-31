@@ -7,6 +7,7 @@ import com.leventsurer.manager.tools.constants.SharedPreferencesConstants.APARTM
 import com.leventsurer.manager.tools.constants.SharedPreferencesConstants.IS_LOGIN
 import com.leventsurer.manager.tools.constants.SharedPreferencesConstants.USER_DOCUMENT_ID
 import com.leventsurer.manager.tools.constants.SharedPreferencesConstants.USER_NAME
+import com.leventsurer.manager.tools.constants.SharedPreferencesConstants.USER_ROLE
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -32,6 +33,7 @@ class SharedPreferencesViewModel @Inject constructor(
     fun writeUserDocumentId(value:String){
         sharedPrefRepository.writeUserDocumentId(USER_DOCUMENT_ID,value)
     }
+
     fun readApartmentName(): String?{
        return sharedPrefRepository.readApartmentName(APARTMENT_NAME)
     }
@@ -44,6 +46,9 @@ class SharedPreferencesViewModel @Inject constructor(
 
     fun readApartmentDocumentId():String?{
         return sharedPrefRepository.readApartmentDocumentId(APARTMENT_DOCUMENT_ID)
+    }
+    fun readUserRole():String?{
+        return  sharedPrefRepository.readUserRole(USER_ROLE)
     }
 
     fun readUserDocumentId():String?{

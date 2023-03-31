@@ -94,8 +94,6 @@ class ResidentInformationDetailsFragment : Fragment() {
                 findNavController().popBackStack()
             },
             endIconClick = {
-                val action = ResidentInformationDetailsFragmentDirections.actionResidentInformationDetailsFragmentToUserProfileFragment()
-                findNavController().navigate(action)
             },
         )
         (requireActivity() as MainActivity).hideBottomNavigation()

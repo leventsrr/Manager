@@ -6,18 +6,22 @@ import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.fragment.app.commit
+import androidx.fragment.app.replace
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
+import com.google.firebase.firestore.FieldValue
 import com.leventsurer.manager.MainActivity
 import com.leventsurer.manager.R
 import com.leventsurer.manager.data.model.Resource
 import com.leventsurer.manager.data.model.UserModel
-import com.leventsurer.manager.databinding.FragmentUserProfileBinding
+import com.leventsurer.manager.databinding.FragmentResidentUserProfileBinding
 import com.leventsurer.manager.tools.helpers.HeaderHelper
 import com.leventsurer.manager.viewModels.DatabaseViewModel
 import com.leventsurer.manager.viewModels.FirebaseStorageViewModel
@@ -27,14 +31,15 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
 @AndroidEntryPoint
-class UserProfileFragment : Fragment() {
-    private var _binding: FragmentUserProfileBinding? = null
-    private val binding: FragmentUserProfileBinding get() = _binding!!
+class ResidentUserProfileFragment : Fragment() {
+    private var _binding: FragmentResidentUserProfileBinding? = null
+    private val binding: FragmentResidentUserProfileBinding get() = _binding!!
     private val storageViewModel by viewModels<FirebaseStorageViewModel>()
     private val databaseViewModel by viewModels<DatabaseViewModel>()
     private val sharedPreferencesViewModel by viewModels<SharedPreferencesViewModel>()
     private var imageUri: Uri? = null
     private var apartmentCode:String? = null
+    private var isExpense:Boolean? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -44,7 +49,7 @@ class UserProfileFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentUserProfileBinding.inflate(inflater, container, false)
+        _binding = FragmentResidentUserProfileBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -54,6 +59,9 @@ class UserProfileFragment : Fragment() {
         getUserInfo()
         onClickHandler()
     }
+
+
+
     //Giriş yapan kullanıcının verilerini veritabanından çeker
     private fun getUserInfo() {
         apartmentCode = sharedPreferencesViewModel.readApartmentName()
@@ -71,7 +79,19 @@ class UserProfileFragment : Fragment() {
                     }
                     is Resource.Loading -> {}
                     is Resource.Success -> {
-                        bindUserInfoToUi(it.result)
+                        if(it.result.role == "yonetici"){
+                            binding.apply {
+                                mcwManagerMaterialCardView.visibility = VISIBLE
+                                bindUserInfoToUi(it.result)
+                            }
+                        }else if(it.result.role == "sakin"){
+                            binding.apply {
+                                bindUserInfoToUi(it.result)
+                                mcwResidentMaterialCard1.visibility = VISIBLE
+                                mcwResidentMaterialCard2.visibility = VISIBLE
+                            }
+                        }
+
                     }
                     else -> { }
                 }
@@ -110,8 +130,35 @@ class UserProfileFragment : Fragment() {
 
             btnSendRequest.setOnClickListener {
                 val userRequest = etUserRequest.text.toString()
-                databaseViewModel.addNewRequest(userRequest)
+                val time = FieldValue.serverTimestamp()
+                databaseViewModel.addNewRequest(userRequest,time)
                 etUserRequest.text?.clear()
+            }
+
+            btnSendExpense.setOnClickListener {
+                if(radioButton1.isChecked || radioButton2.isChecked || etAmountName.text.toString().isNotEmpty()|| etAmount.text.toString().isNotEmpty()){
+
+                        if(radioButton1.isChecked){
+                            isExpense = false
+                        }else if(radioButton2.isChecked){
+                            isExpense = true
+                        }
+                        val amount = etAmount.text.toString().toDouble()
+                        val time = FieldValue.serverTimestamp()
+                        databaseViewModel.addBudgetMovement(amount,isExpense!!,time)
+
+                }else if(!(radioButton1.isChecked || radioButton2.isChecked)){
+                    Toast.makeText(requireContext(),"Lütfen Bir Tip Seçiniz",Toast.LENGTH_LONG).show()
+
+                }else if(etAmountName.text.toString().isEmpty()){
+                    Toast.makeText(requireContext(),"Lütfen İşlemi Açıklaması Giriniz",Toast.LENGTH_LONG).show()
+                }else if( etAmount.text.toString().isEmpty()){
+                    Toast.makeText(requireContext(),"Lütfen İşlemi Tutarı Giriniz",Toast.LENGTH_LONG).show()
+                }
+
+
+
+
             }
         }
     }
@@ -137,7 +184,7 @@ class UserProfileFragment : Fragment() {
             },
             endIconClick = {
                 val action =
-                    UserProfileFragmentDirections.actionUserProfileFragmentToSettingsFragmet()
+                    ResidentUserProfileFragmentDirections.actionUserProfileFragmentToSettingsFragmet()
                 findNavController().navigate(action)
             },
         )

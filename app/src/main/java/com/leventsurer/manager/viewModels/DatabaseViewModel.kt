@@ -1,21 +1,13 @@
 package com.leventsurer.manager.viewModels
 
-import android.content.SharedPreferences
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FieldValue
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.ktx.Firebase
 import com.leventsurer.manager.data.model.*
 import com.leventsurer.manager.data.repository.DatabaseRepository
 import com.leventsurer.manager.data.repository.SharedRepositoryImpl
-import com.leventsurer.manager.tools.constants.FirebaseConstants.APARTMENT_COLLECTIONS
-import com.leventsurer.manager.tools.constants.FirebaseConstants.CHAT_COLLECTION
-import com.leventsurer.manager.tools.constants.SharedPreferencesConstants.APARTMENT_DOCUMENT_ID
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -116,8 +108,8 @@ class DatabaseViewModel @Inject constructor(
         databaseRepository.addNewUser(name, apartmentCode, carPlate , doorNumber,role)
     }
 
-    fun getUserDocumentId(userName:String,apartmentCode: String)  = viewModelScope.launch {
-        databaseRepository.getUserDocumentId(userName,apartmentCode)
+    fun writeUserDocumentIdToSharedPref(userName:String, apartmentCode: String)  = viewModelScope.launch {
+        databaseRepository.writeUserDocumentIdToSharedPref(userName,apartmentCode)
     }
 
     fun addNewApartment(name: String,
@@ -128,12 +120,16 @@ class DatabaseViewModel @Inject constructor(
         databaseRepository.addNewApartment(name,apartmentCode,carPlate,doorNumber, role, apartmentName)
     }
 
-    fun addNewRequest(request:String) = viewModelScope.launch {
-        databaseRepository.addNewRequest(request)
+    fun addNewRequest(request:String,time:FieldValue) = viewModelScope.launch {
+        databaseRepository.addNewRequest(request,time)
     }
 
     fun setUserDuesPaymentStatus(currentStats:Boolean) = viewModelScope.launch {
         databaseRepository.changeUserDuesPaymentStatus(currentStats)
+    }
+
+    fun addBudgetMovement(amount:Double,isExpense:Boolean,time:FieldValue) = viewModelScope.launch{
+        databaseRepository.addBudgetMovement(amount,isExpense,time)
     }
 
 }

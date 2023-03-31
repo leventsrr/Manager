@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.leventsurer.manager.MainActivity
 import com.leventsurer.manager.R
 import com.leventsurer.manager.data.model.*
-import com.leventsurer.manager.databinding.FragmentExecutiveHomePageBinding
+import com.leventsurer.manager.databinding.FragmentHomePageBinding
 import com.leventsurer.manager.tools.adapters.ConciergeAnnouncementAdapter
 import com.leventsurer.manager.tools.adapters.IncomeExpenseAdapter
 import com.leventsurer.manager.tools.adapters.ResidentRequestAdapter
@@ -26,9 +26,9 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class ExecutiveHomePageFragment : Fragment() {
-    private var _binding: FragmentExecutiveHomePageBinding? = null
-    private val binding: FragmentExecutiveHomePageBinding get() = _binding!!
+class HomePageFragment : Fragment() {
+    private var _binding: FragmentHomePageBinding? = null
+    private val binding: FragmentHomePageBinding get() = _binding!!
     private val viewModel by viewModels<AuthViewModel>()
     private val databaseViewModel by viewModels<DatabaseViewModel>()
     private val sharedPrefViewModel by viewModels<SharedPreferencesViewModel>()
@@ -51,7 +51,7 @@ class ExecutiveHomePageFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        _binding = FragmentExecutiveHomePageBinding.inflate(inflater, container, false)
+        _binding = FragmentHomePageBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -220,7 +220,7 @@ class ExecutiveHomePageFragment : Fragment() {
 
             },
             endIconClick = {
-                val action = ExecutiveHomePageFragmentDirections.actionExecutiveHomePageToSettingsFragmet()
+                val action = HomePageFragmentDirections.actionExecutiveHomePageToSettingsFragmet()
                 findNavController().navigate(action)
             },
         )

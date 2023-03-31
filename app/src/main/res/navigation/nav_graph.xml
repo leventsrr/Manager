@@ -27,11 +27,8 @@
     </fragment>
     <fragment
         android:id="@+id/executiveHomePage"
-        android:name="com.leventsurer.manager.ui.fragments.ExecutiveHomePageFragment"
+        android:name="com.leventsurer.manager.ui.fragments.HomePageFragment"
         android:label="ExecutiveHomePage" >
-        <action
-            android:id="@+id/action_executiveHomePage_to_userProfileFragment2"
-            app:destination="@id/userProfileFragment" />
         <action
             android:id="@+id/action_executiveHomePage_to_settingsFragmet"
             app:destination="@id/settingsFragmet" />
@@ -41,9 +38,6 @@
         android:name="com.leventsurer.manager.ui.fragments.WalletFragment"
         android:label="WalletFragment" >
         <action
-            android:id="@+id/action_walletFragment_to_userProfileFragment2"
-            app:destination="@id/userProfileFragment" />
-        <action
             android:id="@+id/action_walletFragment_to_settingsFragmet"
             app:destination="@id/settingsFragmet" />
     </fragment>
@@ -51,9 +45,6 @@
         android:id="@+id/conciergeFragment"
         android:name="com.leventsurer.manager.ui.fragments.ConciergeFragment"
         android:label="ConciergeFragment" >
-        <action
-            android:id="@+id/action_conciergeFragment_to_userProfileFragment2"
-            app:destination="@id/userProfileFragment" />
         <action
             android:id="@+id/action_conciergeFragment_to_settingsFragmet"
             app:destination="@id/settingsFragmet" />
@@ -66,9 +57,6 @@
             android:id="@+id/action_residentsInformationFragment_to_residentInformationDetailsFragment"
             app:destination="@id/residentInformationDetailsFragment" />
         <action
-            android:id="@+id/action_residentsInformationFragment_to_userProfileFragment2"
-            app:destination="@id/userProfileFragment" />
-        <action
             android:id="@+id/action_residentsInformationFragment_to_settingsFragmet"
             app:destination="@id/settingsFragmet" />
         <action
@@ -79,9 +67,6 @@
         android:id="@+id/residentInformationDetailsFragment"
         android:name="com.leventsurer.manager.ui.fragments.ResidentInformationDetailsFragment"
         android:label="ResidentInformationDetailsFragment" >
-        <action
-            android:id="@+id/action_residentInformationDetailsFragment_to_userProfileFragment"
-            app:destination="@id/userProfileFragment" />
         <argument
             android:name="userModel"
             app:argType="com.leventsurer.manager.data.model.UserModel" />
@@ -92,11 +77,14 @@
         android:label="SettingsFragmet" />
     <fragment
         android:id="@+id/userProfileFragment"
-        android:name="com.leventsurer.manager.ui.fragments.UserProfileFragment"
+        android:name="com.leventsurer.manager.ui.fragments.ResidentUserProfileFragment"
         android:label="UserProfileFragment" >
         <action
             android:id="@+id/action_userProfileFragment_to_settingsFragmet"
             app:destination="@id/settingsFragmet" />
+        <action
+            android:id="@+id/action_userProfileFragment_to_conciergeUserProfileFragment"
+            app:destination="@id/conciergeUserProfileFragment" />
     </fragment>
     <fragment
         android:id="@+id/chatFragment"
@@ -116,5 +104,13 @@
         <action
             android:id="@+id/action_splashFragment_to_executiveHomePage"
             app:destination="@id/executiveHomePage" />
+    </fragment>
+    <fragment
+        android:id="@+id/conciergeUserProfileFragment"
+        android:name="com.leventsurer.manager.ui.fragments.ConciergeUserProfileFragment"
+        android:label="ConciergeUserProfileFragment" >
+        <action
+            android:id="@+id/action_conciergeUserProfileFragment_to_settingsFragmet"
+            app:destination="@id/settingsFragmet" />
     </fragment>
 </navigation>

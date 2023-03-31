@@ -16,6 +16,7 @@ import com.leventsurer.manager.tools.constants.FirebaseConstants.USER_COLLECTION
 import com.leventsurer.manager.tools.constants.SharedPreferencesConstants.APARTMENT_DOCUMENT_ID
 import com.leventsurer.manager.tools.constants.SharedPreferencesConstants.APARTMENT_NAME
 import com.leventsurer.manager.tools.constants.SharedPreferencesConstants.USER_DOCUMENT_ID
+import com.leventsurer.manager.tools.constants.SharedPreferencesConstants.USER_ROLE
 import kotlinx.coroutines.runBlocking
 
 import kotlinx.coroutines.tasks.await
@@ -36,7 +37,7 @@ class DatabaseRepositoryImpl @Inject constructor(
                 database.collection(APARTMENT_COLLECTIONS).document(documentId)
                     .collection(
                         CONCIERGE_ANNOUNCEMENT
-                    ).get().await()
+                    ).orderBy("time", Query.Direction.DESCENDING).get().await()
 
             for (document in result) {
                 announcements.add(document.toObject(ConciergeAnnouncementModel::class.java))
@@ -96,7 +97,7 @@ class DatabaseRepositoryImpl @Inject constructor(
                 database.collection(APARTMENT_COLLECTIONS).document(documentId)
                     .collection(
                         RESIDENT_REQUESTS
-                    ).get().await()
+                    ).orderBy("time", Query.Direction.DESCENDING).get().await()
 
             for (document in result) {
                 requests.add(document.toObject(ResidentsRequestModel::class.java))
@@ -139,6 +140,7 @@ class DatabaseRepositoryImpl @Inject constructor(
                         USER_COLLECTION
                     ).document(userDocumentId!!).get().await()
             val userInfoModel = userDocument.toObject(UserModel::class.java)!!
+            sharedRepository.writeUserRole(USER_ROLE, userInfoModel.role)
             Resource.Success(userInfoModel)
         } catch (e: Exception) {
             Resource.Failure(e)
@@ -234,7 +236,8 @@ class DatabaseRepositoryImpl @Inject constructor(
     ) {
         val result = database.collection(APARTMENT_COLLECTIONS).add(
             hashMapOf(
-                "apartmentName" to apartmentName
+                "apartmentName" to apartmentName,
+                "budget" to 0
             )
         ).await().id
         addNewUserToNewApartment(name, apartmentCode, carPlate, doorNumber, role, result)
@@ -270,7 +273,10 @@ class DatabaseRepositoryImpl @Inject constructor(
     }
 
     //Giriş yapan kullanıcın verilerini gösterebilmek için firestore document id verisi alınır.
-    override suspend fun getUserDocumentId(userName: String, apartmentCode: String): String {
+    override suspend fun writeUserDocumentIdToSharedPref(
+        userName: String,
+        apartmentCode: String
+    ): String {
         val apartmentsCollection: QuerySnapshot =
             database.collection(APARTMENT_COLLECTIONS).get().await()
         var apartmentDocumentId = ""
@@ -303,17 +309,40 @@ class DatabaseRepositoryImpl @Inject constructor(
         return userDocumentId
     }
 
-    override suspend fun addNewRequest(request: String) {
+    override suspend fun addNewRequest(request: String, time: FieldValue) {
         val apartmentDocumentId = sharedRepository.readApartmentDocumentId(APARTMENT_DOCUMENT_ID)
 
 
         val request = hashMapOf(
             "request" to request,
-            "requestDate" to ""
+            "requestDate" to "",
+            "time" to time
         )
         database.collection(APARTMENT_COLLECTIONS).document(apartmentDocumentId!!)
             .collection(RESIDENT_REQUESTS).add(request).await()
     }
+
+    override suspend fun addBudgetMovement(amount: Double, isExpense: Boolean, time: FieldValue) {
+        val apartmentDocumentId = sharedRepository.readApartmentDocumentId(APARTMENT_DOCUMENT_ID)
+        val apartment =
+            database.collection(APARTMENT_COLLECTIONS).document(apartmentDocumentId!!).get().await()
+        val apartmentModel = apartment.toObject(Aparment::class.java)
+        Log.e("kontrol", apartmentModel!!.apartmentName)
+        var newBudget = 0.0
+        newBudget = if (!isExpense) {
+            apartmentModel.budget.toDouble() + amount
+
+        } else {
+            apartmentModel.budget.toDouble() - amount
+        }
+        val newApartmentDocument = hashMapOf(
+            "apartmentName" to apartmentModel.apartmentName,
+            "budget" to newBudget.toString()
+        )
+        database.collection(APARTMENT_COLLECTIONS).document(apartmentDocumentId)
+            .set(newApartmentDocument)
+    }
+
     //Kullanıcın ait olduğu apartmana yeni mesaj eklenmesi
     override suspend fun sendNewMessageInChat(message: String, userName: String, time: FieldValue) {
         val message = hashMapOf(
@@ -325,10 +354,11 @@ class DatabaseRepositoryImpl @Inject constructor(
         val apartmentDocumentId = sharedRepository.readApartmentDocumentId(APARTMENT_DOCUMENT_ID)
         database.collection(APARTMENT_COLLECTIONS).document(apartmentDocumentId!!)
             .collection(CHAT_COLLECTION).add(
-            message
-        )
+                message
+            )
             .await()
     }
+
     //Kullanıcının ait olduğu apartmana ait mesajları canlı olarak getirilimesi
     override fun getChatMessages(): LiveData<Resource<List<ChatMessageModel>>> {
 
@@ -338,12 +368,12 @@ class DatabaseRepositoryImpl @Inject constructor(
 
         database.collection(APARTMENT_COLLECTIONS).document(apartmentDocumentId!!).collection(
             CHAT_COLLECTION
-        ).orderBy("time", Query.Direction.ASCENDING).addSnapshotListener{value,error ->
-            if(error!=null){
+        ).orderBy("time", Query.Direction.ASCENDING).addSnapshotListener { value, error ->
+            if (error != null) {
                 liveData.value = Resource.Failure(error)
-            }else if(value!=null){
+            } else if (value != null) {
                 val messages = mutableListOf<ChatMessageModel>()
-                for(doc in value){
+                for (doc in value) {
                     val data = doc.toObject(ChatMessageModel::class.java)
 
                     messages.add(data)
@@ -351,7 +381,7 @@ class DatabaseRepositoryImpl @Inject constructor(
                 liveData.value = Resource.Success(messages)
             }
         }
-        return  liveData
+        return liveData
     }
 
     //Apartman id sine ulaşmak için kullanılacak apartman adının shared preferencesten çekilmesi.

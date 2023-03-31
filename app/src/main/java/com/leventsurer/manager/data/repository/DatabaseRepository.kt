@@ -15,7 +15,7 @@ interface DatabaseRepository {
     suspend fun getAUser(): Resource<UserModel>
     suspend fun getAUserByNameAndDoorNumber(userName:String,doorNumber:String): Resource<UserModel>
     suspend fun getApartmentDocumentId(apartmentCode: String):String
-    suspend fun getUserDocumentId(userName:String,apartmentCode: String):String
+    suspend fun writeUserDocumentIdToSharedPref(userName:String, apartmentCode: String):String
     fun getChatMessages():LiveData<Resource<List<ChatMessageModel>>>
 
     //Set
@@ -45,8 +45,8 @@ interface DatabaseRepository {
 
     suspend fun changeUserDuesPaymentStatus(currentStatus:Boolean)
 
-    suspend fun addNewRequest(request:String)
-
+    suspend fun addNewRequest(request:String,time:FieldValue)
+    suspend fun addBudgetMovement(amount:Double,isExpense:Boolean, time:FieldValue)
     suspend fun sendNewMessageInChat(message:String,userName:String,time:FieldValue)
 
 }

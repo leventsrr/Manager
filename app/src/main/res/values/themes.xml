@@ -12,5 +12,11 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor">?attr/colorSecondary</item>
         <!-- Customize your theme here. -->
+
+        <!-- checkbox color -->
+        <item name="colorControlNormal">@color/firstColor</item>
+        <item name="colorControlActivated">@color/firstColor</item>
+
     </style>
+
 </resources>

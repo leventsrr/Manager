@@ -8,6 +8,7 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.onNavDestinationSelected
 import androidx.navigation.ui.setupWithNavController
+import com.google.android.material.navigation.NavigationView
 import com.leventsurer.manager.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -38,6 +39,8 @@ class MainActivity : AppCompatActivity() {
     fun showBottomNavigation() {
         binding.bottomNav.visibility = View.VISIBLE
     }
+
+
 
 
 

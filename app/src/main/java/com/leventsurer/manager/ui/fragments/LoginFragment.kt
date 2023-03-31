@@ -12,8 +12,6 @@ import androidx.navigation.fragment.findNavController
 import com.leventsurer.manager.MainActivity
 import com.leventsurer.manager.R
 import com.leventsurer.manager.data.model.Resource
-import com.leventsurer.manager.data.repository.DatabaseRepository
-import com.leventsurer.manager.data.repository.DatabaseRepositoryImpl
 import com.leventsurer.manager.databinding.FragmentLoginBinding
 import com.leventsurer.manager.viewModels.AuthViewModel
 import com.leventsurer.manager.viewModels.DatabaseViewModel
@@ -44,7 +42,7 @@ class LoginFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         onClickHandler()
-        checkIsLoginInfo()
+        //checkIsLoginInfo()
         (requireActivity() as MainActivity).hideBottomNavigation()
 
     }
@@ -98,10 +96,10 @@ class LoginFragment : Fragment() {
         sharedPrefViewModel.writeIsLogin(true)
         sharedPrefViewModel.writeApartmentName(binding.twUserApartmentName.text.toString())
         sharedPrefViewModel.writeUserName(viewModel.currentUser?.displayName.toString())
-        /*databaseViewModel.getUserDocumentId(
+        databaseViewModel.writeUserDocumentIdToSharedPref(
             viewModel.currentUser!!.displayName.toString(),
             binding.twUserApartmentName.text.toString()
-        )*/
+        )
     }
 
 

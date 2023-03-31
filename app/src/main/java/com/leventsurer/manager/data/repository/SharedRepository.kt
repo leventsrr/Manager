@@ -6,6 +6,7 @@ interface SharedRepository {
     fun writeUserDocumentId(key:String,value: String)
     fun writeIsLogin(key: String,value: Boolean)
     fun writeApartmentDocumentId(key: String,value: String)
+    fun writeUserRole(key: String,value: String)
 
     fun readApartmentName(key: String): String?
     fun readUserName(key: String):String?

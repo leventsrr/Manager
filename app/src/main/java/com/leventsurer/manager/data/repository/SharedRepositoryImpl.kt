@@ -41,6 +41,16 @@ class SharedRepositoryImpl @Inject constructor(
         editor.apply()
     }
 
+
+    override fun writeUserRole(key: String, value: String) {
+        val editor: SharedPreferences.Editor = sharedPreferences.edit()
+        editor.putString(key, value)
+        editor.apply()
+    }
+
+    fun readUserRole(key: String):String? {
+        return sharedPreferences.getString(key,"")
+    }
     override fun readApartmentName(key: String): String? {
         return sharedPreferences.getString(key, "")
     }
