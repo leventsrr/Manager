@@ -81,7 +81,9 @@ class ResidentUserProfileFragment : Fragment() {
                     is Resource.Success -> {
                         if(it.result.role == "yonetici"){
                             binding.apply {
-                                mcwManagerMaterialCardView.visibility = VISIBLE
+                                mcwSetMonthyPaymentCard.visibility = VISIBLE
+                                mcwShareNewAnnouncementCard.visibility =VISIBLE
+                                mcwShareNewExpenseOrIncomeCard.visibility = VISIBLE
                                 bindUserInfoToUi(it.result)
                             }
                         }else if(it.result.role == "sakin"){
@@ -170,6 +172,14 @@ class ResidentUserProfileFragment : Fragment() {
                 databaseViewModel.setApartmentMonthlyPayment(amount)
                 etMonthlyPaymentAmount.text?.clear()
                 Toast.makeText(requireContext(),"Aidat Güncellendi",Toast.LENGTH_LONG).show()
+            }
+
+            btnSendAnnouncement.setOnClickListener {
+                val announcement = etManagerAnnouncement.text.toString()
+                val time =  FieldValue.serverTimestamp()
+                databaseViewModel.addNewManagerAnnouncement(announcement,time)
+                etManagerAnnouncement.text?.clear()
+                Toast.makeText(requireContext(),"Duyuru Paylaşıldı",Toast.LENGTH_LONG).show()
             }
         }
 

@@ -4,13 +4,13 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.google.firebase.firestore.*
-import com.google.firebase.firestore.ktx.toObject
 import com.leventsurer.manager.data.model.*
 import com.leventsurer.manager.tools.constants.FirebaseConstants.APARTMENT_COLLECTIONS
 import com.leventsurer.manager.tools.constants.FirebaseConstants.CHAT_COLLECTION
 import com.leventsurer.manager.tools.constants.FirebaseConstants.CONCIERGE_ANNOUNCEMENT
 import com.leventsurer.manager.tools.constants.FirebaseConstants.DUTIES
 import com.leventsurer.manager.tools.constants.FirebaseConstants.FINANCIAL_EVENTS
+import com.leventsurer.manager.tools.constants.FirebaseConstants.MANAGER_ANNOUNCEMENT
 import com.leventsurer.manager.tools.constants.FirebaseConstants.RESIDENT_REQUESTS
 import com.leventsurer.manager.tools.constants.FirebaseConstants.USER_COLLECTION
 import com.leventsurer.manager.tools.constants.SharedPreferencesConstants.APARTMENT_DOCUMENT_ID
@@ -41,6 +41,25 @@ class DatabaseRepositoryImpl @Inject constructor(
 
             for (document in result) {
                 announcements.add(document.toObject(ConciergeAnnouncementModel::class.java))
+            }
+            Resource.Success(announcements)
+        } catch (e: Exception) {
+            Resource.Failure(e)
+        }
+    }
+    //Yönetici duyurularının veri tabanından alınması
+    override suspend fun getManagerAnnouncements(): Resource<ArrayList<ManagerAnnouncementModel>> {
+        val documentId = reachToDocumentIdFromSharedPref()
+        return try {
+            val announcements = arrayListOf<ManagerAnnouncementModel>()
+            val result: QuerySnapshot =
+                database.collection(APARTMENT_COLLECTIONS).document(documentId)
+                    .collection(
+                        MANAGER_ANNOUNCEMENT
+                    ).orderBy("time", Query.Direction.DESCENDING).get().await()
+
+            for (document in result) {
+                announcements.add(document.toObject(ManagerAnnouncementModel::class.java))
             }
             Resource.Success(announcements)
         } catch (e: Exception) {
@@ -246,13 +265,16 @@ class DatabaseRepositoryImpl @Inject constructor(
     override suspend fun changeUserDuesPaymentStatus(currentStatus: Boolean) {
         val apartmentDocumentId = sharedRepository.readApartmentDocumentId(APARTMENT_DOCUMENT_ID)
         val userDocumentId = sharedRepository.readUserDocumentId(USER_DOCUMENT_ID)
-        Log.e(
-            "kontrol",
-            "repository içinde. apartment:$apartmentDocumentId, user:$userDocumentId, status:$currentStatus"
-        )
+
         database.collection(APARTMENT_COLLECTIONS).document(apartmentDocumentId!!).collection(
             USER_COLLECTION
         ).document(userDocumentId!!).update("duesPaymentStatus", currentStatus).await()
+        val apartment =  database.collection(APARTMENT_COLLECTIONS).document(apartmentDocumentId).get().await()
+        val apartmentModel = apartment.toObject(Apartment::class.java)
+        val apartmentDailyPaymentAmount :Double = apartmentModel?.monthlyPayment.toString().toDouble()
+        val apartmentNewBudget : Double = apartmentDailyPaymentAmount + apartmentModel?.budget.toString().toDouble()
+
+        database.collection(APARTMENT_COLLECTIONS).document(apartmentDocumentId).update("budget",apartmentNewBudget) 
 
     }
 
@@ -312,8 +334,6 @@ class DatabaseRepositoryImpl @Inject constructor(
 
     override suspend fun addNewRequest(request: String, time: FieldValue) {
         val apartmentDocumentId = sharedRepository.readApartmentDocumentId(APARTMENT_DOCUMENT_ID)
-
-
         val request = hashMapOf(
             "request" to request,
             "requestDate" to "",
@@ -323,25 +343,32 @@ class DatabaseRepositoryImpl @Inject constructor(
             .collection(RESIDENT_REQUESTS).add(request).await()
     }
 
+    override suspend fun addNewManagerAnnouncement(announcement: String, time: FieldValue) {
+        val apartmentDocumentId = sharedRepository.readApartmentDocumentId(APARTMENT_DOCUMENT_ID)
+        val announcement = hashMapOf(
+            "announcement" to announcement,
+            "time" to time
+        )
+        database.collection(APARTMENT_COLLECTIONS).document(apartmentDocumentId!!)
+            .collection(MANAGER_ANNOUNCEMENT).add(announcement).await()
+    }
+    //yöneticinin yeni parasal olay girmesini sağlar
     override suspend fun addNewFinancialEvent(amount: Double, isExpense: Boolean, time: FieldValue,eventName:String) {
         val apartmentDocumentId = sharedRepository.readApartmentDocumentId(APARTMENT_DOCUMENT_ID)
         val apartment =
             database.collection(APARTMENT_COLLECTIONS).document(apartmentDocumentId!!).get().await()
-        val apartmentModel = apartment.toObject(Aparment::class.java)
+        val apartmentModel = apartment.toObject(Apartment::class.java)
         Log.e("kontrol", apartmentModel!!.apartmentName)
         var newBudget = 0.0
         newBudget = if (!isExpense) {
-            apartmentModel.budget.toDouble() + amount
+            apartmentModel.budget + amount
 
         } else {
-            apartmentModel.budget.toDouble() - amount
+            apartmentModel.budget - amount
         }
-        val newApartmentDocument = hashMapOf(
-            "apartmentName" to apartmentModel.apartmentName,
-            "budget" to newBudget.toString()
-        )
+
         database.collection(APARTMENT_COLLECTIONS).document(apartmentDocumentId)
-            .set(newApartmentDocument)
+            .update("budget",newBudget)
 
         val newFinancialEvent = hashMapOf(
             "amount" to amount,
@@ -392,19 +419,14 @@ class DatabaseRepositoryImpl @Inject constructor(
         }
         return liveData
     }
-
+    //Yöneticinin apartman aidatının tutarını değiştirmesini sağlar
     override suspend fun setApartmentMonthlyPayment(amount: Double) {
         val apartmentDocumentId = sharedRepository.readApartmentDocumentId(APARTMENT_DOCUMENT_ID)
         val apartment =
             database.collection(APARTMENT_COLLECTIONS).document(apartmentDocumentId!!).get().await()
-        val apartmentModel = apartment.toObject(Aparment::class.java)
-        val newApartmentValues = hashMapOf(
-            "apartmentName" to apartmentModel?.apartmentName,
-            "budget" to apartmentModel?.budget,
-            "monthlyPayment" to amount
-        )
+
         database.collection(APARTMENT_COLLECTIONS).document(apartmentDocumentId!!)
-            .set(newApartmentValues)
+            .update("monthlyPayment",amount)
     }
     //Apartman id sine ulaşmak için kullanılacak apartman adının shared preferencesten çekilmesi.
     private suspend fun reachToDocumentIdFromSharedPref(): String {

@@ -4,6 +4,7 @@ object FirebaseConstants {
     //Firestore Database Constants
     val APARTMENT_COLLECTIONS = "apartments"
     val CONCIERGE_ANNOUNCEMENT = "conciergeAnnouncements"
+    val MANAGER_ANNOUNCEMENT = "managerAnnouncements"
     val DUTIES = "conciergeDuties"
     val RESIDENT_REQUESTS = "residentsRequest"
     val FINANCIAL_EVENTS = "recentFinancialEvents"

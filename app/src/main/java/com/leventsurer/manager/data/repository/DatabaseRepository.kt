@@ -8,6 +8,7 @@ import com.leventsurer.manager.data.model.*
 interface DatabaseRepository {
     //Get
     suspend fun getConciergeAnnouncements(): Resource<ArrayList<ConciergeAnnouncementModel>>
+    suspend fun getManagerAnnouncements(): Resource<ArrayList<ManagerAnnouncementModel>>
     suspend fun getConciergeDuties(): Resource<ArrayList<ConciergeDutiesModel>>
     suspend fun getRecentFinancialEvents(): Resource<ArrayList<FinancialEventModel>>
     suspend fun getResidentsRequests(): Resource<ArrayList<ResidentsRequestModel>>
@@ -26,6 +27,8 @@ interface DatabaseRepository {
         doorNumber: String,
         role: String
     )
+
+
 
     suspend fun addNewUserToNewApartment(
         name: String,
@@ -46,6 +49,7 @@ interface DatabaseRepository {
     suspend fun changeUserDuesPaymentStatus(currentStatus:Boolean)
 
     suspend fun addNewRequest(request:String,time:FieldValue)
+    suspend fun addNewManagerAnnouncement(announcement:String,time: FieldValue)
     suspend fun addNewFinancialEvent(amount:Double, isExpense:Boolean, time:FieldValue,eventName:String)
     suspend fun sendNewMessageInChat(message:String,userName:String,time:FieldValue)
     suspend fun setApartmentMonthlyPayment(amount:Double)

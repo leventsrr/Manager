@@ -25,6 +25,9 @@ class DatabaseViewModel @Inject constructor(
     private val _conciergeAnnouncementFlow = MutableStateFlow<Resource<ArrayList<ConciergeAnnouncementModel>>?>(null)
     val conciergeAnnouncementFlow : StateFlow<Resource<ArrayList<ConciergeAnnouncementModel>>?> = _conciergeAnnouncementFlow
 
+    private val _managerAnnouncementFlow = MutableStateFlow<Resource<ArrayList<ManagerAnnouncementModel>>?>(null)
+    val managerAnnouncementFlow : StateFlow<Resource<ArrayList<ManagerAnnouncementModel>>?> = _managerAnnouncementFlow
+
     private val _conciergeDutiesFlow = MutableStateFlow<Resource<ArrayList<ConciergeDutiesModel>>?>(null)
     val conciergeDutiesFlow : StateFlow<Resource<ArrayList<ConciergeDutiesModel>>?> = _conciergeDutiesFlow
 
@@ -83,6 +86,14 @@ class DatabaseViewModel @Inject constructor(
 
     }
 
+    fun getManagerAnnouncement()= viewModelScope.launch {
+        _managerAnnouncementFlow.value = Resource.Loading
+        val result = databaseRepository.getManagerAnnouncements()
+        _managerAnnouncementFlow.value = result
+
+    }
+
+
     fun getResidentRequests() = viewModelScope.launch {
         _residentRequestFlow.value = Resource.Loading
         val result = databaseRepository.getResidentsRequests()
@@ -115,6 +126,10 @@ class DatabaseViewModel @Inject constructor(
 
     fun addNewRequest(request:String,time:FieldValue) = viewModelScope.launch {
         databaseRepository.addNewRequest(request,time)
+    }
+
+    fun addNewManagerAnnouncement(announcement:String,time:FieldValue) = viewModelScope.launch {
+        databaseRepository.addNewManagerAnnouncement(announcement,time)
     }
 
     fun setUserDuesPaymentStatus(currentStats:Boolean) = viewModelScope.launch {

@@ -1,7 +1,6 @@
 package com.leventsurer.manager.ui.fragments
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -16,7 +15,7 @@ import com.leventsurer.manager.R
 import com.leventsurer.manager.data.model.*
 import com.leventsurer.manager.databinding.FragmentHomePageBinding
 import com.leventsurer.manager.tools.adapters.ConciergeAnnouncementAdapter
-import com.leventsurer.manager.tools.adapters.IncomeExpenseAdapter
+import com.leventsurer.manager.tools.adapters.ManagerAnnouncementAdapter
 import com.leventsurer.manager.tools.adapters.ResidentRequestAdapter
 import com.leventsurer.manager.tools.helpers.HeaderHelper
 import com.leventsurer.manager.viewModels.AuthViewModel
@@ -35,12 +34,12 @@ class HomePageFragment : Fragment() {
 
     private val conciergeAnnouncementsAdapterList = ArrayList<ConciergeAnnouncementModel>()
     private val residentRequestAdapterList = ArrayList<ResidentsRequestModel>()
-    private val financialEventAdapterList = ArrayList<FinancialEventModel>()
+    private val managerAnnouncementAdapterList = ArrayList<ManagerAnnouncementModel>()
 
     //Adapters
     private lateinit var conciergeAnnouncementAdapter: ConciergeAnnouncementAdapter
     private lateinit var residentRequestAdapter: ResidentRequestAdapter
-    private lateinit var financialEventAdapter: IncomeExpenseAdapter
+    private lateinit var managerAnnouncementAdapter: ManagerAnnouncementAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -64,7 +63,7 @@ class HomePageFragment : Fragment() {
         setupResidentRequestAdapter()
         getConciergeAnnouncement()
         getResidentRequests()
-        getFinancialEvents()
+        getManagerAnnouncement()
 
         setupIncomeExpenseAdapter()
         readSharedPref()
@@ -151,15 +150,15 @@ class HomePageFragment : Fragment() {
     }
 
     //Gerçekleşen ekonomik harcama ve birikim olayları için istek atar
-    private fun getFinancialEvents() {
-        databaseViewModel.getFinancialEvents()
-        observeFinancialEventFlow()
+    private fun getManagerAnnouncement() {
+        databaseViewModel.getManagerAnnouncement()
+        observeManagerAnnouncementFlow()
     }
     //Ekonomik olaylar için atılan isteğe karşılık gelen cevabı inceler ve gelen verileri ilgili adapter listesine aktarır
-    private fun observeFinancialEventFlow() {
+    private fun observeManagerAnnouncementFlow() {
         viewLifecycleOwner.lifecycleScope.launch {
 
-            databaseViewModel.financialEventsFlow.collect {
+            databaseViewModel.managerAnnouncementFlow.collect {
                 when (it) {
                     is Resource.Failure -> {
                         Toast.makeText(context, it.exception.message, Toast.LENGTH_LONG).show()
@@ -172,8 +171,8 @@ class HomePageFragment : Fragment() {
                     is Resource.Success -> {
                         binding.pbFinancialEvents.visibility = View.GONE
 
-                        financialEventAdapterList.addAll(it.result)
-                        financialEventAdapter.list = financialEventAdapterList
+                        managerAnnouncementAdapterList.addAll(it.result)
+                        managerAnnouncementAdapter.list = managerAnnouncementAdapterList
 
                     }
                     else -> {
@@ -201,8 +200,8 @@ class HomePageFragment : Fragment() {
     //Gelir gider verilerinin listeleneceği adapter ın kurulumunu yapar
     private fun setupIncomeExpenseAdapter() {
         binding.rwIncomeExpense.layoutManager = LinearLayoutManager(requireContext())
-        financialEventAdapter = IncomeExpenseAdapter()
-        binding.rwIncomeExpense.adapter = financialEventAdapter
+        managerAnnouncementAdapter = ManagerAnnouncementAdapter()
+        binding.rwIncomeExpense.adapter = managerAnnouncementAdapter
     }
 
     private fun setupUi() {

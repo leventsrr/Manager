@@ -13,10 +13,12 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.leventsurer.manager.MainActivity
 import com.leventsurer.manager.R
+import com.leventsurer.manager.data.model.FinancialEventModel
 import com.leventsurer.manager.data.model.Resource
 import com.leventsurer.manager.data.model.UserModel
 import com.leventsurer.manager.databinding.FragmentWalletBinding
 import com.leventsurer.manager.tools.adapters.DuesPaymentStatusAdapter
+import com.leventsurer.manager.tools.adapters.FinancialEventsDetailAdapter
 import com.leventsurer.manager.tools.helpers.HeaderHelper
 import com.leventsurer.manager.viewModels.DatabaseViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -28,8 +30,10 @@ class WalletFragment : Fragment() {
     private val databaseViewModel by viewModels<DatabaseViewModel>()
     //Adapter list
     private var duesPaymentStatusAdapterList = ArrayList<UserModel>()
+    private var financialEventAdapterList = ArrayList<FinancialEventModel>()
     //Adapters
     private lateinit var duesPaymentStatusAdapter : DuesPaymentStatusAdapter
+    private lateinit var financialEventsAdapter:FinancialEventsDetailAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -47,13 +51,47 @@ class WalletFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setupUi()
         setupDuesPaymentStatusAdapter()
+        setupFinancialEventsDetailAdapter()
         getUsers()
+        getFinancialEvents()
     }
 
     private fun getUsers() {
         Log.e("kontrol","fragment içinde")
         databaseViewModel.getAllApartmentUsers()
         observeUsers()
+    }
+
+    private fun getFinancialEvents(){
+        databaseViewModel.getFinancialEvents()
+        observeFinancialEvents()
+    }
+
+    private fun observeFinancialEvents() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            databaseViewModel.financialEventsFlow.collect {
+                when (it) {
+                    is Resource.Failure -> {
+                        Toast.makeText(context, it.exception.message, Toast.LENGTH_LONG).show()
+                        Log.e("kontrol","fragment içinde observe -> Failure")
+
+                    }
+                    is Resource.Loading -> {
+                        Log.e("kontrol","fragment içinde observe -> Loading")
+                    }
+                    is Resource.Success -> {
+                        Log.e("kontrol","fragment içinde observe -> Success")
+                        Log.e("kontrol","gelen liste ${it.result}")
+                        financialEventAdapterList = it.result
+                        financialEventsAdapter.list = financialEventAdapterList
+                    }
+                    else -> {
+
+                    }
+                }
+            }
+
+        }
     }
 
     private fun observeUsers() {
@@ -88,6 +126,11 @@ class WalletFragment : Fragment() {
         binding.rwDuesPaymentStatus.layoutManager = LinearLayoutManager(requireContext())
         duesPaymentStatusAdapter = DuesPaymentStatusAdapter()
         binding.rwDuesPaymentStatus.adapter = duesPaymentStatusAdapter
+    }
+    private fun setupFinancialEventsDetailAdapter(){
+        binding.rwFinancialEvents.layoutManager = LinearLayoutManager(requireContext())
+        financialEventsAdapter = FinancialEventsDetailAdapter()
+        binding.rwFinancialEvents.adapter = financialEventsAdapter
     }
 
 
