@@ -59,13 +59,13 @@ class HomePageFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setupUi()
 
-        setupConciergeAnnouncementAdapter()
-        setupResidentRequestAdapter()
+       // setupConciergeAnnouncementAdapter()
+        //setupResidentRequestAdapter()
         getConciergeAnnouncement()
         getResidentRequests()
         getManagerAnnouncement()
 
-        setupIncomeExpenseAdapter()
+       // setupIncomeExpenseAdapter()
         readSharedPref()
     }
 
@@ -89,14 +89,14 @@ class HomePageFragment : Fragment() {
                 when (it) {
                     is Resource.Failure -> {
                         Toast.makeText(context, it.exception.message, Toast.LENGTH_LONG).show()
-                        binding.pbConciergeAnnouncement.visibility = View.GONE
+                        //binding.pbConciergeAnnouncement.visibility = View.GONE
 
                     }
                     is Resource.Loading -> {
-                        binding.pbConciergeAnnouncement.visibility = View.VISIBLE
+                       // binding.pbConciergeAnnouncement.visibility = View.VISIBLE
                     }
                     is Resource.Success -> {
-                        binding.pbConciergeAnnouncement.visibility = View.GONE
+                        //binding.pbConciergeAnnouncement.visibility = View.GONE
 
                         conciergeAnnouncementsAdapterList.addAll(it.result)
                         conciergeAnnouncementAdapter.list = conciergeAnnouncementsAdapterList
@@ -126,14 +126,14 @@ class HomePageFragment : Fragment() {
                 when (it) {
                     is Resource.Failure -> {
                         Toast.makeText(context, it.exception.message, Toast.LENGTH_LONG).show()
-                        binding.pbResidentRequests.visibility = View.GONE
+                        //binding.pbResidentRequests.visibility = View.GONE
 
                     }
                     is Resource.Loading -> {
-                        binding.pbResidentRequests.visibility = View.VISIBLE
+                        //binding.pbResidentRequests.visibility = View.VISIBLE
                     }
                     is Resource.Success -> {
-                        binding.pbResidentRequests.visibility = View.GONE
+                        //binding.pbResidentRequests.visibility = View.GONE
 
                         residentRequestAdapterList.addAll(it.result)
                         residentRequestAdapter.list = residentRequestAdapterList
@@ -162,14 +162,14 @@ class HomePageFragment : Fragment() {
                 when (it) {
                     is Resource.Failure -> {
                         Toast.makeText(context, it.exception.message, Toast.LENGTH_LONG).show()
-                        binding.pbFinancialEvents.visibility = View.GONE
+                        //binding.pbFinancialEvents.visibility = View.GONE
 
                     }
                     is Resource.Loading -> {
-                        binding.pbFinancialEvents.visibility = View.VISIBLE
+                       // binding.pbFinancialEvents.visibility = View.VISIBLE
                     }
                     is Resource.Success -> {
-                        binding.pbFinancialEvents.visibility = View.GONE
+                        //binding.pbFinancialEvents.visibility = View.GONE
 
                         managerAnnouncementAdapterList.addAll(it.result)
                         managerAnnouncementAdapter.list = managerAnnouncementAdapterList
@@ -186,7 +186,7 @@ class HomePageFragment : Fragment() {
     }
 
     //Sakin isteklerinin listeleneceği adapter ın kurulumunu yapar
-    private fun setupResidentRequestAdapter() {
+    /*private fun setupResidentRequestAdapter() {
         binding.rwResidentRequest.layoutManager = LinearLayoutManager(requireContext())
         residentRequestAdapter = ResidentRequestAdapter()
         binding.rwResidentRequest.adapter = residentRequestAdapter
@@ -202,11 +202,11 @@ class HomePageFragment : Fragment() {
         binding.rwIncomeExpense.layoutManager = LinearLayoutManager(requireContext())
         managerAnnouncementAdapter = ManagerAnnouncementAdapter()
         binding.rwIncomeExpense.adapter = managerAnnouncementAdapter
-    }
+    }*/
 
     private fun setupUi() {
         HeaderHelper.customHeader(
-            binding.customHeader,
+           binding.customHeader,
             title = "Anasayfa",
             startIconVisibility = true,
             endIconVisibility = true,
