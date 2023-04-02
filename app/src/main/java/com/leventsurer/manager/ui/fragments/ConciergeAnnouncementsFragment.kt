@@ -74,14 +74,14 @@ class ConciergeAnnouncementsFragment : Fragment() {
                 when (it) {
                     is Resource.Failure -> {
                         Toast.makeText(context, it.exception.message, Toast.LENGTH_LONG).show()
-                        //binding.pbFinancialEvents.visibility = View.GONE
+                        binding.pbProgressBar.visibility = View.GONE
 
                     }
                     is Resource.Loading -> {
-                        // binding.pbFinancialEvents.visibility = View.VISIBLE
+                        binding.pbProgressBar.visibility = View.VISIBLE
                     }
                     is Resource.Success -> {
-                        //binding.pbFinancialEvents.visibility = View.GONE
+                        binding.pbProgressBar.visibility = View.GONE
 
                         conciergeAnnouncementAdapterList.addAll(it.result)
                         conciergeAnnouncementAdapter.list = conciergeAnnouncementAdapterList

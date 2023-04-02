@@ -53,6 +53,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-storage-ktx:20.1.0'
     implementation 'com.google.android.gms:play-services-auth:20.4.1'
     implementation 'androidx.security:security-crypto-ktx:1.1.0-alpha03'
+
     def nav_version = "2.5.0"
     def fragment_version = "1.5.0"
     def recycler_version = "1.2.1"
@@ -66,8 +67,9 @@ dependencies {
     def okhttp_version = "5.0.0-" + "alpha" + ".2"
     def lottie_version = '4.1.0'
 
+    def firebase_messaging_version = '23.1.2'
 
-
+    implementation "com.google.firebase:firebase-messaging-ktx:$firebase_messaging_version"
     implementation platform('com.google.firebase:firebase-bom:26.7.0')
     implementation 'com.google.firebase:firebase-analytics'
     implementation 'com.google.firebase:firebase-crashlytics'

@@ -74,14 +74,14 @@ class ResidentsRequestsFragment : Fragment() {
                 when (it) {
                     is Resource.Failure -> {
                         Toast.makeText(context, it.exception.message, Toast.LENGTH_LONG).show()
-                        //binding.pbFinancialEvents.visibility = View.GONE
+                        binding.progressBar.visibility = View.GONE
 
                     }
                     is Resource.Loading -> {
-                        // binding.pbFinancialEvents.visibility = View.VISIBLE
+                        binding.progressBar.visibility = View.VISIBLE
                     }
                     is Resource.Success -> {
-                        //binding.pbFinancialEvents.visibility = View.GONE
+                        binding.progressBar.visibility = View.GONE
 
                         residentsRequestsAdapterList.addAll(it.result)
                         residentsRequestsAdapter.list = residentsRequestsAdapterList
