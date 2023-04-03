@@ -9,14 +9,12 @@ import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.leventsurer.manager.MainActivity
 import com.leventsurer.manager.R
 import com.leventsurer.manager.data.model.Resource
 import com.leventsurer.manager.data.model.UserModel
 import com.leventsurer.manager.databinding.FragmentResidentInformationDetailsBinding
-import com.leventsurer.manager.tools.adapters.ResidentPastRequestAdapter
 import com.leventsurer.manager.tools.helpers.HeaderHelper
 import com.leventsurer.manager.viewModels.DatabaseViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -43,7 +41,6 @@ class ResidentInformationDetailsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupUi()
-        setupResidentPastRequestAdapter()
         handleArguments()
         getUserInfo()
     }
@@ -97,12 +94,6 @@ class ResidentInformationDetailsFragment : Fragment() {
             },
         )
         (requireActivity() as MainActivity).hideBottomNavigation()
-    }
-    //İncelenen kullanıcının geçmiş isteklerinin listeleneceği adapter ın kurulumunu yapar
-    private fun setupResidentPastRequestAdapter() {
-        binding.rwResidentPastRequest.layoutManager = LinearLayoutManager(requireContext())
-        val residentsPastRequestAdapter = ResidentPastRequestAdapter()
-        binding.rwResidentPastRequest.adapter = residentsPastRequestAdapter
     }
 
     //get the data sent from the other page

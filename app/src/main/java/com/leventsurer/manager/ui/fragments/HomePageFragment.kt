@@ -17,16 +17,12 @@ import com.leventsurer.manager.MainActivity
 import com.leventsurer.manager.R
 import com.leventsurer.manager.data.model.*
 import com.leventsurer.manager.databinding.FragmentHomePageBinding
-import com.leventsurer.manager.tools.adapters.ConciergeAnnouncementAdapter
-import com.leventsurer.manager.tools.adapters.ManagerAnnouncementAdapter
-import com.leventsurer.manager.tools.adapters.ResidentRequestAdapter
 import com.leventsurer.manager.tools.adapters.homePageAdapter.HomeRecyclerViewAdapter
 import com.leventsurer.manager.tools.adapters.homePageAdapter.HomeRecyclerViewItem
 import com.leventsurer.manager.tools.helpers.ChipCardHelper
 import com.leventsurer.manager.tools.helpers.HeaderHelper
 import com.leventsurer.manager.viewModels.AuthViewModel
 import com.leventsurer.manager.viewModels.DatabaseViewModel
-import com.leventsurer.manager.viewModels.SharedPreferencesViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 

@@ -49,12 +49,21 @@ class DatabaseViewModel @Inject constructor(
     private val _apartmentLiveData = MutableLiveData<Resource<Apartment>?>(null)
     val apartmentLiveData :LiveData<Resource<Apartment>?> = _apartmentLiveData
 
+    private val _apartmentsFlow = MutableStateFlow<Resource<List<Apartment>>?>(null)
+    val apartmentsFlow : StateFlow<Resource<List<Apartment>>?> = _apartmentsFlow
 
     fun getApartmentInfo()= viewModelScope.launch {
         _apartmentLiveData.value = Resource.Loading
         val result = databaseRepository.getAnApartment()
         _apartmentLiveData.value = result
     }
+
+    fun getAllApartments() = viewModelScope.launch {
+        _apartmentsFlow.value = Resource.Loading
+        val result = databaseRepository.getApartments()
+        _apartmentsFlow.value = result
+    }
+
 
     fun getChatMessages(): LiveData<Resource<List<ChatMessageModel>>>{
         return  databaseRepository.getChatMessages()

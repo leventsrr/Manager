@@ -32,15 +32,6 @@
         <action
             android:id="@+id/action_executiveHomePage_to_settingsFragmet"
             app:destination="@id/settingsFragmet" />
-        <action
-            android:id="@+id/action_executiveHomePage_to_managerAnnouncementFragment"
-            app:destination="@id/managerAnnouncementFragment" />
-        <action
-            android:id="@+id/action_executiveHomePage_to_conciergeAnnouncementsFragment"
-            app:destination="@id/conciergeAnnouncementsFragment" />
-        <action
-            android:id="@+id/action_executiveHomePage_to_residentsRequestsFragment"
-            app:destination="@id/residentsRequestsFragment" />
     </fragment>
     <fragment
         android:id="@+id/walletFragment"
@@ -122,16 +113,4 @@
             android:id="@+id/action_conciergeUserProfileFragment_to_settingsFragmet"
             app:destination="@id/settingsFragmet" />
     </fragment>
-    <fragment
-        android:id="@+id/managerAnnouncementFragment"
-        android:name="com.leventsurer.manager.ui.fragments.ManagerAnnouncementFragment"
-        android:label="ManagerAnnouncementFragment" />
-    <fragment
-        android:id="@+id/conciergeAnnouncementsFragment"
-        android:name="com.leventsurer.manager.ui.fragments.ConciergeAnnouncementsFragment"
-        android:label="ConciergeAnnouncementsFragment" />
-    <fragment
-        android:id="@+id/residentsRequestsFragment"
-        android:name="com.leventsurer.manager.ui.fragments.ResidentsRequestsFragment"
-        android:label="ResidentsRequestsFragment" />
 </navigation>

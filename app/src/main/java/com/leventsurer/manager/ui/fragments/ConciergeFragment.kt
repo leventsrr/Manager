@@ -1,7 +1,6 @@
 package com.leventsurer.manager.ui.fragments
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -14,10 +13,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.leventsurer.manager.MainActivity
 import com.leventsurer.manager.R
 import com.leventsurer.manager.data.model.ConciergeDutiesModel
-import com.leventsurer.manager.data.model.FinancialEventModel
 import com.leventsurer.manager.data.model.Resource
 import com.leventsurer.manager.databinding.FragmentConciergeBinding
-import com.leventsurer.manager.tools.adapters.ConciergeAnnouncementAdapter
 import com.leventsurer.manager.tools.adapters.ConciergeDutyToDoAdapterAdapter
 import com.leventsurer.manager.tools.adapters.ConciergeDutyToDoneAdapter
 import com.leventsurer.manager.tools.helpers.HeaderHelper

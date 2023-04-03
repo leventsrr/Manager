@@ -165,6 +165,21 @@ class DatabaseRepositoryImpl @Inject constructor(
             Resource.Failure(e)
         }
     }
+    //Tüm apartmanların listesini getirir
+    override suspend fun getApartments(): Resource<List<Apartment>> {
+        return try {
+            val apartmentModelList = arrayListOf<Apartment>()
+            val apartments:QuerySnapshot =  database.collection(APARTMENT_COLLECTIONS).get().await()
+            for(apartment in apartments){
+                apartmentModelList.add(apartment.toObject(Apartment::class.java))
+            }
+            Log.e("kontrol","viewmodel apartmanlar $apartmentModelList")
+            Resource.Success(apartmentModelList)
+        }catch (e:Exception){
+            Resource.Failure(e)
+        }
+    }
+
     //Kullanıcının ait olduğu apartmanın bilgilerini getirir
     override suspend fun getAnApartment(): Resource<Apartment> {
         return try {
