@@ -46,6 +46,15 @@ class DatabaseViewModel @Inject constructor(
     private val _chatMessagesFlow = MutableLiveData<Resource<List<ChatMessageModel>>?>(null)
     val chatMessagesFlow : LiveData<Resource<List<ChatMessageModel>>?> = _chatMessagesFlow
 
+    private val _apartmentLiveData = MutableLiveData<Resource<Apartment>?>(null)
+    val apartmentLiveData :LiveData<Resource<Apartment>?> = _apartmentLiveData
+
+
+    fun getApartmentInfo()= viewModelScope.launch {
+        _apartmentLiveData.value = Resource.Loading
+        val result = databaseRepository.getAnApartment()
+        _apartmentLiveData.value = result
+    }
 
     fun getChatMessages(): LiveData<Resource<List<ChatMessageModel>>>{
         return  databaseRepository.getChatMessages()

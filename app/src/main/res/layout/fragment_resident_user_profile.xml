@@ -11,11 +11,12 @@
 
     android:background="@color/grey"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:layout_marginBottom="70dp">
     <androidx.constraintlayout.widget.ConstraintLayout
 
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
         <include
             android:id="@+id/customHeader"
@@ -490,7 +491,7 @@
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/textInputLayout50"
                     android:layout_width="match_parent"
-                    android:layout_height="190dp"
+                    android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
                     android:layout_marginTop="10dp"
                     android:layout_marginEnd="10dp"
@@ -502,7 +503,7 @@
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/etManagerAnnouncement"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:layout_marginBottom="10dp" />
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -524,6 +525,7 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="10dp"
             android:layout_marginTop="10dp"
+            android:layout_marginBottom="100dp"
             android:elevation="5dp"
             android:visibility="gone"
             app:cardCornerRadius="10dp"

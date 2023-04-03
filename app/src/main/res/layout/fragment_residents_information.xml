@@ -24,12 +24,13 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rwResidentsInformation"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="500dp"
             android:layout_gravity="center_horizontal"
             android:layout_marginHorizontal="15dp"
-            android:layout_marginBottom="20dp"
+            android:layout_marginTop="20dp"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.498"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/customHeader">
 

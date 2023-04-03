@@ -14,6 +14,7 @@ interface DatabaseRepository {
     suspend fun getResidentsRequests(): Resource<ArrayList<ResidentsRequestModel>>
     suspend fun getUsers(): Resource<ArrayList<UserModel>>
     suspend fun getAUser(): Resource<UserModel>
+    suspend fun getAnApartment() : Resource<Apartment>
     suspend fun getAUserByNameAndDoorNumber(userName:String,doorNumber:String): Resource<UserModel>
     suspend fun getApartmentDocumentId(apartmentCode: String):String
     suspend fun writeUserDocumentIdToSharedPref(userName:String, apartmentCode: String):String

@@ -11,6 +11,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.leventsurer.manager.MainActivity
 import com.leventsurer.manager.R
 import com.leventsurer.manager.data.model.Resource
@@ -116,7 +117,7 @@ class ResidentsInformationFragment : Fragment() {
     }
     //apartman sakinlerinin listeleneceği adapter ın kurulumunu yapar
     private fun setupConciergeDutyToDoAdapter() {
-        binding.rwResidentsInformation.layoutManager = GridLayoutManager(requireContext(), 3)
+        binding.rwResidentsInformation.layoutManager = LinearLayoutManager(requireContext()) //GridLayoutManager(requireContext(), 3)
         residentsInformationAdapter = ResidentsInformationAdapter()
         binding.rwResidentsInformation.adapter = residentsInformationAdapter
         residentsInformationAdapter.moveDetailPage {

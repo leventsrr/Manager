@@ -34,6 +34,8 @@ class WalletFragment : Fragment() {
     //Adapters
     private lateinit var duesPaymentStatusAdapter : DuesPaymentStatusAdapter
     private lateinit var financialEventsAdapter:FinancialEventsDetailAdapter
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -54,10 +56,29 @@ class WalletFragment : Fragment() {
         setupFinancialEventsDetailAdapter()
         getUsers()
         getFinancialEvents()
+        getApartmentBudget()
+        observeApartmentData()
+    }
+
+    private fun getApartmentBudget() {
+        databaseViewModel.getApartmentInfo()
+
+    }
+
+    private fun observeApartmentData() {
+        databaseViewModel.apartmentLiveData.observe(viewLifecycleOwner){
+            when(it){
+                is Resource.Loading ->{}
+                is Resource.Failure ->{}
+                is Resource.Success ->{
+                    binding.twCurrentBudget.text = it.result.budget.toString()
+                }
+                else->{}
+            }
+        }
     }
 
     private fun getUsers() {
-        Log.e("kontrol","fragment içinde")
         databaseViewModel.getAllApartmentUsers()
         observeUsers()
     }

@@ -38,7 +38,7 @@
         <entry key="..\:/Users/leven/AndroidStudioProjects/Manager/app/src/main/res/layout/fragment_concierge_announcements.xml" value="0.3569230769230769" />
         <entry key="..\:/Users/leven/AndroidStudioProjects/Manager/app/src/main/res/layout/fragment_concierge_user_profile.xml" value="0.3484375" />
         <entry key="..\:/Users/leven/AndroidStudioProjects/Manager/app/src/main/res/layout/fragment_executive_home_page.xml" value="0.228125" />
-        <entry key="..\:/Users/leven/AndroidStudioProjects/Manager/app/src/main/res/layout/fragment_home_page.xml" value="0.2833333333333333" />
+        <entry key="..\:/Users/leven/AndroidStudioProjects/Manager/app/src/main/res/layout/fragment_home_page.xml" value="0.33" />
         <entry key="..\:/Users/leven/AndroidStudioProjects/Manager/app/src/main/res/layout/fragment_login.xml" value="0.2786458333333333" />
         <entry key="..\:/Users/leven/AndroidStudioProjects/Manager/app/src/main/res/layout/fragment_manager_announcement.xml" value="0.35833333333333334" />
         <entry key="..\:/Users/leven/AndroidStudioProjects/Manager/app/src/main/res/layout/fragment_resident_information_details.xml" value="0.24242424242424243" />
@@ -52,6 +52,7 @@
         <entry key="..\:/Users/leven/AndroidStudioProjects/Manager/app/src/main/res/layout/fragment_wallet.xml" value="0.25277777777777777" />
         <entry key="..\:/Users/leven/AndroidStudioProjects/Manager/app/src/main/res/layout/income_expense_row.xml" value="0.2552083333333333" />
         <entry key="..\:/Users/leven/AndroidStudioProjects/Manager/app/src/main/res/layout/manager_announcement_row.xml" value="0.2833333333333333" />
+        <entry key="..\:/Users/leven/AndroidStudioProjects/Manager/app/src/main/res/layout/my_chip_card.xml" value="0.3614583333333333" />
         <entry key="..\:/Users/leven/AndroidStudioProjects/Manager/app/src/main/res/layout/other_user_message_row.xml" value="0.3614583333333333" />
         <entry key="..\:/Users/leven/AndroidStudioProjects/Manager/app/src/main/res/layout/resident_information_row.xml" value="0.30085470085470084" />
         <entry key="..\:/Users/leven/AndroidStudioProjects/Manager/app/src/main/res/layout/resident_past_request_raw.xml" value="0.36666666666666664" />

@@ -165,7 +165,21 @@ class DatabaseRepositoryImpl @Inject constructor(
             Resource.Failure(e)
         }
     }
+    //Kullanıcının ait olduğu apartmanın bilgilerini getirir
+    override suspend fun getAnApartment(): Resource<Apartment> {
+        return try {
+            val apartmentDocumentId =
+                sharedRepository.readApartmentDocumentId(APARTMENT_DOCUMENT_ID)
 
+            val apartmentDocument: DocumentSnapshot =
+                database.collection(APARTMENT_COLLECTIONS).document(apartmentDocumentId!!).get().await()
+            val apartmentModel = apartmentDocument.toObject(Apartment::class.java)!!
+
+            Resource.Success(apartmentModel)
+        } catch (e: Exception) {
+            Resource.Failure(e)
+        }
+    }
     //Uygulama içinde seçilen kullanıcının bilgilerini veritabanından getirir
     override suspend fun getAUserByNameAndDoorNumber(
         userName: String,

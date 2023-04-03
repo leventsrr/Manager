@@ -47,16 +47,6 @@ class LoginFragment : Fragment() {
 
     }
 
-    private fun checkIsLoginInfo() {
-        val isLogin = sharedPrefViewModel.readIsLogin()
-        if(isLogin == true){
-            val action =
-                LoginFragmentDirections.actionLoginFragmentToExecutiveHomePage()
-            findNavController().navigate(action)
-            binding.pbProgressBar.visibility = View.GONE
-        }
-    }
-
     //Giriş yapılırken girilen bilgiler doğrultusunda istek atılmasını ve gelen cevaba göre yönlendirme yapılmasını sağlar
     private fun observeFlow() {
         viewLifecycleOwner.lifecycleScope.launch {
