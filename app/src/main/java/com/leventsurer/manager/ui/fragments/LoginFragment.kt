@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.GONE
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.viewModels
@@ -11,6 +12,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.leventsurer.manager.MainActivity
 import com.leventsurer.manager.R
+import com.leventsurer.manager.data.model.Apartment
 import com.leventsurer.manager.data.model.Resource
 import com.leventsurer.manager.databinding.FragmentLoginBinding
 import com.leventsurer.manager.viewModels.AuthViewModel
@@ -23,7 +25,7 @@ import kotlinx.coroutines.launch
 class LoginFragment : Fragment() {
     private var _binding: FragmentLoginBinding? = null
     private val binding: FragmentLoginBinding get() = _binding!!
-
+    private var apartmentList = arrayListOf<Apartment>()
     private val viewModel by viewModels<AuthViewModel>()
     private val sharedPrefViewModel by viewModels<SharedPreferencesViewModel>()
     private val databaseViewModel by viewModels<DatabaseViewModel>()
@@ -42,13 +44,12 @@ class LoginFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         onClickHandler()
-        //checkIsLoginInfo()
         (requireActivity() as MainActivity).hideBottomNavigation()
 
     }
 
     //Giriş yapılırken girilen bilgiler doğrultusunda istek atılmasını ve gelen cevaba göre yönlendirme yapılmasını sağlar
-    private fun observeFlow() {
+    private fun observeLoginFlow() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewModel.loginFlow.collect {
                 when (it) {
@@ -92,7 +93,53 @@ class LoginFragment : Fragment() {
         )
     }
 
+    private fun getApartments(){
+        databaseViewModel.getAllApartments()
+        observeApartmentsFlow()
+    }
 
+    private fun isApartmentCodeInDatabase(apartments:List<Apartment>,userApartment: String):Boolean{
+        for(apartment in apartments){
+            if(apartment.apartmentName == userApartment){
+                return true
+            }
+        }
+        return false
+    }
+    //kullanıcının geçerli bir apartman kodu girip girmediğini kontrol eder
+    private fun observeApartmentsFlow() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            databaseViewModel.apartmentsFlow.collect {
+                when (it) {
+                    is Resource.Failure -> {
+                        Toast.makeText(context, it.exception.message, Toast.LENGTH_LONG).show()
+                        binding.pbProgressBar.visibility = View.GONE
+
+                    }
+                    is Resource.Loading -> {
+                        binding.pbProgressBar.visibility = View.VISIBLE
+                    }
+                    is Resource.Success -> {
+                        apartmentList.addAll(it.result)
+                        val isApartmentNameValid = isApartmentCodeInDatabase(apartmentList,binding.twUserApartmentName.text.toString())
+                        if(isApartmentNameValid){
+                            val email: String = binding.twUserEmail.text.toString()
+                            val password: String = binding.twUserPassword.text.toString()
+                            viewModel.login(email, password)
+                            observeLoginFlow()
+                        }else{
+                            Toast.makeText(requireContext(),"Lütfen Geçerli Bir Apartman Kodu Giriniz",Toast.LENGTH_LONG).show()
+                            binding.pbProgressBar.visibility = GONE
+                        }
+                    }
+                    else -> {
+
+                    }
+                }
+            }
+
+        }
+    }
 
     private fun onClickHandler() {
         binding.apply {
@@ -101,12 +148,8 @@ class LoginFragment : Fragment() {
                 findNavController().navigate(action)
             }
             buttonLogin.setOnClickListener {
-                val email: String = twUserEmail.text.toString()
-                val password: String = twUserPassword.text.toString()
-                viewModel.login(email, password)
-                observeFlow()
+                getApartments()
             }
-
             iwSignInWithGoogle.setOnClickListener {
 
             }
