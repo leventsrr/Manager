@@ -14,14 +14,17 @@ interface DatabaseRepository {
     suspend fun getResidentsRequests(): Resource<ArrayList<ResidentsRequestModel>>
     suspend fun getUsers(): Resource<ArrayList<UserModel>>
     suspend fun getAUser(): Resource<UserModel>
+
+
     suspend fun getApartments():Resource<List<Apartment>>
     suspend fun getAnApartment() : Resource<Apartment>
+
     suspend fun getAUserByNameAndDoorNumber(userName:String,doorNumber:String): Resource<UserModel>
     suspend fun getApartmentDocumentId(apartmentCode: String):String
     suspend fun writeUserDocumentIdToSharedPref(userName:String, apartmentCode: String):String
     fun getChatMessages():LiveData<Resource<List<ChatMessageModel>>>
 
-    //Set
+    //Add
     suspend fun addNewUser(
         name: String,
         apartmentCode: String,
@@ -56,4 +59,7 @@ interface DatabaseRepository {
     suspend fun sendNewMessageInChat(message:String,userName:String,time:FieldValue)
     suspend fun setApartmentMonthlyPayment(amount:Double)
 
+
+    //Set
+    suspend fun updateAnUser(userName:String,phoneNumber: String,carPlate: String,doorNumber: String)
 }

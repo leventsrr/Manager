@@ -145,11 +145,7 @@ class SignupFragment : Fragment() {
                             binding.etApartmentCode.text.toString()
                         )
                         if (isTaken) {
-                            Toast.makeText(
-                                requireContext(),
-                                "Bu İsim Daha Önce Alındı.Apartmanınıza Başka Bir İsim Belirleyiniz",
-                                Toast.LENGTH_LONG
-                            ).show()
+                            binding.etApartmentCode.error = "Bu İsim Daha Önce Alındı.Apartmanınıza Başka Bir İsim Belirleyiniz"
                             binding.pbProgressBar.visibility = GONE
                         } else {
                             binding.apply {
@@ -200,13 +196,6 @@ class SignupFragment : Fragment() {
             }
 
             buttonSignup.setOnClickListener {
-                val userName = etNewUserName.text.toString()
-                val userEmail = etNewUserMail.text.toString()
-                val userPassword = etNewUserPassword.text.toString()
-                val userCarPlate = etCarPlate.text.toString()
-                val userDoorNumber = etDoorNumber.text.toString()
-                val apartmentCode = etApartmentCode.text.toString()
-
                 if (isRoleSelected) {
                     if (newUserRole == "yonetici") {
                         getApartments()

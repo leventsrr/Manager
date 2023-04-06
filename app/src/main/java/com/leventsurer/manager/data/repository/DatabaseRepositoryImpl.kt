@@ -3,6 +3,8 @@ package com.leventsurer.manager.data.repository
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.UserProfileChangeRequest
 import com.google.firebase.firestore.*
 import com.leventsurer.manager.data.model.*
 import com.leventsurer.manager.tools.constants.FirebaseConstants.APARTMENT_COLLECTIONS
@@ -17,6 +19,7 @@ import com.leventsurer.manager.tools.constants.SharedPreferencesConstants.APARTM
 import com.leventsurer.manager.tools.constants.SharedPreferencesConstants.APARTMENT_NAME
 import com.leventsurer.manager.tools.constants.SharedPreferencesConstants.USER_DOCUMENT_ID
 import com.leventsurer.manager.tools.constants.SharedPreferencesConstants.USER_ROLE
+import com.leventsurer.manager.viewModels.AuthViewModel
 import kotlinx.coroutines.runBlocking
 
 import kotlinx.coroutines.tasks.await
@@ -27,6 +30,8 @@ class DatabaseRepositoryImpl @Inject constructor(
 ) : DatabaseRepository {
     @Inject
     lateinit var sharedRepository: SharedRepositoryImpl
+    @Inject
+    lateinit var firebaseAuth: FirebaseAuth
 
     //Kapıcı duyurularının veri tabanından alınması
     override suspend fun getConciergeAnnouncements(): Resource<ArrayList<ConciergeAnnouncementModel>> {
@@ -47,6 +52,7 @@ class DatabaseRepositoryImpl @Inject constructor(
             Resource.Failure(e)
         }
     }
+
     //Yönetici duyurularının veri tabanından alınması
     override suspend fun getManagerAnnouncements(): Resource<ArrayList<ManagerAnnouncementModel>> {
         val documentId = reachToDocumentIdFromSharedPref()
@@ -165,17 +171,18 @@ class DatabaseRepositoryImpl @Inject constructor(
             Resource.Failure(e)
         }
     }
+
     //Tüm apartmanların listesini getirir
     override suspend fun getApartments(): Resource<List<Apartment>> {
         return try {
             val apartmentModelList = arrayListOf<Apartment>()
-            val apartments:QuerySnapshot =  database.collection(APARTMENT_COLLECTIONS).get().await()
-            for(apartment in apartments){
+            val apartments: QuerySnapshot = database.collection(APARTMENT_COLLECTIONS).get().await()
+            for (apartment in apartments) {
                 apartmentModelList.add(apartment.toObject(Apartment::class.java))
             }
-            Log.e("kontrol","viewmodel apartmanlar $apartmentModelList")
+            Log.e("kontrol", "viewmodel apartmanlar $apartmentModelList")
             Resource.Success(apartmentModelList)
-        }catch (e:Exception){
+        } catch (e: Exception) {
             Resource.Failure(e)
         }
     }
@@ -187,7 +194,8 @@ class DatabaseRepositoryImpl @Inject constructor(
                 sharedRepository.readApartmentDocumentId(APARTMENT_DOCUMENT_ID)
 
             val apartmentDocument: DocumentSnapshot =
-                database.collection(APARTMENT_COLLECTIONS).document(apartmentDocumentId!!).get().await()
+                database.collection(APARTMENT_COLLECTIONS).document(apartmentDocumentId!!).get()
+                    .await()
             val apartmentModel = apartmentDocument.toObject(Apartment::class.java)!!
 
             Resource.Success(apartmentModel)
@@ -195,6 +203,7 @@ class DatabaseRepositoryImpl @Inject constructor(
             Resource.Failure(e)
         }
     }
+
     //Uygulama içinde seçilen kullanıcının bilgilerini veritabanından getirir
     override suspend fun getAUserByNameAndDoorNumber(
         userName: String,
@@ -298,12 +307,16 @@ class DatabaseRepositoryImpl @Inject constructor(
         database.collection(APARTMENT_COLLECTIONS).document(apartmentDocumentId!!).collection(
             USER_COLLECTION
         ).document(userDocumentId!!).update("duesPaymentStatus", currentStatus).await()
-        val apartment =  database.collection(APARTMENT_COLLECTIONS).document(apartmentDocumentId).get().await()
+        val apartment =
+            database.collection(APARTMENT_COLLECTIONS).document(apartmentDocumentId).get().await()
         val apartmentModel = apartment.toObject(Apartment::class.java)
-        val apartmentDailyPaymentAmount :Double = apartmentModel?.monthlyPayment.toString().toDouble()
-        val apartmentNewBudget : Double = apartmentDailyPaymentAmount + apartmentModel?.budget.toString().toDouble()
+        val apartmentDailyPaymentAmount: Double =
+            apartmentModel?.monthlyPayment.toString().toDouble()
+        val apartmentNewBudget: Double =
+            apartmentDailyPaymentAmount + apartmentModel?.budget.toString().toDouble()
 
-        database.collection(APARTMENT_COLLECTIONS).document(apartmentDocumentId).update("budget",apartmentNewBudget) 
+        database.collection(APARTMENT_COLLECTIONS).document(apartmentDocumentId)
+            .update("budget", apartmentNewBudget)
 
     }
 
@@ -381,8 +394,14 @@ class DatabaseRepositoryImpl @Inject constructor(
         database.collection(APARTMENT_COLLECTIONS).document(apartmentDocumentId!!)
             .collection(MANAGER_ANNOUNCEMENT).add(announcement).await()
     }
+
     //yöneticinin yeni parasal olay girmesini sağlar
-    override suspend fun addNewFinancialEvent(amount: Double, isExpense: Boolean, time: FieldValue,eventName:String) {
+    override suspend fun addNewFinancialEvent(
+        amount: Double,
+        isExpense: Boolean,
+        time: FieldValue,
+        eventName: String
+    ) {
         val apartmentDocumentId = sharedRepository.readApartmentDocumentId(APARTMENT_DOCUMENT_ID)
         val apartment =
             database.collection(APARTMENT_COLLECTIONS).document(apartmentDocumentId!!).get().await()
@@ -397,7 +416,7 @@ class DatabaseRepositoryImpl @Inject constructor(
         }
 
         database.collection(APARTMENT_COLLECTIONS).document(apartmentDocumentId)
-            .update("budget",newBudget)
+            .update("budget", newBudget)
 
         val newFinancialEvent = hashMapOf(
             "amount" to amount,
@@ -405,7 +424,8 @@ class DatabaseRepositoryImpl @Inject constructor(
             "eventName" to eventName,
             "isExpense" to isExpense
         )
-        database.collection(APARTMENT_COLLECTIONS).document(apartmentDocumentId).collection(FINANCIAL_EVENTS).add(newFinancialEvent)
+        database.collection(APARTMENT_COLLECTIONS).document(apartmentDocumentId)
+            .collection(FINANCIAL_EVENTS).add(newFinancialEvent)
     }
 
     //Kullanıcın ait olduğu apartmana yeni mesaj eklenmesi
@@ -448,6 +468,31 @@ class DatabaseRepositoryImpl @Inject constructor(
         }
         return liveData
     }
+
+    override suspend fun updateAnUser(
+        userName: String,
+        phoneNumber: String,
+        carPlate: String,
+        doorNumber: String
+    ) {
+        val apartmentDocumentId = sharedRepository.readApartmentDocumentId(APARTMENT_DOCUMENT_ID)
+        val userDocumentId = sharedRepository.readUserDocumentId(USER_DOCUMENT_ID)
+        firebaseAuth.currentUser?.updateProfile(UserProfileChangeRequest.Builder().setDisplayName(userName).build())?.await()
+        database.collection(APARTMENT_COLLECTIONS).document(apartmentDocumentId!!).collection(
+            USER_COLLECTION
+        ).document(userDocumentId!!).update(
+            "carPlate",
+            carPlate,
+            "userName",
+            userName,
+            "phoneNumber",
+            phoneNumber,
+            "doorNumber",
+            doorNumber
+        ).await()
+
+    }
+
     //Yöneticinin apartman aidatının tutarını değiştirmesini sağlar
     override suspend fun setApartmentMonthlyPayment(amount: Double) {
         val apartmentDocumentId = sharedRepository.readApartmentDocumentId(APARTMENT_DOCUMENT_ID)
@@ -455,8 +500,9 @@ class DatabaseRepositoryImpl @Inject constructor(
             database.collection(APARTMENT_COLLECTIONS).document(apartmentDocumentId!!).get().await()
 
         database.collection(APARTMENT_COLLECTIONS).document(apartmentDocumentId!!)
-            .update("monthlyPayment",amount)
+            .update("monthlyPayment", amount)
     }
+
     //Apartman id sine ulaşmak için kullanılacak apartman adının shared preferencesten çekilmesi.
     private suspend fun reachToDocumentIdFromSharedPref(): String {
         val apartmentName = sharedRepository.readApartmentName(APARTMENT_NAME)

@@ -1,5 +1,7 @@
 package com.leventsurer.manager.ui.fragments
 
+import android.annotation.SuppressLint
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -9,6 +11,7 @@ import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -17,6 +20,7 @@ import com.leventsurer.manager.MainActivity
 import com.leventsurer.manager.R
 import com.leventsurer.manager.data.model.*
 import com.leventsurer.manager.databinding.FragmentHomePageBinding
+import com.leventsurer.manager.databinding.MyChipCardBinding
 import com.leventsurer.manager.tools.adapters.homePageAdapter.HomeRecyclerViewAdapter
 import com.leventsurer.manager.tools.adapters.homePageAdapter.HomeRecyclerViewItem
 import com.leventsurer.manager.tools.helpers.ChipCardHelper
@@ -54,6 +58,7 @@ class HomePageFragment : Fragment() {
         setupUi()
         setupHomePageAdapter()
         getHomePageInfo(chosenCardNumber)
+        changeChipsColor()
     }
 
     //Adapter kurulumu yapar
@@ -218,6 +223,7 @@ class HomePageFragment : Fragment() {
             chipOnClickListener = {
                 chosenCardNumber = 1
                 getHomePageInfo(chosenCardNumber)
+                changeChipsColor()
             }
         )
 
@@ -228,6 +234,7 @@ class HomePageFragment : Fragment() {
             chipOnClickListener = {
                 chosenCardNumber = 2
                 getHomePageInfo(chosenCardNumber)
+                changeChipsColor()
             }
         )
 
@@ -238,6 +245,7 @@ class HomePageFragment : Fragment() {
             chipOnClickListener = {
                 chosenCardNumber = 3
                 getHomePageInfo(chosenCardNumber)
+                changeChipsColor()
             }
         )
 
@@ -247,6 +255,7 @@ class HomePageFragment : Fragment() {
             icon = R.drawable.ic_baseline_poll_24,
             chipOnClickListener = {
                 chosenCardNumber = 4
+                changeChipsColor()
             }
         )
 
@@ -254,5 +263,21 @@ class HomePageFragment : Fragment() {
         (requireActivity() as MainActivity).showBottomNavigation()
     }
 
+    @SuppressLint("ResourceAsColor")
+    private fun changeChipsColor(){
+        val chipsList = listOf(binding.incCard1,binding.incCard2,binding.incCard3,binding.incCard4)
+        for(i in 1..chipsList.size){
+
+            if(chosenCardNumber == i){
+                chipsList[i-1].cwMyChip.setCardBackgroundColor(ContextCompat.getColor(requireContext(),R.color.thirdColor))
+                chipsList[i-1].twCardText.setTextColor(Color.parseColor("#FFFFFF"))
+                chipsList[i-1].iwCardImage.visibility = GONE
+             }else{
+                chipsList[i-1].cwMyChip.setCardBackgroundColor(ContextCompat.getColor(requireContext(),R.color.white))
+                chipsList[i-1].twCardText.setTextColor(R.color.black)
+                chipsList[i-1].iwCardImage.visibility = VISIBLE
+            }
+        }
+    }
 
 }

@@ -37,8 +37,8 @@ class DatabaseViewModel @Inject constructor(
     private val _financialEventsFlow = MutableStateFlow<Resource<ArrayList<FinancialEventModel>>?>(null)
     val financialEventsFlow : StateFlow<Resource<ArrayList<FinancialEventModel>>?> = _financialEventsFlow
 
-    private val _userInfoFlow = MutableStateFlow<Resource<UserModel>?>(null)
-    val userInfoFlow : StateFlow<Resource<UserModel>?> = _userInfoFlow
+    private val _userInfoFlow = MutableLiveData<Resource<UserModel>?>(null)
+    val userInfoFlow : LiveData<Resource<UserModel>?> = _userInfoFlow
 
     private val _users = MutableStateFlow<Resource<ArrayList<UserModel>>?>(null)
     val users : StateFlow<Resource<ArrayList<UserModel>>?> = _users
@@ -160,6 +160,10 @@ class DatabaseViewModel @Inject constructor(
 
     fun setApartmentMonthlyPayment(amount:Double) = viewModelScope.launch {
         databaseRepository.setApartmentMonthlyPayment(amount)
+    }
+
+    fun updateUserInfo(userName: String,phoneNumber:String,carPlate: String,doorNumber: String) = viewModelScope.launch {
+        databaseRepository.updateAnUser(userName, phoneNumber, carPlate, doorNumber)
     }
 
 }

@@ -5,11 +5,11 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class UserModel(
-    val carPlate: String = "",
-    val doorNumber:String = "",
+    var carPlate: String = "",
+    var doorNumber:String = "",
     @field:JvmField  val duesPaymentStatus:Boolean = false,
-    val fullName:String = "",
-    val phoneNumber:String = "",
+    var fullName:String = "",
+    var phoneNumber:String = "",
     val role:String = "",
     val imageLink:String = ""
 ) : Parcelable

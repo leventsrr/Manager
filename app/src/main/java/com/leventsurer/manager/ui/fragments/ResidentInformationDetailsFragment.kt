@@ -51,8 +51,7 @@ class ResidentInformationDetailsFragment : Fragment() {
     }
 
     private fun observeUserInfo() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            databaseViewModel.userInfoFlow.collect {
+            databaseViewModel.userInfoFlow.observe(viewLifecycleOwner) {
                 when (it) {
                     is Resource.Failure -> {
                         Toast.makeText(context, it.exception.message, Toast.LENGTH_LONG).show()
@@ -65,7 +64,6 @@ class ResidentInformationDetailsFragment : Fragment() {
                 }
             }
 
-        }
     }
 
     private fun bindUserInfoToUi(model: UserModel) {

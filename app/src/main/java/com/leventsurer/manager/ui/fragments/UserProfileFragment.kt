@@ -1,17 +1,19 @@
 package com.leventsurer.manager.ui.fragments
 
+import android.app.AlertDialog
+import android.app.Dialog
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.fragment.app.commit
-import androidx.fragment.app.replace
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -21,8 +23,9 @@ import com.leventsurer.manager.MainActivity
 import com.leventsurer.manager.R
 import com.leventsurer.manager.data.model.Resource
 import com.leventsurer.manager.data.model.UserModel
-import com.leventsurer.manager.databinding.FragmentResidentUserProfileBinding
+import com.leventsurer.manager.databinding.FragmentUserProfileBinding
 import com.leventsurer.manager.tools.helpers.HeaderHelper
+import com.leventsurer.manager.ui.dialog.ProfileCustomDialog
 import com.leventsurer.manager.viewModels.DatabaseViewModel
 import com.leventsurer.manager.viewModels.FirebaseStorageViewModel
 import com.leventsurer.manager.viewModels.SharedPreferencesViewModel
@@ -30,16 +33,18 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
+
 @AndroidEntryPoint
-class ResidentUserProfileFragment : Fragment() {
-    private var _binding: FragmentResidentUserProfileBinding? = null
-    private val binding: FragmentResidentUserProfileBinding get() = _binding!!
+class UserProfileFragment : Fragment() {
+    private var _binding: FragmentUserProfileBinding? = null
+    private val binding: FragmentUserProfileBinding get() = _binding!!
     private val storageViewModel by viewModels<FirebaseStorageViewModel>()
     private val databaseViewModel by viewModels<DatabaseViewModel>()
     private val sharedPreferencesViewModel by viewModels<SharedPreferencesViewModel>()
     private var imageUri: Uri? = null
     private var apartmentCode:String? = null
     private var isExpense:Boolean? = null
+    private  var userModel=UserModel()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -49,7 +54,7 @@ class ResidentUserProfileFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentResidentUserProfileBinding.inflate(inflater, container, false)
+        _binding = FragmentUserProfileBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -58,6 +63,7 @@ class ResidentUserProfileFragment : Fragment() {
         setupUi()
         getUserInfo()
         onClickHandler()
+        observeUserInfo()
     }
 
 
@@ -66,19 +72,21 @@ class ResidentUserProfileFragment : Fragment() {
     private fun getUserInfo() {
         apartmentCode = sharedPreferencesViewModel.readApartmentName()
         databaseViewModel.getUserInfo()
-        observeUserInfo()
-
     }
 
     private fun observeUserInfo() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            databaseViewModel.userInfoFlow.collect {
+            databaseViewModel.userInfoFlow.observe(viewLifecycleOwner) {
                 when (it) {
                     is Resource.Failure -> {
                         Toast.makeText(context, it.exception.message, Toast.LENGTH_LONG).show()
                     }
                     is Resource.Loading -> {}
                     is Resource.Success -> {
+                        userModel.fullName = it.result.fullName
+                        userModel.phoneNumber = it.result.phoneNumber
+                        userModel.carPlate = it.result.carPlate
+                        userModel.doorNumber = it.result.doorNumber
+
                         if(it.result.role == "yonetici"){
                             binding.apply {
                                 mcwSetMonthyPaymentCard.visibility = VISIBLE
@@ -99,7 +107,7 @@ class ResidentUserProfileFragment : Fragment() {
                 }
             }
 
-        }
+
     }
     //Gelene kullanıcı bilgilerini arayüzde gerekli yerlere yerleştirir
     private fun bindUserInfoToUi(model: UserModel) {
@@ -154,9 +162,9 @@ class ResidentUserProfileFragment : Fragment() {
                     Toast.makeText(requireContext(),"Lütfen Bir Tip Seçiniz",Toast.LENGTH_LONG).show()
 
                 }else if(etAmountName.text.toString().isEmpty()){
-                    Toast.makeText(requireContext(),"Lütfen İşlemi Açıklaması Giriniz",Toast.LENGTH_LONG).show()
+                    etAmountName.error = "Lütfen İşlemi Açıklaması Giriniz"
                 }else if( etAmount.text.toString().isEmpty()){
-                    Toast.makeText(requireContext(),"Lütfen İşlemi Tutarı Giriniz",Toast.LENGTH_LONG).show()
+                    etAmount.error = "Lütfen İşlemi Tutarı Giriniz"
                 }
 
                 radioButton1.isChecked = false
@@ -180,6 +188,12 @@ class ResidentUserProfileFragment : Fragment() {
                 databaseViewModel.addNewManagerAnnouncement(announcement,time)
                 etManagerAnnouncement.text?.clear()
                 Toast.makeText(requireContext(),"Duyuru Paylaşıldı",Toast.LENGTH_LONG).show()
+            }
+
+            btnEditInfo.setOnClickListener {
+
+                ProfileCustomDialog(userModel).show(parentFragmentManager,"Custom Fragment")
+
             }
         }
 
@@ -207,7 +221,7 @@ class ResidentUserProfileFragment : Fragment() {
             },
             endIconClick = {
                 val action =
-                    ResidentUserProfileFragmentDirections.actionUserProfileFragmentToSettingsFragmet()
+                    UserProfileFragmentDirections.actionUserProfileFragmentToSettingsFragmet()
                 findNavController().navigate(action)
             },
         )

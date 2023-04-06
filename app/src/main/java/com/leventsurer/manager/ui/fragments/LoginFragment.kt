@@ -128,7 +128,7 @@ class LoginFragment : Fragment() {
                             viewModel.login(email, password)
                             observeLoginFlow()
                         }else{
-                            Toast.makeText(requireContext(),"Lütfen Geçerli Bir Apartman Kodu Giriniz",Toast.LENGTH_LONG).show()
+                            binding.twUserApartmentName.error = "Lütfen Geçerli Bir Apartman Kodu Giriniz"
                             binding.pbProgressBar.visibility = GONE
                         }
                     }

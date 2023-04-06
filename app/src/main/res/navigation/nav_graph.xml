@@ -77,14 +77,11 @@
         android:label="SettingsFragmet" />
     <fragment
         android:id="@+id/userProfileFragment"
-        android:name="com.leventsurer.manager.ui.fragments.ResidentUserProfileFragment"
+        android:name="com.leventsurer.manager.ui.fragments.UserProfileFragment"
         android:label="UserProfileFragment" >
         <action
             android:id="@+id/action_userProfileFragment_to_settingsFragmet"
             app:destination="@id/settingsFragmet" />
-        <action
-            android:id="@+id/action_userProfileFragment_to_conciergeUserProfileFragment"
-            app:destination="@id/conciergeUserProfileFragment" />
     </fragment>
     <fragment
         android:id="@+id/chatFragment"
@@ -104,13 +101,5 @@
         <action
             android:id="@+id/action_splashFragment_to_executiveHomePage"
             app:destination="@id/executiveHomePage" />
-    </fragment>
-    <fragment
-        android:id="@+id/conciergeUserProfileFragment"
-        android:name="com.leventsurer.manager.ui.fragments.ConciergeUserProfileFragment"
-        android:label="ConciergeUserProfileFragment" >
-        <action
-            android:id="@+id/action_conciergeUserProfileFragment_to_settingsFragmet"
-            app:destination="@id/settingsFragmet" />
     </fragment>
 </navigation>
