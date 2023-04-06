@@ -68,6 +68,10 @@ class ProfileCustomDialog(userModel:UserModel) :DialogFragment() {
                 dialog?.cancel()
                 Toast.makeText(requireContext(),"Bilgiler Sayfa Güncellendiğinde Güncellenecektir.",Toast.LENGTH_LONG).show()
             }
+
+            btnCancel.setOnClickListener {
+                dialog?.cancel()
+            }
         }
 
     }

@@ -5,6 +5,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
     <uses-sdk tools:overrideLibrary="androidx.security" />
+    <uses-permission android:name="android.permission.CALL_PHONE"/>
     <application
 
         android:name=".MyApplication"

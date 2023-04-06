@@ -8,7 +8,7 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-
+        android:background="@color/grey"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".ui.fragments.ResidentInformationDetailsFragment">
@@ -18,144 +18,145 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
-        <LinearLayout
-            android:id="@+id/linearLayout2"
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/mcwImageCard"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:elevation="5dp"
+            app:cardCornerRadius="10dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/customHeader"
+            app:strokeColor="@color/grey"
+            android:layout_marginHorizontal="10dp"
+            android:layout_marginTop="10dp"
+            app:strokeWidth="1dp">
+
+            <ImageView
+                android:id="@+id/iwUserProfilePhoto"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop" />
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/mcwUserInfoDetail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:orientation="horizontal"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/customHeader">
+            android:layout_marginHorizontal="10dp"
+            app:cardCornerRadius="10dp"
+            android:elevation="10dp"
 
-            <com.google.android.material.card.MaterialCardView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:elevation="5dp"
-                app:cardCornerRadius="10dp"
-                app:strokeColor="@color/grey"
-                app:strokeWidth="1dp">
-
-                <ImageView
-                    android:id="@+id/iwUserProfilePhoto"
-                    android:layout_width="120dp"
-                    android:layout_height="120dp"
-                    android:scaleType="centerCrop"/>
-            </com.google.android.material.card.MaterialCardView>
+            app:layout_constraintTop_toBottomOf="@+id/mcwImageCard">
 
             <LinearLayout
+                android:id="@+id/linearLayout2"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center_horizontal"
-                android:orientation="vertical"
-                android:paddingStart="10dp">
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_margin="5dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/mcwImageCard">
+
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:orientation="horizontal">
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical">
 
-                    <TextView
-                        android:layout_width="0dp"
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:fontFamily="@font/titillium_web_bold"
-                        android:text="Daire Sakini Adı :" />
+                        android:gravity="center"
+                        android:orientation="horizontal">
 
-                    <TextView
-                        android:id="@+id/twUserName"
-                        android:layout_width="0dp"
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/titillium_web_bold"
+                            android:text="Daire Sakini Adı :" />
+
+                        <TextView
+                            android:id="@+id/twUserName"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/titillium_web_bold" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:fontFamily="@font/titillium_web_bold" />
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/titillium_web_bold"
+                            android:text="Daire Numarası :" />
+
+                        <TextView
+                            android:id="@+id/twDoorNumber"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/titillium_web_bold" />
+                    </LinearLayout>
+
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/titillium_web_bold"
+                            android:text="Araç Plakası :" />
+
+                        <TextView
+                            android:id="@+id/twUserCarPlate"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/titillium_web_bold" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/titillium_web_bold"
+                            android:text="Telefon Numarası :" />
+
+                        <TextView
+                            android:id="@+id/twUserPhoneNumber"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/titillium_web_bold" />
+                    </LinearLayout>
+
                 </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:fontFamily="@font/titillium_web_bold"
-                        android:text="Daire Numarası :" />
-
-                    <TextView
-                        android:id="@+id/twDoorNumber"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:fontFamily="@font/titillium_web_bold" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:fontFamily="@font/titillium_web_bold"
-                        android:text="Gecikmiş Aidat Adeti :" />
-
-                    <TextView
-                        android:id="@+id/twPaymentStatus"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:fontFamily="@font/titillium_web_bold" />
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:fontFamily="@font/titillium_web_bold"
-                        android:text="Araç Plakası :" />
-
-                    <TextView
-                        android:id="@+id/twUserCarPlate"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:fontFamily="@font/titillium_web_bold" />
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:fontFamily="@font/titillium_web_bold"
-                        android:text="Telefon Numarası :" />
-
-                    <TextView
-                        android:id="@+id/twUserPhoneNumber"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:fontFamily="@font/titillium_web_bold" />
-                </LinearLayout>
-
             </LinearLayout>
-        </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
 
         <com.google.android.material.divider.MaterialDivider
             android:id="@+id/materialDivider3"
@@ -164,7 +165,7 @@
             android:layout_marginTop="10dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/linearLayout2" />
+            app:layout_constraintTop_toBottomOf="@+id/mcwUserInfoDetail" />
 
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
@@ -201,5 +202,23 @@
             </LinearLayout>
 
         </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/btnCallResident"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|bottom"
+            android:layout_margin="16dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="10dp"
+            android:backgroundTint="@color/thirdColor"
+            android:contentDescription="Ara"
+            android:src="@drawable/ic_baseline_call_24"
+            app:tint="@android:color/white"
+            app:borderWidth="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:rippleColor="@color/white" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.leventsurer.manager.R
 import com.leventsurer.manager.data.model.UserModel
 import com.leventsurer.manager.databinding.ResidentInformationRowBinding
 import com.leventsurer.manager.ui.fragments.ResidentsInformationFragmentDirections
@@ -40,7 +41,12 @@ class ResidentsInformationAdapter : RecyclerView.Adapter<ResidentsInformationAda
             val currentItem = list[position]
             twResidentDoorNumber.text = currentItem.doorNumber
             twResidentFullName.text = currentItem.fullName
-            Glide.with(context).load(currentItem.imageLink).into(iwResidentPhoto)
+            if (currentItem.imageLink.isNotEmpty()){
+                Glide.with(context).load(currentItem.imageLink).into(iwResidentPhoto)
+            }else{
+                iwResidentPhoto.setImageResource(R.drawable.default_profile_photo)
+            }
+
 
         }
 
@@ -50,8 +56,7 @@ class ResidentsInformationAdapter : RecyclerView.Adapter<ResidentsInformationAda
                     it(list[position])
                 }
             }
-           /* val action = ResidentsInformationFragmentDirections.actionResidentsInformationFragmentToResidentInformationDetailsFragment()
-            it?.findNavController()?.navigate(action)*/
+
         }
 
     }
