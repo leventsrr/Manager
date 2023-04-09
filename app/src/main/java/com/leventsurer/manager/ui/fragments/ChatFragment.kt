@@ -1,5 +1,6 @@
 package com.leventsurer.manager.ui.fragments
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -38,7 +39,6 @@ class ChatFragment : Fragment() {
     private lateinit var chatMessageAdapter: ChatMessagesAdapter
     private val sharedPrefViewModel by viewModels<SharedPreferencesViewModel>()
     private val databaseViewModel by viewModels<DatabaseViewModel>()
-    private val authViewModel by viewModels<AuthViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -66,7 +66,7 @@ class ChatFragment : Fragment() {
 
     private fun setupChatMessagesAdapter() {
         binding.rwChatMessages.layoutManager = LinearLayoutManager(requireContext())
-        chatMessageAdapter = ChatMessagesAdapter(authViewModel)
+        chatMessageAdapter = ChatMessagesAdapter(sharedPrefViewModel)
         binding.rwChatMessages.adapter = chatMessageAdapter
         binding.rwChatMessages.layoutManager = LinearLayoutManager(requireContext()).apply {
             stackFromEnd = true
@@ -81,22 +81,26 @@ class ChatFragment : Fragment() {
 
     private fun observeChatMessages() {
         databaseViewModel.getChatMessages().observe(viewLifecycleOwner) {
-            when (it) {
+
+        when (it) {
                 is Resource.Failure -> {
                     Toast.makeText(requireContext(), it.exception.message, Toast.LENGTH_LONG).show()
                 }
                 is Resource.Loading -> {
                 }
                 is Resource.Success -> {
+                    Log.e("kontrol","observe success")
                     chatMessagesAdapterList.clear()
                     chatMessagesAdapterList.addAll(it.result)
                     chatMessageAdapter.list = chatMessagesAdapterList
+
                 }
                 else -> {
                     Log.e("control", "location observe function in else ChatFragment")
                 }
             }
         }
+
 
     }
 

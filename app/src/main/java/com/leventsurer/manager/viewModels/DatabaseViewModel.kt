@@ -46,11 +46,24 @@ class DatabaseViewModel @Inject constructor(
     private val _chatMessagesFlow = MutableLiveData<Resource<List<ChatMessageModel>>?>(null)
     val chatMessagesFlow : LiveData<Resource<List<ChatMessageModel>>?> = _chatMessagesFlow
 
-    private val _apartmentLiveData = MutableLiveData<Resource<Apartment>?>(null)
-    val apartmentLiveData :LiveData<Resource<Apartment>?> = _apartmentLiveData
+    private val _apartmentLiveData = MutableLiveData<Resource<ApartmentModel>?>(null)
+    val apartmentLiveData :LiveData<Resource<ApartmentModel>?> = _apartmentLiveData
 
-    private val _apartmentsFlow = MutableStateFlow<Resource<List<Apartment>>?>(null)
-    val apartmentsFlow : StateFlow<Resource<List<Apartment>>?> = _apartmentsFlow
+    private val _apartmentsFlow = MutableStateFlow<Resource<List<ApartmentModel>>?>(null)
+    val apartmentsFlow : StateFlow<Resource<List<ApartmentModel>>?> = _apartmentsFlow
+
+    private val _pollsLiveData = MutableLiveData<Resource<List<PollModel>>?>(null)
+    val pollsLiveData : LiveData<Resource<List<PollModel>>?> = _pollsLiveData
+
+    fun getPolls() = viewModelScope.launch {
+        _pollsLiveData.value = Resource.Loading
+        val result = databaseRepository.getPolls()
+        _pollsLiveData.value = result
+    }
+
+    fun addNewPoll(pollText:String,time: FieldValue) = viewModelScope.launch {
+        databaseRepository.addNewPoll(pollText, time)
+    }
 
     fun getApartmentInfo()= viewModelScope.launch {
         _apartmentLiveData.value = Resource.Loading

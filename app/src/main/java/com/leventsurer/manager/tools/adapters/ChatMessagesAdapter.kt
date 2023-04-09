@@ -9,21 +9,28 @@ import android.view.LayoutInflater
 import android.view.View.GONE
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.AsyncListDiffer
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.leventsurer.manager.R
 import com.leventsurer.manager.data.model.ChatMessageModel
 import com.leventsurer.manager.databinding.UserChatMessageRowBinding
 import com.leventsurer.manager.viewModels.AuthViewModel
+import com.leventsurer.manager.viewModels.SharedPreferencesViewModel
 import kotlinx.coroutines.runBlocking
 
-class ChatMessagesAdapter(private val authViewModel: AuthViewModel) : RecyclerView.Adapter<ChatMessagesAdapter.ChatMessageHolder>(
+class ChatMessagesAdapter(private val sharedPreferencesViewModel: SharedPreferencesViewModel) :
+    RecyclerView.Adapter<ChatMessagesAdapter.ChatMessageHolder>(
 
-) {
+    ) {
 
     private lateinit var context: Context
+
     class ChatMessageHolder(val binding: UserChatMessageRowBinding) :
         RecyclerView.ViewHolder(binding.root) {
     }
+
+
 
     var list = ArrayList<ChatMessageModel>()
         @SuppressLint("NotifyDataSetChanged")
@@ -41,19 +48,29 @@ class ChatMessagesAdapter(private val authViewModel: AuthViewModel) : RecyclerVi
 
     @SuppressLint("ResourceAsColor")
     override fun onBindViewHolder(holder: ChatMessageHolder, position: Int) {
+        val userName = sharedPreferencesViewModel.readUserName()
         holder.binding.apply {
-            val userName = authViewModel.currentUser!!.displayName
-            val currentItem:ChatMessageModel = list[position]
-            Log.e("kontrol","size:${list.size}")
-            if(currentItem.userName == userName){
-                cwMessageCard.setCardBackgroundColor(ContextCompat.getColor(context,R.color.thirdColor))
+
+            val currentItem: ChatMessageModel = list[position]
+            Log.e("kontrol", "item name:${currentItem.userName},userName:$userName")
+            if (currentItem.userName == userName) {
+                Log.e("kontrol","if içinde")
+                cwMessageCard.setCardBackgroundColor(
+                    ContextCompat.getColor(
+                        context,
+                        R.color.thirdColor
+                    )
+                )
                 twSender.visibility = GONE
                 linearLayout1.gravity = Gravity.END
-            }else{
+            } else {
+                Log.e("kontrol","else içinde")
                 twSender.text = currentItem.userName
             }
             twMessage.text = currentItem.message
         }
+
+
     }
 
     override fun getItemCount(): Int {

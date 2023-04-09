@@ -16,15 +16,20 @@ interface DatabaseRepository {
     suspend fun getAUser(): Resource<UserModel>
 
 
-    suspend fun getApartments():Resource<List<Apartment>>
-    suspend fun getAnApartment() : Resource<Apartment>
+    suspend fun getApartments():Resource<List<ApartmentModel>>
+    suspend fun getAnApartment() : Resource<ApartmentModel>
 
     suspend fun getAUserByNameAndDoorNumber(userName:String,doorNumber:String): Resource<UserModel>
     suspend fun getApartmentDocumentId(apartmentCode: String):String
     suspend fun writeUserDocumentIdToSharedPref(userName:String, apartmentCode: String):String
+    suspend fun getPolls():Resource<List<PollModel>>
+
     fun getChatMessages():LiveData<Resource<List<ChatMessageModel>>>
 
     //Add
+
+    suspend fun addNewPoll(pollText:String,time: FieldValue)
+
     suspend fun addNewUser(
         name: String,
         apartmentCode: String,

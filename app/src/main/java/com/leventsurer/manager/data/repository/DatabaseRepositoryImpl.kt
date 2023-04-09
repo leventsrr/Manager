@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.UserProfileChangeRequest
 import com.google.firebase.firestore.*
+import com.google.firebase.firestore.ktx.toObject
 import com.leventsurer.manager.data.model.*
 import com.leventsurer.manager.tools.constants.FirebaseConstants.APARTMENT_COLLECTIONS
 import com.leventsurer.manager.tools.constants.FirebaseConstants.CHAT_COLLECTION
@@ -13,13 +14,13 @@ import com.leventsurer.manager.tools.constants.FirebaseConstants.CONCIERGE_ANNOU
 import com.leventsurer.manager.tools.constants.FirebaseConstants.DUTIES
 import com.leventsurer.manager.tools.constants.FirebaseConstants.FINANCIAL_EVENTS
 import com.leventsurer.manager.tools.constants.FirebaseConstants.MANAGER_ANNOUNCEMENT
+import com.leventsurer.manager.tools.constants.FirebaseConstants.POLLS
 import com.leventsurer.manager.tools.constants.FirebaseConstants.RESIDENT_REQUESTS
 import com.leventsurer.manager.tools.constants.FirebaseConstants.USER_COLLECTION
 import com.leventsurer.manager.tools.constants.SharedPreferencesConstants.APARTMENT_DOCUMENT_ID
 import com.leventsurer.manager.tools.constants.SharedPreferencesConstants.APARTMENT_NAME
 import com.leventsurer.manager.tools.constants.SharedPreferencesConstants.USER_DOCUMENT_ID
 import com.leventsurer.manager.tools.constants.SharedPreferencesConstants.USER_ROLE
-import com.leventsurer.manager.viewModels.AuthViewModel
 import kotlinx.coroutines.runBlocking
 
 import kotlinx.coroutines.tasks.await
@@ -171,14 +172,44 @@ class DatabaseRepositoryImpl @Inject constructor(
             Resource.Failure(e)
         }
     }
+    //Apartmana ait anketleri veritabanından çeker
+    override suspend fun getPolls(): Resource<List<PollModel>> {
+        return try {
+            val apartmentDocumentId =
+                sharedRepository.readApartmentDocumentId(APARTMENT_DOCUMENT_ID)
+            val polls = arrayListOf<PollModel>()
+            val pollDocuments = database.collection(APARTMENT_COLLECTIONS).document(apartmentDocumentId!!).collection(POLLS).get().await()
+            for(doc in pollDocuments){
+                Log.e("kontrol",doc.toString())
+                polls.add(doc.toObject(PollModel::class.java))
+            }
+            Resource.Success(polls)
+        }catch (e:Exception){
+            Resource.Failure(e)
+        }
+    }
+
+    override suspend fun addNewPoll(pollText: String,time:FieldValue) {
+        val apartmentDocumentId =
+            sharedRepository.readApartmentDocumentId(APARTMENT_DOCUMENT_ID)
+        val newPoll = hashMapOf(
+            "agreeCount" to 0,
+            "disagreeCount" to 0,
+            "people" to mapOf("agreePeople" to arrayListOf<String>(),"disagreePeople" to arrayListOf<String>()),
+            "pollText" to pollText,
+            "time" to time
+        )
+
+        database.collection(APARTMENT_COLLECTIONS).document(apartmentDocumentId!!).collection(POLLS).add(newPoll).await()
+    }
 
     //Tüm apartmanların listesini getirir
-    override suspend fun getApartments(): Resource<List<Apartment>> {
+    override suspend fun getApartments(): Resource<List<ApartmentModel>> {
         return try {
-            val apartmentModelList = arrayListOf<Apartment>()
+            val apartmentModelList = arrayListOf<ApartmentModel>()
             val apartments: QuerySnapshot = database.collection(APARTMENT_COLLECTIONS).get().await()
             for (apartment in apartments) {
-                apartmentModelList.add(apartment.toObject(Apartment::class.java))
+                apartmentModelList.add(apartment.toObject(ApartmentModel::class.java))
             }
             Log.e("kontrol", "viewmodel apartmanlar $apartmentModelList")
             Resource.Success(apartmentModelList)
@@ -188,7 +219,7 @@ class DatabaseRepositoryImpl @Inject constructor(
     }
 
     //Kullanıcının ait olduğu apartmanın bilgilerini getirir
-    override suspend fun getAnApartment(): Resource<Apartment> {
+    override suspend fun getAnApartment(): Resource<ApartmentModel> {
         return try {
             val apartmentDocumentId =
                 sharedRepository.readApartmentDocumentId(APARTMENT_DOCUMENT_ID)
@@ -196,7 +227,7 @@ class DatabaseRepositoryImpl @Inject constructor(
             val apartmentDocument: DocumentSnapshot =
                 database.collection(APARTMENT_COLLECTIONS).document(apartmentDocumentId!!).get()
                     .await()
-            val apartmentModel = apartmentDocument.toObject(Apartment::class.java)!!
+            val apartmentModel = apartmentDocument.toObject(ApartmentModel::class.java)!!
 
             Resource.Success(apartmentModel)
         } catch (e: Exception) {
@@ -309,7 +340,7 @@ class DatabaseRepositoryImpl @Inject constructor(
         ).document(userDocumentId!!).update("duesPaymentStatus", currentStatus).await()
         val apartment =
             database.collection(APARTMENT_COLLECTIONS).document(apartmentDocumentId).get().await()
-        val apartmentModel = apartment.toObject(Apartment::class.java)
+        val apartmentModel = apartment.toObject(ApartmentModel::class.java)
         val apartmentDailyPaymentAmount: Double =
             apartmentModel?.monthlyPayment.toString().toDouble()
         val apartmentNewBudget: Double =
@@ -405,7 +436,7 @@ class DatabaseRepositoryImpl @Inject constructor(
         val apartmentDocumentId = sharedRepository.readApartmentDocumentId(APARTMENT_DOCUMENT_ID)
         val apartment =
             database.collection(APARTMENT_COLLECTIONS).document(apartmentDocumentId!!).get().await()
-        val apartmentModel = apartment.toObject(Apartment::class.java)
+        val apartmentModel = apartment.toObject(ApartmentModel::class.java)
         Log.e("kontrol", apartmentModel!!.apartmentName)
         var newBudget = 0.0
         newBudget = if (!isExpense) {

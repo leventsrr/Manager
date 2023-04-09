@@ -12,7 +12,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.leventsurer.manager.MainActivity
 import com.leventsurer.manager.R
-import com.leventsurer.manager.data.model.Apartment
+import com.leventsurer.manager.data.model.ApartmentModel
 import com.leventsurer.manager.data.model.Resource
 import com.leventsurer.manager.databinding.FragmentLoginBinding
 import com.leventsurer.manager.viewModels.AuthViewModel
@@ -25,7 +25,7 @@ import kotlinx.coroutines.launch
 class LoginFragment : Fragment() {
     private var _binding: FragmentLoginBinding? = null
     private val binding: FragmentLoginBinding get() = _binding!!
-    private var apartmentList = arrayListOf<Apartment>()
+    private var apartmentList = arrayListOf<ApartmentModel>()
     private val viewModel by viewModels<AuthViewModel>()
     private val sharedPrefViewModel by viewModels<SharedPreferencesViewModel>()
     private val databaseViewModel by viewModels<DatabaseViewModel>()
@@ -98,7 +98,7 @@ class LoginFragment : Fragment() {
         observeApartmentsFlow()
     }
 
-    private fun isApartmentCodeInDatabase(apartments:List<Apartment>,userApartment: String):Boolean{
+    private fun isApartmentCodeInDatabase(apartments:List<ApartmentModel>, userApartment: String):Boolean{
         for(apartment in apartments){
             if(apartment.apartmentName == userApartment){
                 return true

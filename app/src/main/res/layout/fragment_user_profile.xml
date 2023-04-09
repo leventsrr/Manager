@@ -540,23 +540,97 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
         </com.google.android.material.card.MaterialCardView>
 
+
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/managerPollCard"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="10dp"
+            android:elevation="10dp"
+            android:visibility="visible"
+            app:cardCornerRadius="10dp"
+            android:layout_marginTop="10dp"
+            app:layout_constraintTop_toBottomOf="@+id/mcwShareNewAnnouncementCard">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:fontFamily="@font/titillium_web_bold"
+                    android:text="Yeni Anket Paylaş"
+                    android:textColor="@color/thirdColor"
+                    android:textSize="20sp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="10dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Anket"
+                        android:textSize="15sp" />
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/textInputLayout10"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2"
+                        app:boxBackgroundColor="@color/white"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@+id/textView14"
+                        app:layout_constraintTop_toBottomOf="@+id/textView20"
+                        app:suffixText="Tl">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/etPoll"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="10dp"
+                            android:layout_marginBottom="10dp"
+                            android:inputType="text"
+                            android:maxLines="1" />
+                    </com.google.android.material.textfield.TextInputLayout>
+                </LinearLayout>
+
+                <Button
+                    android:id="@+id/btnPollShare"
+                    android:layout_width="200dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="center"
+                    android:text="Paylaş" />
+            </LinearLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/mcwSetMonthyPaymentCard"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="10dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="100dp"
             android:elevation="5dp"
             android:visibility="gone"
             app:cardCornerRadius="10dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/mcwShareNewAnnouncementCard">
+            android:layout_marginTop="10dp"
+            app:layout_constraintTop_toBottomOf="@+id/managerPollCard">
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -590,22 +664,18 @@
                     </com.google.android.material.textfield.TextInputLayout>
 
 
-
                 </LinearLayout>
 
                 <Button
-                    android:layout_gravity="center"
                     android:id="@+id/btnNewMonthlyPayment"
                     android:layout_width="200dp"
                     android:layout_height="40dp"
+                    android:layout_gravity="center"
                     android:text="Güncelle" />
             </LinearLayout>
 
 
         </com.google.android.material.card.MaterialCardView>
-
-
-
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

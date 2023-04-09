@@ -20,7 +20,6 @@ import com.leventsurer.manager.MainActivity
 import com.leventsurer.manager.R
 import com.leventsurer.manager.data.model.*
 import com.leventsurer.manager.databinding.FragmentHomePageBinding
-import com.leventsurer.manager.databinding.MyChipCardBinding
 import com.leventsurer.manager.tools.adapters.homePageAdapter.HomeRecyclerViewAdapter
 import com.leventsurer.manager.tools.adapters.homePageAdapter.HomeRecyclerViewItem
 import com.leventsurer.manager.tools.helpers.ChipCardHelper
@@ -84,8 +83,51 @@ class HomePageFragment : Fragment() {
                 databaseViewModel.getResidentRequests()
                 observeResidentsRequestsFlow()
             }
-            4 -> {}
+            4 -> {
+                databaseViewModel.getPolls()
+                observePollData()
+            }
         }
+    }
+    //Apartmana ait anketleri dinler
+    private fun observePollData() {
+        databaseViewModel.pollsLiveData.observe(viewLifecycleOwner) {
+            when (it) {
+                is Resource.Failure -> {
+                    Toast.makeText(context, it.exception.message, Toast.LENGTH_LONG).show()
+                    binding.pbProgressBar.visibility = GONE
+
+                }
+                is Resource.Loading -> {
+                    binding.recyclerView.visibility = GONE
+                    binding.pbProgressBar.visibility = VISIBLE
+                }
+                is Resource.Success -> {
+                    binding.pbProgressBar.visibility = GONE
+                    binding.recyclerView.visibility = VISIBLE
+                    adapterList.clear()
+                    for (poll in it.result) {
+                        Log.e("kontrol","${poll.pollText} / ${poll.agreeCount} / ${poll.disagreeCount}")
+                        val listItem =
+                            HomeRecyclerViewItem.Polls(
+                                pollText = poll.pollText,
+                                agreeCount = poll.agreeCount,
+                                disagreeCount = poll.disagreeCount
+                            )
+
+                        Log.e("kontrol","ana sayfa ${listItem.agreeCount} / ${listItem.disagreeCount} / ${listItem.pollText}")
+                        adapterList.add(listItem)
+                        homePageAdapter.items = adapterList
+                    }
+                    Log.e("kontrol", adapterList.toString())
+
+                }
+                else -> {
+
+                }
+            }
+        }
+
     }
 
     //Yönetici duyurularının dinler
@@ -255,6 +297,7 @@ class HomePageFragment : Fragment() {
             icon = R.drawable.ic_baseline_poll_24,
             chipOnClickListener = {
                 chosenCardNumber = 4
+                getHomePageInfo(chosenCardNumber)
                 changeChipsColor()
             }
         )
@@ -264,18 +307,29 @@ class HomePageFragment : Fragment() {
     }
 
     @SuppressLint("ResourceAsColor")
-    private fun changeChipsColor(){
-        val chipsList = listOf(binding.incCard1,binding.incCard2,binding.incCard3,binding.incCard4)
-        for(i in 1..chipsList.size){
+    private fun changeChipsColor() {
+        val chipsList =
+            listOf(binding.incCard1, binding.incCard2, binding.incCard3, binding.incCard4)
+        for (i in 1..chipsList.size) {
 
-            if(chosenCardNumber == i){
-                chipsList[i-1].cwMyChip.setCardBackgroundColor(ContextCompat.getColor(requireContext(),R.color.thirdColor))
-                chipsList[i-1].twCardText.setTextColor(Color.parseColor("#FFFFFF"))
-                chipsList[i-1].iwCardImage.visibility = GONE
-             }else{
-                chipsList[i-1].cwMyChip.setCardBackgroundColor(ContextCompat.getColor(requireContext(),R.color.white))
-                chipsList[i-1].twCardText.setTextColor(R.color.black)
-                chipsList[i-1].iwCardImage.visibility = VISIBLE
+            if (chosenCardNumber == i) {
+                chipsList[i - 1].cwMyChip.setCardBackgroundColor(
+                    ContextCompat.getColor(
+                        requireContext(),
+                        R.color.thirdColor
+                    )
+                )
+                chipsList[i - 1].twCardText.setTextColor(Color.parseColor("#FFFFFF"))
+                chipsList[i - 1].iwCardImage.visibility = GONE
+            } else {
+                chipsList[i - 1].cwMyChip.setCardBackgroundColor(
+                    ContextCompat.getColor(
+                        requireContext(),
+                        R.color.white
+                    )
+                )
+                chipsList[i - 1].twCardText.setTextColor(R.color.black)
+                chipsList[i - 1].iwCardImage.visibility = VISIBLE
             }
         }
     }

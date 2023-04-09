@@ -14,4 +14,10 @@ sealed class HomeRecyclerViewItem{
         val request:String
     ):HomeRecyclerViewItem()
 
+    class Polls(
+        val pollText:String,
+        val agreeCount:Int,
+        val disagreeCount:Int
+    ):HomeRecyclerViewItem()
+
 }

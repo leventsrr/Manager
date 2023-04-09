@@ -2,6 +2,8 @@ package com.leventsurer.manager.ui.fragments
 
 import android.app.AlertDialog
 import android.app.Dialog
+import android.content.ClipboardManager
+import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
@@ -13,6 +15,7 @@ import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.getSystemService
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -92,6 +95,7 @@ class UserProfileFragment : Fragment() {
                                 mcwSetMonthyPaymentCard.visibility = VISIBLE
                                 mcwShareNewAnnouncementCard.visibility =VISIBLE
                                 mcwShareNewExpenseOrIncomeCard.visibility = VISIBLE
+                                managerPollCard.visibility = VISIBLE
                                 bindUserInfoToUi(it.result)
                             }
                         }else if(it.result.role == "sakin"){
@@ -183,17 +187,30 @@ class UserProfileFragment : Fragment() {
             }
 
             btnSendAnnouncement.setOnClickListener {
-                val announcement = etManagerAnnouncement.text.toString()
-                val time =  FieldValue.serverTimestamp()
-                databaseViewModel.addNewManagerAnnouncement(announcement,time)
-                etManagerAnnouncement.text?.clear()
-                Toast.makeText(requireContext(),"Duyuru Paylaşıldı",Toast.LENGTH_LONG).show()
+                if(etManagerAnnouncement.text.isNullOrEmpty()){
+                    Toast.makeText(requireContext(),"Boş Duyuru Paylaşılamaz",Toast.LENGTH_LONG).show()
+                }else{
+                    val announcement = etManagerAnnouncement.text.toString()
+                    val time =  FieldValue.serverTimestamp()
+                    databaseViewModel.addNewManagerAnnouncement(announcement,time)
+                    etManagerAnnouncement.text?.clear()
+                    Toast.makeText(requireContext(),"Duyuru Paylaşıldı",Toast.LENGTH_LONG).show()
+                }
+
             }
 
             btnEditInfo.setOnClickListener {
 
                 ProfileCustomDialog(userModel).show(parentFragmentManager,"Custom Fragment")
 
+            }
+
+
+            btnPollShare.setOnClickListener {
+                val time:FieldValue = FieldValue.serverTimestamp()
+                val pollText:String = etPoll.text.toString()
+                databaseViewModel.addNewPoll(pollText, time)
+                Toast.makeText(requireContext(),"Anket Paylaşıldı",Toast.LENGTH_LONG).show()
             }
         }
 

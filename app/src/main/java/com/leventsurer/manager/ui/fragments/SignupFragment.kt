@@ -1,7 +1,6 @@
 package com.leventsurer.manager.ui.fragments
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -13,7 +12,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.leventsurer.manager.MainActivity
 import com.leventsurer.manager.R
-import com.leventsurer.manager.data.model.Apartment
+import com.leventsurer.manager.data.model.ApartmentModel
 import com.leventsurer.manager.data.model.Resource
 import com.leventsurer.manager.databinding.FragmentSignupBinding
 import com.leventsurer.manager.viewModels.AuthViewModel
@@ -21,7 +20,6 @@ import com.leventsurer.manager.viewModels.DatabaseViewModel
 import com.leventsurer.manager.viewModels.SharedPreferencesViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 
 @AndroidEntryPoint
 class SignupFragment : Fragment() {
@@ -31,7 +29,7 @@ class SignupFragment : Fragment() {
     private val databaseViewModel by viewModels<DatabaseViewModel>()
     private val sharedPrefViewModel by viewModels<SharedPreferencesViewModel>()
     private lateinit var newUserRole: String
-    private var apartmentsList = arrayListOf<Apartment>()
+    private var apartmentsList = arrayListOf<ApartmentModel>()
     private var isRoleSelected: Boolean = false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -178,7 +176,7 @@ class SignupFragment : Fragment() {
     }
 
     private fun isApartmentNameTaken(
-        apartmentList: List<Apartment>,
+        apartmentList: List<ApartmentModel>,
         newUserApartmentName: String
     ): Boolean {
         for (apartment in apartmentList) {
