@@ -64,7 +64,9 @@ class DatabaseViewModel @Inject constructor(
     fun addNewPoll(pollText:String,time: FieldValue) = viewModelScope.launch {
         databaseRepository.addNewPoll(pollText, time)
     }
-
+    fun changePollStatistics(isAgree: Boolean,pollText: String) = viewModelScope.launch {
+        databaseRepository.changePollStatistics(isAgree, pollText)
+    }
     fun getApartmentInfo()= viewModelScope.launch {
         _apartmentLiveData.value = Resource.Loading
         val result = databaseRepository.getAnApartment()

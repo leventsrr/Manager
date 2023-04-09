@@ -1,7 +1,10 @@
 package com.leventsurer.manager.tools.adapters.homePageAdapter
 
+import android.util.Log
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
+import com.leventsurer.manager.data.model.PollModel
+import com.leventsurer.manager.data.model.UserModel
 import com.leventsurer.manager.databinding.ConciergeAnnouncementRowBinding
 import com.leventsurer.manager.databinding.ManagerAnnouncementRowBinding
 import com.leventsurer.manager.databinding.PollRowBinding
@@ -35,5 +38,9 @@ sealed class HomeRecyclerViewHolder(binding:ViewBinding):RecyclerView.ViewHolder
                 twDisagreeCount.text = poll.disagreeCount.toString()
             }
         }
+
     }
+
+
+
 }

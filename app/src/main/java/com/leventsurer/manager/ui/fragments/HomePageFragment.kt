@@ -65,6 +65,9 @@ class HomePageFragment : Fragment() {
         binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
         homePageAdapter = HomeRecyclerViewAdapter()
         binding.recyclerView.adapter = homePageAdapter
+        homePageAdapter.sendPollAnswer{ text,isAgree->
+            databaseViewModel.changePollStatistics(isAgree,text)
+        }
     }
 
     //Seçilen karta göre bilgileri veritababından çağırır

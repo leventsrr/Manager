@@ -210,6 +210,7 @@ class UserProfileFragment : Fragment() {
                 val time:FieldValue = FieldValue.serverTimestamp()
                 val pollText:String = etPoll.text.toString()
                 databaseViewModel.addNewPoll(pollText, time)
+                etPoll.text?.clear()
                 Toast.makeText(requireContext(),"Anket Paylaşıldı",Toast.LENGTH_LONG).show()
             }
         }

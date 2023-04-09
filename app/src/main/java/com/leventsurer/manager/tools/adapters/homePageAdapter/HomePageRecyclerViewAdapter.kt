@@ -1,10 +1,15 @@
 package com.leventsurer.manager.tools.adapters.homePageAdapter
 
 import android.annotation.SuppressLint
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.RadioButton
+import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.leventsurer.manager.R
+import com.leventsurer.manager.data.model.PollModel
 import com.leventsurer.manager.databinding.ConciergeAnnouncementRowBinding
 import com.leventsurer.manager.databinding.ManagerAnnouncementRowBinding
 import com.leventsurer.manager.databinding.PollRowBinding
@@ -43,8 +48,10 @@ class HomeRecyclerViewAdapter : RecyclerView.Adapter<HomeRecyclerViewHolder>() {
                 )
             )
             R.layout.poll_row -> HomeRecyclerViewHolder.PollHolder(
-                PollRowBinding.inflate(LayoutInflater.from(parent.context),
-                parent,false)
+                PollRowBinding.inflate(
+                    LayoutInflater.from(parent.context),
+                    parent, false
+                )
             )
             else -> throw IllegalArgumentException("Invalid ViewType Provided")
         }
@@ -55,7 +62,34 @@ class HomeRecyclerViewAdapter : RecyclerView.Adapter<HomeRecyclerViewHolder>() {
             is HomeRecyclerViewHolder.ManagerAnnouncementHolder -> holder.bind(items[position] as HomeRecyclerViewItem.ManagerAnnouncement)
             is HomeRecyclerViewHolder.ConciergeAnnouncementHolder -> holder.bind(items[position] as HomeRecyclerViewItem.ConciergeAnnouncement)
             is HomeRecyclerViewHolder.ResidentRequestHolder -> holder.bind(items[position] as HomeRecyclerViewItem.ResidentRequest)
-            is HomeRecyclerViewHolder.PollHolder ->holder.bind(items[position] as HomeRecyclerViewItem.Polls)
+            is HomeRecyclerViewHolder.PollHolder ->{
+                holder.bind(items[position] as HomeRecyclerViewItem.Polls)
+                val btn = holder.itemView.findViewById<Button>(R.id.btnSendAnswer)
+                val radioButton1 = holder.itemView.findViewById<RadioButton>(R.id.radio_button_1)
+                val radioButton2 = holder.itemView.findViewById<RadioButton>(R.id.radio_button_2)
+                val pollTextView = holder.itemView.findViewById<TextView>(R.id.twPollText)
+                val pollText = pollTextView.text.toString()
+                btn.setOnClickListener {
+                    sendPollAnswer.let {
+                        if (it != null){
+                            if(radioButton1.isChecked){
+                                it(pollText,false)
+                            }else if(radioButton2.isChecked){
+                                it(pollText,true)
+                            }
+
+                        }
+                    }
+                }
+
+            /*holder.itemView.setOnClickListener {
+                    sendPollAnswer.let {
+                        if (it != null){
+                            it("apartmani yiktirsak mi ",true)
+                        }
+                    }
+                }*/
+            }
 
         }
     }
@@ -69,6 +103,12 @@ class HomeRecyclerViewAdapter : RecyclerView.Adapter<HomeRecyclerViewHolder>() {
             is HomeRecyclerViewItem.ResidentRequest -> R.layout.resident_request_raw
             is HomeRecyclerViewItem.Polls -> R.layout.poll_row
         }
+    }
+
+    private var sendPollAnswer: ((pollText: String,isAgree:Boolean) -> Unit)? = null
+    fun sendPollAnswer(f: ((pollText: String,isAgree:Boolean) -> Unit)) {
+        Log.e("kontrol", "anket butonuna tıklandı: ")
+        sendPollAnswer = f
     }
 }
  

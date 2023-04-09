@@ -20,6 +20,7 @@ import com.leventsurer.manager.tools.constants.FirebaseConstants.USER_COLLECTION
 import com.leventsurer.manager.tools.constants.SharedPreferencesConstants.APARTMENT_DOCUMENT_ID
 import com.leventsurer.manager.tools.constants.SharedPreferencesConstants.APARTMENT_NAME
 import com.leventsurer.manager.tools.constants.SharedPreferencesConstants.USER_DOCUMENT_ID
+import com.leventsurer.manager.tools.constants.SharedPreferencesConstants.USER_NAME
 import com.leventsurer.manager.tools.constants.SharedPreferencesConstants.USER_ROLE
 import kotlinx.coroutines.runBlocking
 
@@ -203,6 +204,28 @@ class DatabaseRepositoryImpl @Inject constructor(
         database.collection(APARTMENT_COLLECTIONS).document(apartmentDocumentId!!).collection(POLLS).add(newPoll).await()
     }
 
+    override suspend fun changePollStatistics(isAgree: Boolean,pollText: String) {
+        val apartmentDocumentId =
+            sharedRepository.readApartmentDocumentId(APARTMENT_DOCUMENT_ID)
+        val userName: String? = sharedRepository.readUserName(USER_NAME)
+        val pollDocument = database.collection(APARTMENT_COLLECTIONS).document(apartmentDocumentId!!).collection(
+            POLLS).whereEqualTo("pollText",pollText).get().await()
+
+        val pollModel = pollDocument.documents[0].toObject(PollModel::class.java)
+        Log.e("kontrol","isAgree değeri:$isAgree")
+        if (userName.toString() !in pollModel!!.people["agreePeople"]!! && userName.toString() !in pollModel.people["disagreePeople"]!! ){
+            if(isAgree){
+                pollModel.agreeCount +=1
+                pollModel.people["agreePeople"]?.add(userName!!)
+            }else if(!isAgree){
+                pollModel.disagreeCount +=1
+                pollModel.people["disagreePeople"]?.add(userName!!)
+            }
+
+            database.collection(APARTMENT_COLLECTIONS).document(apartmentDocumentId).collection(
+                POLLS).document(pollDocument.documents[0].id).set(pollModel)
+        }
+    }
     //Tüm apartmanların listesini getirir
     override suspend fun getApartments(): Resource<List<ApartmentModel>> {
         return try {
