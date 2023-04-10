@@ -55,17 +55,18 @@ class DatabaseViewModel @Inject constructor(
     private val _pollsLiveData = MutableLiveData<Resource<List<PollModel>>?>(null)
     val pollsLiveData : LiveData<Resource<List<PollModel>>?> = _pollsLiveData
 
-    fun getPolls() = viewModelScope.launch {
-        _pollsLiveData.value = Resource.Loading
+     suspend fun getPolls()  : LiveData<Resource<List<PollModel>>> {
+        /*_pollsLiveData.value = Resource.Loading
         val result = databaseRepository.getPolls()
-        _pollsLiveData.value = result
+        _pollsLiveData.value = result*/
+        return databaseRepository.getPolls()
     }
 
     fun addNewPoll(pollText:String,time: FieldValue) = viewModelScope.launch {
         databaseRepository.addNewPoll(pollText, time)
     }
-    fun changePollStatistics(isAgree: Boolean,pollText: String) = viewModelScope.launch {
-        databaseRepository.changePollStatistics(isAgree, pollText)
+    suspend fun changePollStatistics(isAgree: Boolean, pollText: String):String  {
+        return databaseRepository.changePollStatistics(isAgree, pollText)
     }
     fun getApartmentInfo()= viewModelScope.launch {
         _apartmentLiveData.value = Resource.Loading

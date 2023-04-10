@@ -22,7 +22,7 @@ interface DatabaseRepository {
     suspend fun getAUserByNameAndDoorNumber(userName:String,doorNumber:String): Resource<UserModel>
     suspend fun getApartmentDocumentId(apartmentCode: String):String
     suspend fun writeUserDocumentIdToSharedPref(userName:String, apartmentCode: String):String
-    suspend fun getPolls():Resource<List<PollModel>>
+    suspend fun getPolls():LiveData<Resource<List<PollModel>>>
 
     fun getChatMessages():LiveData<Resource<List<ChatMessageModel>>>
 
@@ -67,5 +67,5 @@ interface DatabaseRepository {
 
     //Set
     suspend fun updateAnUser(userName:String,phoneNumber: String,carPlate: String,doorNumber: String)
-    suspend fun changePollStatistics(isAgree:Boolean,pollText:String)
+    suspend fun changePollStatistics(isAgree:Boolean,pollText:String):String
 }

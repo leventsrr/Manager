@@ -28,6 +28,7 @@ import com.leventsurer.manager.viewModels.AuthViewModel
 import com.leventsurer.manager.viewModels.DatabaseViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 @AndroidEntryPoint
 class HomePageFragment : Fragment() {
@@ -58,6 +59,7 @@ class HomePageFragment : Fragment() {
         setupHomePageAdapter()
         getHomePageInfo(chosenCardNumber)
         changeChipsColor()
+        
     }
 
     //Adapter kurulumu yapar
@@ -66,7 +68,14 @@ class HomePageFragment : Fragment() {
         homePageAdapter = HomeRecyclerViewAdapter()
         binding.recyclerView.adapter = homePageAdapter
         homePageAdapter.sendPollAnswer{ text,isAgree->
-            databaseViewModel.changePollStatistics(isAgree,text)
+            runBlocking {
+                val report = databaseViewModel.changePollStatistics(isAgree,text)
+                Toast.makeText(requireContext(),report,Toast.LENGTH_LONG).show()
+            }
+
+
+
+
         }
     }
 
@@ -87,14 +96,16 @@ class HomePageFragment : Fragment() {
                 observeResidentsRequestsFlow()
             }
             4 -> {
-                databaseViewModel.getPolls()
-                observePollData()
+                runBlocking {
+                    databaseViewModel.getPolls()
+                    observePollData()
+                }
             }
         }
     }
     //Apartmana ait anketleri dinler
-    private fun observePollData() {
-        databaseViewModel.pollsLiveData.observe(viewLifecycleOwner) {
+    private suspend fun observePollData() {
+        databaseViewModel.getPolls().observe(viewLifecycleOwner) {
             when (it) {
                 is Resource.Failure -> {
                     Toast.makeText(context, it.exception.message, Toast.LENGTH_LONG).show()

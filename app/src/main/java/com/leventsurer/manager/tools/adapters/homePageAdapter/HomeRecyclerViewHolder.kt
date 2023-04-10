@@ -36,6 +36,7 @@ sealed class HomeRecyclerViewHolder(binding:ViewBinding):RecyclerView.ViewHolder
                 twPollText.text = poll.pollText
                 twAgreeCount.text = poll.agreeCount.toString()
                 twDisagreeCount.text = poll.disagreeCount.toString()
+
             }
         }
 

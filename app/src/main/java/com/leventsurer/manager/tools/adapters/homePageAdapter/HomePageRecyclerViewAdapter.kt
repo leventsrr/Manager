@@ -82,13 +82,6 @@ class HomeRecyclerViewAdapter : RecyclerView.Adapter<HomeRecyclerViewHolder>() {
                     }
                 }
 
-            /*holder.itemView.setOnClickListener {
-                    sendPollAnswer.let {
-                        if (it != null){
-                            it("apartmani yiktirsak mi ",true)
-                        }
-                    }
-                }*/
             }
 
         }

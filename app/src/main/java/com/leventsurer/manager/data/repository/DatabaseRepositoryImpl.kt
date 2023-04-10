@@ -32,6 +32,7 @@ class DatabaseRepositoryImpl @Inject constructor(
 ) : DatabaseRepository {
     @Inject
     lateinit var sharedRepository: SharedRepositoryImpl
+
     @Inject
     lateinit var firebaseAuth: FirebaseAuth
 
@@ -173,59 +174,95 @@ class DatabaseRepositoryImpl @Inject constructor(
             Resource.Failure(e)
         }
     }
+
     //Apartmana ait anketleri veritabanından çeker
-    override suspend fun getPolls(): Resource<List<PollModel>> {
-        return try {
-            val apartmentDocumentId =
-                sharedRepository.readApartmentDocumentId(APARTMENT_DOCUMENT_ID)
-            val polls = arrayListOf<PollModel>()
-            val pollDocuments = database.collection(APARTMENT_COLLECTIONS).document(apartmentDocumentId!!).collection(POLLS).get().await()
-            for(doc in pollDocuments){
-                Log.e("kontrol",doc.toString())
-                polls.add(doc.toObject(PollModel::class.java))
+    override suspend fun getPolls(): LiveData<Resource<List<PollModel>>> {
+
+        val apartmentDocumentId =
+            sharedRepository.readApartmentDocumentId(APARTMENT_DOCUMENT_ID)
+        val liveData = MutableLiveData<Resource<List<PollModel>>>()
+        liveData.value = Resource.Loading
+        database.collection(APARTMENT_COLLECTIONS).document(apartmentDocumentId!!).collection(
+            POLLS
+        ).addSnapshotListener { value, error ->
+            if (error != null) {
+                liveData.value = Resource.Failure(error)
+            } else if (value != null) {
+                val messages = mutableListOf<PollModel>()
+                for (doc in value) {
+                    val data = doc.toObject(PollModel::class.java)
+
+                    messages.add(data)
+                }
+                liveData.value = Resource.Success(messages)
             }
-            Resource.Success(polls)
-        }catch (e:Exception){
-            Resource.Failure(e)
         }
+        return liveData
     }
 
-    override suspend fun addNewPoll(pollText: String,time:FieldValue) {
+    override suspend fun addNewPoll(pollText: String, time: FieldValue) {
         val apartmentDocumentId =
             sharedRepository.readApartmentDocumentId(APARTMENT_DOCUMENT_ID)
         val newPoll = hashMapOf(
             "agreeCount" to 0,
             "disagreeCount" to 0,
-            "people" to mapOf("agreePeople" to arrayListOf<String>(),"disagreePeople" to arrayListOf<String>()),
+            "people" to mapOf(
+                "agreePeople" to arrayListOf<String>(),
+                "disagreePeople" to arrayListOf<String>()
+            ),
             "pollText" to pollText,
             "time" to time
         )
 
-        database.collection(APARTMENT_COLLECTIONS).document(apartmentDocumentId!!).collection(POLLS).add(newPoll).await()
+        database.collection(APARTMENT_COLLECTIONS).document(apartmentDocumentId!!).collection(POLLS)
+            .add(newPoll).await()
     }
 
-    override suspend fun changePollStatistics(isAgree: Boolean,pollText: String) {
+    override suspend fun changePollStatistics(isAgree: Boolean, pollText: String): String {
         val apartmentDocumentId =
             sharedRepository.readApartmentDocumentId(APARTMENT_DOCUMENT_ID)
         val userName: String? = sharedRepository.readUserName(USER_NAME)
-        val pollDocument = database.collection(APARTMENT_COLLECTIONS).document(apartmentDocumentId!!).collection(
-            POLLS).whereEqualTo("pollText",pollText).get().await()
+        val pollDocument =
+            database.collection(APARTMENT_COLLECTIONS).document(apartmentDocumentId!!).collection(
+                POLLS
+            ).whereEqualTo("pollText", pollText).get().await()
 
         val pollModel = pollDocument.documents[0].toObject(PollModel::class.java)
-        Log.e("kontrol","isAgree değeri:$isAgree")
-        if (userName.toString() !in pollModel!!.people["agreePeople"]!! && userName.toString() !in pollModel.people["disagreePeople"]!! ){
-            if(isAgree){
-                pollModel.agreeCount +=1
+        if (isAgree) {
+            return if (userName.toString() in pollModel!!.people["agreePeople"]!!) {
+                "Daha önce bu yönde kararınızı belirttiniz"
+            } else {
+                pollModel.agreeCount += 1
                 pollModel.people["agreePeople"]?.add(userName!!)
-            }else if(!isAgree){
-                pollModel.disagreeCount +=1
-                pollModel.people["disagreePeople"]?.add(userName!!)
-            }
 
-            database.collection(APARTMENT_COLLECTIONS).document(apartmentDocumentId).collection(
-                POLLS).document(pollDocument.documents[0].id).set(pollModel)
+                if (userName.toString() in pollModel.people["disagreePeople"]!!) {
+                    pollModel.disagreeCount -= 1
+                    pollModel.people["disagreePeople"]?.remove(userName)
+                }
+                database.collection(APARTMENT_COLLECTIONS).document(apartmentDocumentId).collection(
+                    POLLS).document(pollDocument.documents[0].id).set(pollModel)
+                "Kararınızı Belirttiniz"
+
+            }
+        } else {
+            return if (userName.toString() in pollModel!!.people["disagreePeople"]!!) {
+                "Daha önce bu yönde kararınızı belirttiniz"
+            } else {
+                pollModel.disagreeCount += 1
+                pollModel.people["disagreePeople"]?.add(userName!!)
+
+                if (userName.toString() in pollModel.people["agreePeople"]!!) {
+                    pollModel.agreeCount -= 1
+                    pollModel.people["agreePeople"]?.remove(userName)
+                }
+                database.collection(APARTMENT_COLLECTIONS).document(apartmentDocumentId).collection(
+                    POLLS).document(pollDocument.documents[0].id).set(pollModel)
+                "Kararınızı Belirttiniz"
+            }
         }
+
     }
+
     //Tüm apartmanların listesini getirir
     override suspend fun getApartments(): Resource<List<ApartmentModel>> {
         return try {
@@ -531,7 +568,9 @@ class DatabaseRepositoryImpl @Inject constructor(
     ) {
         val apartmentDocumentId = sharedRepository.readApartmentDocumentId(APARTMENT_DOCUMENT_ID)
         val userDocumentId = sharedRepository.readUserDocumentId(USER_DOCUMENT_ID)
-        firebaseAuth.currentUser?.updateProfile(UserProfileChangeRequest.Builder().setDisplayName(userName).build())?.await()
+        firebaseAuth.currentUser?.updateProfile(
+            UserProfileChangeRequest.Builder().setDisplayName(userName).build()
+        )?.await()
         database.collection(APARTMENT_COLLECTIONS).document(apartmentDocumentId!!).collection(
             USER_COLLECTION
         ).document(userDocumentId!!).update(
@@ -550,8 +589,7 @@ class DatabaseRepositoryImpl @Inject constructor(
     //Yöneticinin apartman aidatının tutarını değiştirmesini sağlar
     override suspend fun setApartmentMonthlyPayment(amount: Double) {
         val apartmentDocumentId = sharedRepository.readApartmentDocumentId(APARTMENT_DOCUMENT_ID)
-        val apartment =
-            database.collection(APARTMENT_COLLECTIONS).document(apartmentDocumentId!!).get().await()
+
 
         database.collection(APARTMENT_COLLECTIONS).document(apartmentDocumentId!!)
             .update("monthlyPayment", amount)
