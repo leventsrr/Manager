@@ -36,8 +36,9 @@ class HomePageFragment : Fragment() {
     private val binding: FragmentHomePageBinding get() = _binding!!
     private val viewModel by viewModels<AuthViewModel>()
     private val databaseViewModel by viewModels<DatabaseViewModel>()
-    private var chosenCardNumber: Int = 1
+    private var chosenCardNumber: Int = 0
     private val adapterList = ArrayList<HomeRecyclerViewItem>()
+    private var residentsList = ArrayList<UserModel>()
     private lateinit var homePageAdapter: HomeRecyclerViewAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,7 +60,20 @@ class HomePageFragment : Fragment() {
         setupHomePageAdapter()
         getHomePageInfo(chosenCardNumber)
         changeChipsColor()
-        
+        observeResidents()
+        observeApartmentInfo()
+        onClickListener()
+    }
+
+    private fun onClickListener() {
+        binding.apply {
+            btnHome.setOnClickListener {
+                recyclerView.visibility = GONE
+                homePageGreetPart.visibility = VISIBLE
+                chosenCardNumber = 0
+                changeChipsColor()
+            }
+        }
     }
 
     //Adapter kurulumu yapar
@@ -117,8 +131,10 @@ class HomePageFragment : Fragment() {
                     binding.pbProgressBar.visibility = VISIBLE
                 }
                 is Resource.Success -> {
+                    binding.homePageGreetPart.visibility = GONE
                     binding.pbProgressBar.visibility = GONE
                     binding.recyclerView.visibility = VISIBLE
+
                     adapterList.clear()
                     for (poll in it.result) {
                         Log.e("kontrol","${poll.pollText} / ${poll.agreeCount} / ${poll.disagreeCount}")
@@ -159,6 +175,7 @@ class HomePageFragment : Fragment() {
                         binding.pbProgressBar.visibility = VISIBLE
                     }
                     is Resource.Success -> {
+                        binding.homePageGreetPart.visibility = GONE
                         binding.pbProgressBar.visibility = GONE
                         binding.recyclerView.visibility = VISIBLE
                         adapterList.clear()
@@ -195,6 +212,7 @@ class HomePageFragment : Fragment() {
                         binding.pbProgressBar.visibility = VISIBLE
                     }
                     is Resource.Success -> {
+                        binding.homePageGreetPart.visibility = GONE
                         binding.pbProgressBar.visibility = GONE
                         binding.recyclerView.visibility = VISIBLE
                         adapterList.clear()
@@ -231,6 +249,7 @@ class HomePageFragment : Fragment() {
                         binding.pbProgressBar.visibility = VISIBLE
                     }
                     is Resource.Success -> {
+                        binding.homePageGreetPart.visibility = GONE
                         binding.pbProgressBar.visibility = GONE
                         binding.recyclerView.visibility = VISIBLE
                         adapterList.clear()
@@ -251,6 +270,80 @@ class HomePageFragment : Fragment() {
         }
     }
 
+    //apartmanda oturan kişileri çeker
+    private fun observeResidents(){
+
+        databaseViewModel.getAllApartmentUsers()
+        viewLifecycleOwner.lifecycleScope.launch {
+            databaseViewModel.users.collect {
+                when (it) {
+                    is Resource.Failure -> {
+                        Toast.makeText(context, it.exception.message, Toast.LENGTH_LONG).show()
+                        binding.pbProgressBar.visibility = GONE
+
+                    }
+                    is Resource.Loading -> {
+                        binding.recyclerView.visibility = GONE
+                        binding.pbProgressBar.visibility = VISIBLE
+                    }
+                    is Resource.Success -> {
+                        binding.pbProgressBar.visibility = GONE
+                        residentsList = it.result
+                        for(resident:UserModel in it.result){
+                            if (resident.role == "yonetici"){
+                                binding.twManagerName.text = resident.fullName
+                                binding.twManagerPhone.text = resident.phoneNumber
+                            }else if(resident.role == "kapici"){
+                                binding.twConciergeName.text = resident.fullName
+                                binding.twConciergePhone.text = resident.phoneNumber
+                            }
+                        }
+                        binding.twResidentCount.text = residentsList.size.toString()
+
+                        Log.e("kontrol", adapterList.toString())
+
+                    }
+                    else -> {
+
+                    }
+                }
+            }
+
+        }
+    }
+
+    private fun observeApartmentInfo(){
+        databaseViewModel.getApartmentInfo()
+            databaseViewModel.apartmentLiveData.observe(viewLifecycleOwner) {
+                when (it) {
+                    is Resource.Failure -> {
+                        Toast.makeText(context, it.exception.message, Toast.LENGTH_LONG).show()
+                        binding.pbProgressBar.visibility = GONE
+
+                    }
+                    is Resource.Loading -> {
+                        binding.recyclerView.visibility = GONE
+                        binding.pbProgressBar.visibility = VISIBLE
+                    }
+                    is Resource.Success -> {
+                        binding.pbProgressBar.visibility = GONE
+                        binding.apply {
+                            twApartmentAddress.text = it.result.address
+                            twApartmentMonthlyPayment.text = it.result.monthlyPayment.toString()
+                            twApartmentName.text = it.result.apartmentName
+
+                        }
+
+                        Log.e("kontrol", adapterList.toString())
+
+                    }
+                    else -> {
+
+                    }
+                }
+            }
+
+    }
     //Fragment açılırken gerekli arayüz bağlantılarını kurar
     private fun setupUi() {
         HeaderHelper.customHeader(
@@ -261,10 +354,8 @@ class HomePageFragment : Fragment() {
             startIcon = R.drawable.ic_baseline_sensor_door_24,
             endIcon = R.drawable.ic_baseline_settings_24,
             startIconClick = {
-
                 viewModel.logout()
                 findNavController().popBackStack()
-
             },
             endIconClick = {
                 val action = HomePageFragmentDirections.actionExecutiveHomePageToSettingsFragmet()
@@ -333,8 +424,10 @@ class HomePageFragment : Fragment() {
                         R.color.thirdColor
                     )
                 )
+
                 chipsList[i - 1].twCardText.setTextColor(Color.parseColor("#FFFFFF"))
                 chipsList[i - 1].iwCardImage.visibility = GONE
+
             } else {
                 chipsList[i - 1].cwMyChip.setCardBackgroundColor(
                     ContextCompat.getColor(

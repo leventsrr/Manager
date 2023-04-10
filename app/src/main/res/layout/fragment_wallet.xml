@@ -51,6 +51,7 @@
                        android:layout_weight="1"
                        android:layout_height="wrap_content"
                        android:text="Mevcut Birikim:"
+                       android:fontFamily="@font/titillium_web_bold"
                        android:textSize="20sp"/>
 
                    <TextView
@@ -83,19 +84,22 @@
                         android:layout_width="0dp"
                         android:layout_weight="6"
                         android:layout_height="wrap_content"
-                        android:text="Yapılan İşlem" />
+                        android:text="Yapılan İşlem"
+                        android:fontFamily="@font/titillium_web_bold"/>
                     <TextView
                         android:gravity="center"
                         android:layout_width="0dp"
                         android:layout_weight="3"
                         android:layout_height="wrap_content"
-                        android:text="Tutar" />
+                        android:text="Tutar"
+                        android:fontFamily="@font/titillium_web_bold"/>
                     <TextView
                         android:gravity="end"
                         android:layout_width="0dp"
                         android:layout_weight="3"
                         android:layout_height="wrap_content"
-                        android:text="Gider/Gelir" />
+                        android:text="Gider/Gelir"
+                        android:fontFamily="@font/titillium_web_bold"/>
                 </LinearLayout>
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rwFinancialEvents"

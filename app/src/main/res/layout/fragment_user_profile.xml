@@ -195,6 +195,7 @@
                     android:layout_marginTop="11dp"
                     android:layout_marginBottom="10dp"
                     android:text="Apartman Kodu"
+                    android:fontFamily="@font/titillium_web_bold"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
@@ -207,7 +208,7 @@
                     android:layout_marginStart="74dp"
                     android:layout_marginTop="11dp"
                     android:layout_marginBottom="10dp"
-                    android:text="Maltepe"
+                    android:fontFamily="@font/titillium_web"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/textView13"
                     app:layout_constraintTop_toTopOf="parent"
@@ -244,6 +245,7 @@
                     android:layout_marginTop="11dp"
                     android:layout_marginBottom="10dp"
                     android:text="Bu ayın kirasını ödedim"
+                    android:fontFamily="@font/titillium_web_bold"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
@@ -317,6 +319,7 @@
                     android:layout_width="200dp"
                     android:layout_height="40dp"
                     android:text="İsteği Paylaş"
+                    android:fontFamily="@font/titillium_web_bold"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/textInputLayout" />
@@ -370,13 +373,15 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="10dp"
-                        android:text="Gelir" />
+                        android:text="Gelir"
+                        android:fontFamily="@font/titillium_web"/>
 
                     <RadioButton
                         android:id="@+id/radio_button_2"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Gider" />
+                        android:text="Gider"
+                        android:fontFamily="@font/titillium_web"/>
                 </RadioGroup>
 
                 <LinearLayout
@@ -469,6 +474,7 @@
                     android:layout_marginTop="10dp"
                     android:layout_marginBottom="10dp"
                     android:text="Paylaş"
+                    android:fontFamily="@font/titillium_web_bold"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -533,6 +539,7 @@
                     android:layout_width="200dp"
                     android:layout_height="40dp"
                     android:text="Duyuruyu Paylaş"
+                    android:fontFamily="@font/titillium_web_bold"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/textInputLayout50" />
@@ -578,6 +585,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:text="Anket"
+                        android:fontFamily="@font/titillium_web"
                         android:textSize="15sp" />
 
                     <com.google.android.material.textfield.TextInputLayout
@@ -640,7 +648,8 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="Aidat Tutarı:" />
+                        android:text="Aidat Tutarı:"
+                        android:fontFamily="@font/titillium_web"/>
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/textInputLayout6"

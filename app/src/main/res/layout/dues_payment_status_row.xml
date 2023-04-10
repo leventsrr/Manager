@@ -19,6 +19,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:text="Levent Sürer"
+            android:fontFamily="@font/titillium_web"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

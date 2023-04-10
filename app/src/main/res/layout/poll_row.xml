@@ -25,6 +25,8 @@
                 android:id="@+id/twPollText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/titillium_web_bold"
+                android:textSize="20sp"
                 android:gravity="center"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -40,21 +42,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/textView3"
                 tools:layout_editor_absoluteX="0dp">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="10dp"
-                    android:text="Onaylayan:"
-                    tools:layout_editor_absoluteX="81dp"
-                    tools:layout_editor_absoluteY="35dp" />
 
-                <TextView
-                    android:id="@+id/twAgreeCount"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="20dp"
-                    tools:layout_editor_absoluteX="167dp"
-                    tools:layout_editor_absoluteY="35dp" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -68,7 +56,26 @@
                     android:id="@+id/twDisagreeCount"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textColor="@color/red"
+                    android:layout_marginEnd="20dp"
                     tools:layout_editor_absoluteX="303dp"
+                    tools:layout_editor_absoluteY="35dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="10dp"
+                    android:text="Onaylayan:"
+                    tools:layout_editor_absoluteX="81dp"
+                    tools:layout_editor_absoluteY="35dp" />
+
+                <TextView
+                    android:id="@+id/twAgreeCount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+
+                    android:textColor="@color/green"
+                    tools:layout_editor_absoluteX="167dp"
                     tools:layout_editor_absoluteY="35dp" />
             </LinearLayout>
 
@@ -88,13 +95,15 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="10dp"
-                    android:text="Onaylamıyorum" />
+                    android:text="Onaylamıyorum"
+                    android:fontFamily="@font/titillium_web"/>
 
                 <RadioButton
                     android:id="@+id/radio_button_2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Onaylıyorum" />
+                    android:text="Onaylıyorum"
+                    android:fontFamily="@font/titillium_web"/>
             </RadioGroup>
 
             <Button

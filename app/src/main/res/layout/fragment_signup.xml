@@ -196,21 +196,24 @@
                         style="?attr/materialButtonOutlinedStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Yönetici" />
+                        android:text="Yönetici"
+                        android:fontFamily="@font/titillium_web_bold"/>
 
                     <Button
                         android:id="@+id/button2"
                         style="?attr/materialButtonOutlinedStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Apartman Sakini" />
+                        android:text="Apartman Sakini"
+                        android:fontFamily="@font/titillium_web_bold"/>
 
                     <Button
                         android:id="@+id/button3"
                         style="?attr/materialButtonOutlinedStyle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Kapıcı" />
+                        android:text="Kapıcı"
+                        android:fontFamily="@font/titillium_web_bold"/>
                 </com.google.android.material.button.MaterialButtonToggleGroup>
 
                 <Button
@@ -220,6 +223,7 @@
                     android:layout_marginTop="10dp"
                     android:backgroundTint="@color/secondColor"
                     android:text="Kayıt Ol"
+                    android:fontFamily="@font/titillium_web_bold"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/toggleButton" />
@@ -246,6 +250,7 @@
                     android:layout_marginEnd="182dp"
                     android:layout_marginBottom="7dp"
                     android:text="Zaten Hesabım Var"
+                    android:fontFamily="@font/titillium_web"
                     android:textColor="@color/thirdColor"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
