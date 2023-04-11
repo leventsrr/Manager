@@ -12,6 +12,7 @@
         android:layout_width="match_parent"
         android:orientation="vertical"
         android:layout_height="match_parent"
+        android:layout_marginBottom="60dp"
         tools:context=".ui.fragments.ConciergeFragment">
 
 
@@ -23,7 +24,8 @@
         <com.google.android.material.card.MaterialCardView
 
             android:layout_width="match_parent"
-            android:layout_height="250dp"
+            android:layout_height="0dp"
+            android:layout_weight="1"
             app:cardCornerRadius="10dp"
             android:layout_marginBottom="10dp"
             android:elevation="5dp"
@@ -78,7 +80,8 @@
         <com.google.android.material.card.MaterialCardView
 
             android:layout_width="match_parent"
-            android:layout_height="250dp"
+            android:layout_height="0dp"
+            android:layout_weight="1"
             app:cardCornerRadius="10dp"
             android:elevation="5dp"
             android:layout_marginTop="20dp"
@@ -130,128 +133,7 @@
             android:id="@+id/pbDutiesDone"
             android:layout_width="50dp"
             android:layout_height="50dp" />
-        <!--<androidx.core.widget.NestedScrollView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
-
-
-                <com.google.android.material.card.MaterialCardView
-
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    app:cardCornerRadius="10dp"
-                    android:layout_marginBottom="10dp"
-                    android:elevation="5dp"
-                    android:layout_marginHorizontal="10dp"
-                    android:layout_marginVertical="5dp">
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
-
-                        <androidx.constraintlayout.widget.ConstraintLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="10dp">
-
-                            <ImageView
-                                android:id="@+id/imageView4"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="10dp"
-                                android:src="@drawable/ic_baseline_access_time_24"
-                                app:layout_constraintBottom_toBottomOf="parent"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toTopOf="parent" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:fontFamily="@font/titillium_web_bold"
-                                android:gravity="center"
-                                android:text="Yapılacak İşler"
-                                app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintStart_toStartOf="parent"
-                                tools:layout_editor_absoluteY="2dp" />
-                        </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-                        <androidx.recyclerview.widget.RecyclerView
-                            android:id="@+id/rwDutyToDo"
-                            android:layout_width="match_parent"
-                            android:layout_height="268dp"
-                            android:layout_margin="10dp" />
-                    </LinearLayout>
-                </com.google.android.material.card.MaterialCardView>
-
-                <ProgressBar
-                    android:id="@+id/pbDutiesDo"
-                    android:layout_gravity="center"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp" />
-                <com.google.android.material.card.MaterialCardView
-
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    app:cardCornerRadius="10dp"
-                    android:elevation="5dp"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginBottom="10dp"
-                    android:layout_marginHorizontal="10dp"
-                    android:layout_marginVertical="5dp">
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
-
-                        <androidx.constraintlayout.widget.ConstraintLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="10dp">
-
-                            <ImageView
-                                android:id="@+id/imageView3"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="10dp"
-                                android:src="@drawable/ic_baseline_done_all_24"
-                                app:layout_constraintBottom_toBottomOf="parent"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toTopOf="parent" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:fontFamily="@font/titillium_web_bold"
-                                android:gravity="center"
-                                android:text="Yapılan İşler"
-                                app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintStart_toStartOf="@+id/imageView3"
-                                tools:layout_editor_absoluteY="2dp" />
-                        </androidx.constraintlayout.widget.ConstraintLayout>
-
-                        <androidx.recyclerview.widget.RecyclerView
-                            android:id="@+id/rwDutyToDone"
-                            android:layout_width="match_parent"
-                            android:layout_height="268dp"
-                            android:layout_margin="10dp" />
-                    </LinearLayout>
-                </com.google.android.material.card.MaterialCardView>
-
-                <ProgressBar
-                    android:layout_gravity="center"
-                    android:id="@+id/pbDutiesDone"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp" />
-            </LinearLayout>
-        </androidx.core.widget.NestedScrollView>-->
 
     </LinearLayout>
 </layout>

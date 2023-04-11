@@ -27,9 +27,7 @@ interface DatabaseRepository {
     fun getChatMessages():LiveData<Resource<List<ChatMessageModel>>>
 
     //Add
-
     suspend fun addNewPoll(pollText:String,time: FieldValue)
-
     suspend fun addNewUser(
         name: String,
         apartmentCode: String,
@@ -37,9 +35,6 @@ interface DatabaseRepository {
         doorNumber: String,
         role: String
     )
-
-
-
     suspend fun addNewUserToNewApartment(
         name: String,
         apartmentCode: String,
@@ -47,7 +42,6 @@ interface DatabaseRepository {
         doorNumber: String,
         role: String, documentId: String
     )
-
     suspend fun addNewApartment(
         name: String,
         apartmentCode: String,
@@ -57,15 +51,17 @@ interface DatabaseRepository {
     )
 
     suspend fun changeUserDuesPaymentStatus(currentStatus:Boolean)
-
+    suspend fun addNewConciergeAnnouncement(announcement:String,time:FieldValue)
     suspend fun addNewRequest(request:String,time:FieldValue)
     suspend fun addNewManagerAnnouncement(announcement:String,time: FieldValue)
     suspend fun addNewFinancialEvent(amount:Double, isExpense:Boolean, time:FieldValue,eventName:String)
     suspend fun sendNewMessageInChat(message:String,userName:String,time:FieldValue)
-    suspend fun setApartmentMonthlyPayment(amount:Double)
+
 
 
     //Set
+    suspend fun setApartmentMonthlyPayment(amount:Double)
     suspend fun updateAnUser(userName:String,phoneNumber: String,carPlate: String,doorNumber: String)
     suspend fun changePollStatistics(isAgree:Boolean,pollText:String):String
+    suspend fun changeConciergeDutyStatus(dutyText:String)
 }

@@ -1,5 +1,6 @@
 package com.leventsurer.manager.tools.adapters
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -15,6 +16,7 @@ class ConciergeDutyToDoneAdapter : RecyclerView.Adapter<ConciergeDutyToDoneAdapt
     }
 
     var list = ArrayList<ConciergeDutiesModel>()
+        @SuppressLint("NotifyDataSetChanged")
         set(value) {
             field = value
             notifyDataSetChanged()

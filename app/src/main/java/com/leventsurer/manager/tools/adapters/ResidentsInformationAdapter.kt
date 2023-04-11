@@ -1,5 +1,6 @@
 package com.leventsurer.manager.tools.adapters
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
@@ -22,6 +23,7 @@ class ResidentsInformationAdapter : RecyclerView.Adapter<ResidentsInformationAda
     }
 
     var list = ArrayList<UserModel>()
+        @SuppressLint("NotifyDataSetChanged")
         set(value) {
             field = value
             notifyDataSetChanged()

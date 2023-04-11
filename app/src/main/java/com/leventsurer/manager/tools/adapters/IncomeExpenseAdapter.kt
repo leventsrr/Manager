@@ -1,5 +1,6 @@
 package com.leventsurer.manager.tools.adapters
 
+import android.annotation.SuppressLint
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -18,6 +19,7 @@ class IncomeExpenseAdapter : RecyclerView.Adapter<IncomeExpenseAdapter.IncomeExp
     }
 
     var list = ArrayList<FinancialEventModel>()
+        @SuppressLint("NotifyDataSetChanged")
         set(value) {
             field = value
             notifyDataSetChanged()

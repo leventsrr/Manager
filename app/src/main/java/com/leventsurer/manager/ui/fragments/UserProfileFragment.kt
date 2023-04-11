@@ -89,20 +89,27 @@ class UserProfileFragment : Fragment() {
                         userModel.phoneNumber = it.result.phoneNumber
                         userModel.carPlate = it.result.carPlate
                         userModel.doorNumber = it.result.doorNumber
+                        bindUserInfoToUi(it.result)
+                        when (it.result.role) {
+                            "yonetici" -> {
+                                binding.apply {
+                                    mcwManagerSetMonthlyPaymentCard.visibility = VISIBLE
+                                    mcwManagerNewAnnouncementCard.visibility =VISIBLE
+                                    mcwManagerNewExpenseOrIncomeCard.visibility = VISIBLE
+                                    mcwManagerPollCard.visibility = VISIBLE
 
-                        if(it.result.role == "yonetici"){
-                            binding.apply {
-                                mcwSetMonthyPaymentCard.visibility = VISIBLE
-                                mcwShareNewAnnouncementCard.visibility =VISIBLE
-                                mcwShareNewExpenseOrIncomeCard.visibility = VISIBLE
-                                managerPollCard.visibility = VISIBLE
-                                bindUserInfoToUi(it.result)
+                                }
                             }
-                        }else if(it.result.role == "sakin"){
-                            binding.apply {
-                                bindUserInfoToUi(it.result)
-                                mcwResidentMaterialCard1.visibility = VISIBLE
-                                mcwResidentMaterialCard2.visibility = VISIBLE
+                            "sakin" -> {
+                                binding.apply {
+                                    mcwResidentMaterialCard1.visibility = VISIBLE
+                                    mcwResidentMaterialCard2.visibility = VISIBLE
+                                }
+                            }
+                            "kapici" -> {
+                                binding.apply {
+                                    mcwConciergeNewAnnouncementCard.visibility = VISIBLE
+                                }
                             }
                         }
 
@@ -212,6 +219,14 @@ class UserProfileFragment : Fragment() {
                 databaseViewModel.addNewPoll(pollText, time)
                 etPoll.text?.clear()
                 Toast.makeText(requireContext(),"Anket Paylaşıldı",Toast.LENGTH_LONG).show()
+            }
+
+            btnSendConciergeAnnouncement.setOnClickListener {
+                val time:FieldValue = FieldValue.serverTimestamp()
+                val announcement:String = etConciergeAnnouncement.text.toString()
+                databaseViewModel.addNewConciergeAnnouncement(announcement, time)
+                etConciergeAnnouncement.text?.clear()
+                Toast.makeText(requireContext(),"Duyuru Paylaşıldı",Toast.LENGTH_LONG).show()
             }
         }
 

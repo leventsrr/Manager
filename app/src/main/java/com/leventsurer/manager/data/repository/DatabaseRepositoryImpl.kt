@@ -486,6 +486,26 @@ class DatabaseRepositoryImpl @Inject constructor(
             .collection(MANAGER_ANNOUNCEMENT).add(announcement).await()
     }
 
+    override suspend fun addNewConciergeAnnouncement(announcement: String, time: FieldValue) {
+        val apartmentDocumentId = sharedRepository.readApartmentDocumentId(APARTMENT_DOCUMENT_ID)
+        val announcement = hashMapOf(
+            "announcement" to announcement,
+            "time" to time
+        )
+        database.collection(APARTMENT_COLLECTIONS).document(apartmentDocumentId!!)
+            .collection(CONCIERGE_ANNOUNCEMENT).add(announcement).await()
+    }
+    //kapıcı görevinin isDone özelliğini true olarak günceller
+    override suspend fun changeConciergeDutyStatus(dutyText: String) {
+        val apartmentDocumentId = sharedRepository.readApartmentDocumentId(APARTMENT_DOCUMENT_ID)
+        val duties = database.collection(APARTMENT_COLLECTIONS).document(apartmentDocumentId!!)
+            .collection(DUTIES).whereEqualTo("duty",dutyText).get().await()
+        val documentId = duties.documents[0].id
+        Log.e("kontrol","id:$documentId")
+        database.collection(APARTMENT_COLLECTIONS).document(apartmentDocumentId)
+            .collection(DUTIES).document(documentId).update("isDone",true)
+
+    }
     //yöneticinin yeni parasal olay girmesini sağlar
     override suspend fun addNewFinancialEvent(
         amount: Double,

@@ -19,6 +19,7 @@ class FinancialEventsDetailAdapter : RecyclerView.Adapter<FinancialEventsDetailA
     }
 
     var list = ArrayList<FinancialEventModel>()
+        @SuppressLint("NotifyDataSetChanged")
         set(value) {
             field = value
             notifyDataSetChanged()

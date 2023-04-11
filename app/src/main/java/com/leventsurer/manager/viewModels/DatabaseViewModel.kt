@@ -166,6 +166,12 @@ class DatabaseViewModel @Inject constructor(
         databaseRepository.addNewManagerAnnouncement(announcement,time)
     }
 
+    fun addNewConciergeAnnouncement(announcement:String,time:FieldValue) = viewModelScope.launch {
+        databaseRepository.addNewConciergeAnnouncement(announcement,time)
+    }
+    fun changeConciergeDutyStatus(duty:String) = viewModelScope.launch {
+        databaseRepository.changeConciergeDutyStatus(duty)
+    }
     fun setUserDuesPaymentStatus(currentStats:Boolean) = viewModelScope.launch {
         databaseRepository.changeUserDuesPaymentStatus(currentStats)
     }

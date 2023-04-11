@@ -1,5 +1,6 @@
 package com.leventsurer.manager.tools.adapters
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -16,6 +17,7 @@ class DuesPaymentStatusAdapter : RecyclerView.Adapter<DuesPaymentStatusAdapter.D
     }
 
     var list = ArrayList<UserModel>()
+        @SuppressLint("NotifyDataSetChanged")
         set(value) {
             field = value
             notifyDataSetChanged()
