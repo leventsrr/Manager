@@ -43,7 +43,7 @@ class ConciergeDutyToDoAdapterAdapter(userRole:String) : RecyclerView.Adapter<Co
                 markDoneDuty.let {
                     if (it != null) {
                         Log.e("kontrol","Tıklanılan görev ${currentItem.duty}")
-                        it(currentItem.duty)
+                        it(currentItem)
                     }
                 }
             }
@@ -55,8 +55,8 @@ class ConciergeDutyToDoAdapterAdapter(userRole:String) : RecyclerView.Adapter<Co
         return list.size
     }
 
-    private var markDoneDuty: ((dutyText: String) -> Unit)? = null
-    fun markDoneDuty(f: ((dutyText: String) -> Unit)) {
+    private var markDoneDuty: ((conciergeDuty: ConciergeDutiesModel) -> Unit)? = null
+    fun markDoneDuty(f: ((conciergeDuty: ConciergeDutiesModel) -> Unit)) {
         markDoneDuty = f
     }
 }

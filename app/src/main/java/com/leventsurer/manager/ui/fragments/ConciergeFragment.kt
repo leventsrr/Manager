@@ -1,5 +1,6 @@
 package com.leventsurer.manager.ui.fragments
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -30,6 +31,7 @@ class ConciergeFragment : Fragment() {
     private val binding: FragmentConciergeBinding get() = _binding!!
     private val databaseViewModel by viewModels<DatabaseViewModel>()
     private lateinit var userRole:String
+    //lists
     private val conciergeDutyDoneAdapterList = ArrayList<ConciergeDutiesModel>()
     private val conciergeDutyDoAdapterList = ArrayList<ConciergeDutiesModel>()
     //Adapters
@@ -43,7 +45,7 @@ class ConciergeFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentConciergeBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -52,7 +54,6 @@ class ConciergeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setupUi()
         getUserInfo()
-
         getConciergeDuties()
     }
 
@@ -78,11 +79,11 @@ class ConciergeFragment : Fragment() {
     //Veri tabanından kapıcı görevlerinin getirilmesi sağlanır
     private fun getConciergeDuties(){
         databaseViewModel.getConciergeDuties()
-        observeFinancialEventFlow()
+        observeConciergeDutyFlow()
     }
     //Kapıcı görevleri için atılan isteğe karşılık gelen cevabın incelenmesini ve gelen verilerin
     // adapter listesine aktarılması sağlanır
-    private fun observeFinancialEventFlow() {
+    private fun observeConciergeDutyFlow() {
         viewLifecycleOwner.lifecycleScope.launch{
 
             databaseViewModel.conciergeDutiesFlow.collect{
@@ -91,7 +92,6 @@ class ConciergeFragment : Fragment() {
                         Toast.makeText(context,it.exception.message, Toast.LENGTH_LONG).show()
                         binding.pbDutiesDo.visibility = View.GONE
                         binding.pbDutiesDone.visibility = View.GONE
-
                     }
                     is Resource.Loading ->{
                         binding.pbDutiesDo.visibility = View.VISIBLE
@@ -105,12 +105,8 @@ class ConciergeFragment : Fragment() {
                         }
                         conciergeDutyDoneAdapter.list = conciergeDutyDoneAdapterList
                         conciergeDutyDoAdapter.list = conciergeDutyDoAdapterList
-
-
                     }
-                    else -> {
-
-                    }
+                    else -> {}
                 }
 
             }
@@ -124,8 +120,17 @@ class ConciergeFragment : Fragment() {
         conciergeDutyDoAdapter = ConciergeDutyToDoAdapterAdapter(userRole)
         binding.rwDutyToDo.adapter = conciergeDutyDoAdapter
         conciergeDutyDoAdapter.markDoneDuty {
-            databaseViewModel.changeConciergeDutyStatus(it)
+            databaseViewModel.changeConciergeDutyStatus(it.duty)
+            changeDutyListTypePosition(it)
         }
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    private fun changeDutyListTypePosition(duty:ConciergeDutiesModel) {
+        conciergeDutyDoAdapter.list.remove(duty)
+        conciergeDutyDoAdapter.notifyDataSetChanged()
+        conciergeDutyDoneAdapter.list.add(duty)
+        conciergeDutyDoneAdapter.notifyDataSetChanged()
     }
 
     //Kapıcının yapılan listesi için olan adapterın kurulumu sağlanır
@@ -145,20 +150,14 @@ class ConciergeFragment : Fragment() {
                 when (it) {
                     is Resource.Failure -> {
                         Toast.makeText(context, it.exception.message, Toast.LENGTH_LONG).show()
-
-
                     }
-                    is Resource.Loading -> {
-
-                    }
+                    is Resource.Loading -> {}
                     is Resource.Success -> {
-                       userRole = it.result.role
+                        userRole = it.result.role
                         setupConciergeDutyToDoAdapter()
                         setupConciergeDutyToDoneAdapter()
                     }
-                    else -> {
-
-                    }
+                    else -> {}
                 }
             }
 
