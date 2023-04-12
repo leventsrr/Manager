@@ -1,5 +1,6 @@
 package com.leventsurer.manager.viewModels
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -185,7 +186,8 @@ class DatabaseViewModel @Inject constructor(
     }
 
     fun updateUserInfo(userName: String,phoneNumber:String,carPlate: String,doorNumber: String) = viewModelScope.launch {
-        databaseRepository.updateAnUser(userName, phoneNumber, carPlate, doorNumber)
+        Log.e("kontrol","viewmodele geldi")
+        databaseRepository.updateUserInfo(userName, phoneNumber, carPlate, doorNumber)
     }
 
 }

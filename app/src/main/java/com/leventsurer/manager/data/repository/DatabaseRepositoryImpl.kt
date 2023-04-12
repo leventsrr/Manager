@@ -581,29 +581,35 @@ class DatabaseRepositoryImpl @Inject constructor(
         return liveData
     }
 
-    override suspend fun updateAnUser(
+    override suspend fun updateUserInfo(
         userName: String,
         phoneNumber: String,
         carPlate: String,
         doorNumber: String
     ) {
+        Log.e("kontrol","databaseRepo ya geldi")
         val apartmentDocumentId = sharedRepository.readApartmentDocumentId(APARTMENT_DOCUMENT_ID)
         val userDocumentId = sharedRepository.readUserDocumentId(USER_DOCUMENT_ID)
-        firebaseAuth.currentUser?.updateProfile(
-            UserProfileChangeRequest.Builder().setDisplayName(userName).build()
-        )?.await()
+        Log.e("kontrol","apartmanId:$apartmentDocumentId - userId:$userDocumentId")
+
+
+
         database.collection(APARTMENT_COLLECTIONS).document(apartmentDocumentId!!).collection(
             USER_COLLECTION
         ).document(userDocumentId!!).update(
             "carPlate",
             carPlate,
-            "userName",
+            "fullName",
             userName,
             "phoneNumber",
             phoneNumber,
             "doorNumber",
             doorNumber
         ).await()
+
+        firebaseAuth.currentUser?.updateProfile(
+            UserProfileChangeRequest.Builder().setDisplayName(userName).build()
+        )?.await()
 
     }
 

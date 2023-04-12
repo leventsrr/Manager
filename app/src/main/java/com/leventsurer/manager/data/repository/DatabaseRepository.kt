@@ -61,7 +61,7 @@ interface DatabaseRepository {
 
     //Set
     suspend fun setApartmentMonthlyPayment(amount:Double)
-    suspend fun updateAnUser(userName:String,phoneNumber: String,carPlate: String,doorNumber: String)
+    suspend fun updateUserInfo(userName:String, phoneNumber: String, carPlate: String, doorNumber: String)
     suspend fun changePollStatistics(isAgree:Boolean,pollText:String):String
     suspend fun changeConciergeDutyStatus(dutyText:String)
 }

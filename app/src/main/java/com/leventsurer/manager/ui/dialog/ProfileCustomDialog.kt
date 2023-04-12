@@ -18,6 +18,8 @@ import com.leventsurer.manager.viewModels.DatabaseViewModel
 import com.leventsurer.manager.viewModels.SharedPreferencesViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
+
 @AndroidEntryPoint
 class ProfileCustomDialog(userModel:UserModel) :DialogFragment() {
     private var _binding: CustomAlertDialogBinding? = null
@@ -37,7 +39,6 @@ class ProfileCustomDialog(userModel:UserModel) :DialogFragment() {
     override fun onStart() {
         super.onStart()
         val width = (resources.displayMetrics.widthPixels * 0.85).toInt()
-        val height = (resources.displayMetrics.heightPixels * 0.40).toInt()
 
         onClickHandler()
         dialog!!.window?.setLayout(width, ViewGroup.LayoutParams.WRAP_CONTENT)
@@ -64,7 +65,9 @@ class ProfileCustomDialog(userModel:UserModel) :DialogFragment() {
                 val carPlate = twUserCarPlate.text.toString()
                 val doorNumber = twUserDoorNumber.text.toString()
 
-                databaseViewModel.updateUserInfo(userName, phoneNumber, carPlate, doorNumber)
+                runBlocking {
+                    databaseViewModel.updateUserInfo(userName, phoneNumber, carPlate, doorNumber)
+                }
                 dialog?.cancel()
                 Toast.makeText(requireContext(),"Bilgiler Sayfa Güncellendiğinde Güncellenecektir.",Toast.LENGTH_LONG).show()
             }
