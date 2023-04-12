@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.viewModels
@@ -57,11 +58,11 @@ class SignupFragment : Fragment() {
                 when (it) {
                     is Resource.Failure -> {
                         Toast.makeText(context, it.exception.message, Toast.LENGTH_LONG).show()
-                        binding.pbProgressBar.visibility = View.GONE
+                        binding.pbProgressBar.visibility = GONE
 
                     }
                     is Resource.Loading -> {
-                        binding.pbProgressBar.visibility = View.VISIBLE
+                        binding.pbProgressBar.visibility = VISIBLE
                     }
                     is Resource.Success -> {
                         if (findNavController().currentDestination?.id == R.id.signupFragment) {
@@ -69,7 +70,7 @@ class SignupFragment : Fragment() {
                             val action =
                                 SignupFragmentDirections.actionSignupFragmentToExecutiveHomePage()
                             findNavController().navigate(action)
-                            binding.pbProgressBar.visibility = View.GONE
+                            binding.pbProgressBar.visibility = GONE
 
                         }
 
@@ -88,6 +89,10 @@ class SignupFragment : Fragment() {
         sharedPrefViewModel.writeIsLogin(true)
         sharedPrefViewModel.writeApartmentName(binding.etApartmentCode.text.toString())
         sharedPrefViewModel.writeUserName(authViewModel.currentUser?.displayName.toString())
+        databaseViewModel.writeUserDocumentIdToSharedPref(
+            authViewModel.currentUser!!.displayName.toString(),
+            binding.etApartmentCode.text.toString()
+        )
     }
 
     //Seçilen role göre gerekli kayıt olma fonksiyonları çalıştırılır.

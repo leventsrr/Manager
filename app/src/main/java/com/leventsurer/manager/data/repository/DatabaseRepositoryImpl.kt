@@ -140,6 +140,7 @@ class DatabaseRepositoryImpl @Inject constructor(
         return try {
             val apartmentDocumentId =
                 sharedRepository.readApartmentDocumentId(APARTMENT_DOCUMENT_ID)
+            Log.e("kontrol","apartman id ${apartmentDocumentId.toString()}")
             val usersDocuments =
                 database.collection(APARTMENT_COLLECTIONS).document(apartmentDocumentId!!)
                     .collection(
@@ -147,7 +148,7 @@ class DatabaseRepositoryImpl @Inject constructor(
                     ).get().await()
             val users = arrayListOf<UserModel>()
             for (user in usersDocuments) {
-                val userModel = user.toObject(UserModel::class.java)!!
+                val userModel = user.toObject(UserModel::class.java)
                 users.add(userModel)
             }
             Resource.Success(users)
@@ -271,7 +272,6 @@ class DatabaseRepositoryImpl @Inject constructor(
             for (apartment in apartments) {
                 apartmentModelList.add(apartment.toObject(ApartmentModel::class.java))
             }
-            Log.e("kontrol", "viewmodel apartmanlar $apartmentModelList")
             Resource.Success(apartmentModelList)
         } catch (e: Exception) {
             Resource.Failure(e)
@@ -388,6 +388,7 @@ class DatabaseRepositoryImpl @Inject constructor(
                 "budget" to 0
             )
         ).await().id
+        sharedRepository.writeApartmentDocumentId(APARTMENT_DOCUMENT_ID,result)
         addNewUserToNewApartment(name, apartmentCode, carPlate, doorNumber, role, result)
     }
 

@@ -86,10 +86,6 @@ class HomePageFragment : Fragment() {
                 val report = databaseViewModel.changePollStatistics(isAgree,text)
                 Toast.makeText(requireContext(),report,Toast.LENGTH_LONG).show()
             }
-
-
-
-
         }
     }
 
