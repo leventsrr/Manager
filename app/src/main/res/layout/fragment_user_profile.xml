@@ -224,7 +224,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="10dp"
             android:layout_marginEnd="10dp"
             app:cardCornerRadius="10dp"
             app:cardElevation="5dp"
@@ -268,16 +268,16 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            android:layout_marginTop="10dp"
             android:layout_marginEnd="10dp"
             android:layout_marginBottom="70dp"
+            android:layout_marginTop="10dp"
             android:visibility="gone"
             app:cardCornerRadius="10dp"
             app:cardElevation="5dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/materialCardView7">
+            app:layout_constraintTop_toBottomOf="@+id/mcwResidentMaterialCard1">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -412,8 +412,7 @@
                         app:boxBackgroundColor="@color/white"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@+id/textView14"
-                        app:layout_constraintTop_toBottomOf="@+id/textView20"
-                        app:suffixText="Tl">
+                        app:layout_constraintTop_toBottomOf="@+id/textView20">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/etAmountName"
@@ -593,8 +592,7 @@
                         app:boxBackgroundColor="@color/white"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toEndOf="@+id/textView14"
-                        app:layout_constraintTop_toBottomOf="@+id/textView20"
-                        app:suffixText="Tl">
+                        app:layout_constraintTop_toBottomOf="@+id/textView20">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/etPoll"

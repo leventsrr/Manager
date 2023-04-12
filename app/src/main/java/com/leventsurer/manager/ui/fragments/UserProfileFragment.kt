@@ -145,19 +145,23 @@ class UserProfileFragment : Fragment() {
 
             cbUserPaymentStatus.setOnClickListener {
                 val currentStatus: Boolean = cbUserPaymentStatus.isChecked
-                Log.e("kontrol", "fragment içinde $currentStatus")
                 databaseViewModel.setUserDuesPaymentStatus(currentStatus)
             }
 
             btnSendRequest.setOnClickListener {
-                val userRequest = etUserRequest.text.toString()
-                val time = FieldValue.serverTimestamp()
-                databaseViewModel.addNewRequest(userRequest,time)
-                etUserRequest.text?.clear()
+                if(etUserRequest.text.isNullOrEmpty()){
+                    Toast.makeText(requireContext(),"Boş İstek Paylaşılamaz",Toast.LENGTH_LONG).show()
+                }else{
+                    val userRequest = etUserRequest.text.toString()
+                    val time = FieldValue.serverTimestamp()
+                    databaseViewModel.addNewRequest(userRequest,time)
+                    etUserRequest.text?.clear()
+                    Toast.makeText(requireContext(),"Yeni İstek Paylaşıldı",Toast.LENGTH_LONG).show()
+                }
             }
 
             btnSendExpense.setOnClickListener {
-                if(radioButton1.isChecked || radioButton2.isChecked || etAmountName.text.toString().isNotEmpty()|| etAmount.text.toString().isNotEmpty()){
+                if(radioButton1.isChecked || radioButton2.isChecked && etAmountName.text.toString().isNotEmpty() && etAmount.text.toString().isNotEmpty()){
 
                         if(radioButton1.isChecked){
                             isExpense = false
@@ -168,29 +172,36 @@ class UserProfileFragment : Fragment() {
                         val time = FieldValue.serverTimestamp()
                         val eventName = etAmountName.text.toString()
                         databaseViewModel.addBudgetMovement(amount,isExpense!!,time,eventName)
+                        radioButton1.isChecked = false
+                        radioButton2.isChecked = false
+                        etAmountName.text?.clear()
+                        etAmount.text?.clear()
+                        Toast.makeText(requireContext(),"Yeni Gelir/Gider Paylaşıldı",Toast.LENGTH_LONG).show()
 
                 }else if(!(radioButton1.isChecked || radioButton2.isChecked)){
                     Toast.makeText(requireContext(),"Lütfen Bir Tip Seçiniz",Toast.LENGTH_LONG).show()
 
+
                 }else if(etAmountName.text.toString().isEmpty()){
                     etAmountName.error = "Lütfen İşlemi Açıklaması Giriniz"
+
                 }else if( etAmount.text.toString().isEmpty()){
                     etAmount.error = "Lütfen İşlemi Tutarı Giriniz"
+
                 }
-
-                radioButton1.isChecked = false
-                radioButton2.isChecked = false
-                etAmountName.text?.clear()
-                etAmount.text?.clear()
-
 
             }
 
             btnNewMonthlyPayment.setOnClickListener {
-                val amount:Double = etMonthlyPaymentAmount.text.toString().toDouble()
-                databaseViewModel.setApartmentMonthlyPayment(amount)
-                etMonthlyPaymentAmount.text?.clear()
-                Toast.makeText(requireContext(),"Aidat Güncellendi",Toast.LENGTH_LONG).show()
+                if(etMonthlyPaymentAmount.text.isNullOrEmpty()){
+                    Toast.makeText(requireContext(),"Lütfen Bir Miktar Giriniz",Toast.LENGTH_LONG).show()
+                }else{
+                    val amount:Double = etMonthlyPaymentAmount.text.toString().toDouble()
+                    databaseViewModel.setApartmentMonthlyPayment(amount)
+                    etMonthlyPaymentAmount.text?.clear()
+                    Toast.makeText(requireContext(),"Aidat Güncellendi",Toast.LENGTH_LONG).show()
+                }
+
             }
 
             btnSendAnnouncement.setOnClickListener {
@@ -214,19 +225,30 @@ class UserProfileFragment : Fragment() {
 
 
             btnPollShare.setOnClickListener {
-                val time:FieldValue = FieldValue.serverTimestamp()
-                val pollText:String = etPoll.text.toString()
-                databaseViewModel.addNewPoll(pollText, time)
-                etPoll.text?.clear()
-                Toast.makeText(requireContext(),"Anket Paylaşıldı",Toast.LENGTH_LONG).show()
+
+                if(etPoll.text.isNullOrEmpty()){
+                    Toast.makeText(requireContext(),"Boş Anket Paylaşılamaz",Toast.LENGTH_LONG).show()
+                }else{
+                    val time:FieldValue = FieldValue.serverTimestamp()
+                    val pollText:String = etPoll.text.toString()
+                    databaseViewModel.addNewPoll(pollText, time)
+                    etPoll.text?.clear()
+                }
+
+
             }
 
             btnSendConciergeAnnouncement.setOnClickListener {
-                val time:FieldValue = FieldValue.serverTimestamp()
-                val announcement:String = etConciergeAnnouncement.text.toString()
-                databaseViewModel.addNewConciergeAnnouncement(announcement, time)
-                etConciergeAnnouncement.text?.clear()
-                Toast.makeText(requireContext(),"Duyuru Paylaşıldı",Toast.LENGTH_LONG).show()
+                if(etConciergeAnnouncement.text.isNullOrEmpty()){
+                    Toast.makeText(requireContext(),"Boş Duyuru Paylaşılamaz",Toast.LENGTH_LONG).show()
+                }else{
+                    val time:FieldValue = FieldValue.serverTimestamp()
+                    val announcement:String = etConciergeAnnouncement.text.toString()
+                    databaseViewModel.addNewConciergeAnnouncement(announcement, time)
+                    etConciergeAnnouncement.text?.clear()
+                    Toast.makeText(requireContext(),"Duyuru Paylaşıldı",Toast.LENGTH_LONG).show()
+                }
+
             }
         }
 

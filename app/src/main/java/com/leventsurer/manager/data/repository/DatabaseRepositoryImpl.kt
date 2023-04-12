@@ -345,6 +345,8 @@ class DatabaseRepositoryImpl @Inject constructor(
 
                     database.collection("apartments").document(documentId)
                         .collection(USER_COLLECTION).add(user).await()
+
+                    sharedRepository.writeApartmentDocumentId(APARTMENT_DOCUMENT_ID,documentId)
                 }
             }
         }

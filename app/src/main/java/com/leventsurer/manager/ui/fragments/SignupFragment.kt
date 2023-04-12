@@ -1,6 +1,7 @@
 package com.leventsurer.manager.ui.fragments
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -48,6 +49,7 @@ class SignupFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         onClickHandler()
+        observeApartmentsFlow()
         (requireActivity() as MainActivity).hideBottomNavigation()
     }
 
@@ -65,6 +67,7 @@ class SignupFragment : Fragment() {
                         binding.pbProgressBar.visibility = VISIBLE
                     }
                     is Resource.Success -> {
+                        Log.e("kontrol","signup metodundan Success döndü")
                         if (findNavController().currentDestination?.id == R.id.signupFragment) {
                             writeDataToSharedPref()
                             val action =
@@ -114,7 +117,8 @@ class SignupFragment : Fragment() {
                 role,
                 apartmentCode
             )
-        } else {
+        } else  {
+            Log.e("kontrol","signup metodunun sakin şartına girdi")
             databaseViewModel.addNewUser(name, apartmentCode, carPlate, doorNumber, role)
         }
         authViewModel.signup(name, email, password)
@@ -125,7 +129,7 @@ class SignupFragment : Fragment() {
 
     private fun getApartments() {
         databaseViewModel.getAllApartments()
-        observeApartmentsFlow()
+
     }
     //Yöneticinin girdiği apartman koduyla daha önce kayıt yapılıp yapılmadığını sorgular
     private fun observeApartmentsFlow() {
@@ -134,42 +138,60 @@ class SignupFragment : Fragment() {
                 when (it) {
                     is Resource.Failure -> {
                         Toast.makeText(context, it.exception.message, Toast.LENGTH_LONG).show()
-                        binding.pbProgressBar.visibility = View.GONE
+                        binding.pbProgressBar.visibility = GONE
 
                     }
                     is Resource.Loading -> {
-                        binding.pbProgressBar.visibility = View.VISIBLE
+                        binding.pbProgressBar.visibility = VISIBLE
                     }
                     is Resource.Success -> {
-
+                        Log.e("kontrol","sapartmentsFlow değeri success oldu ")
+                        apartmentsList.clear()
                         apartmentsList.addAll(it.result)
+                        Log.e("kontrol","apartman listesi $apartmentsList")
                         val isTaken = isApartmentNameTaken(
                             apartmentsList,
                             binding.etApartmentCode.text.toString()
                         )
-                        if (isTaken) {
-                            binding.etApartmentCode.error = "Bu İsim Daha Önce Alındı.Apartmanınıza Başka Bir İsim Belirleyiniz"
-                            binding.pbProgressBar.visibility = GONE
-                        } else {
-                            binding.apply {
-                                val userName = etNewUserName.text.toString()
-                                val userEmail = etNewUserMail.text.toString()
-                                val userPassword = etNewUserPassword.text.toString()
-                                val userCarPlate = etCarPlate.text.toString()
-                                val userDoorNumber = etDoorNumber.text.toString()
-                                val apartmentCode = etApartmentCode.text.toString()
-                                signUp(
-                                    userName,
-                                    userEmail,
-                                    userPassword,
-                                    apartmentCode,
-                                    newUserRole,
-                                    userDoorNumber,
-                                    userCarPlate
-                                )
-                            }
+                        val userName = binding.etNewUserName.text.toString()
+                        val userEmail = binding.etNewUserMail.text.toString()
+                        val userPassword = binding.etNewUserPassword.text.toString()
+                        val userCarPlate = binding.etCarPlate.text.toString()
+                        val userDoorNumber = binding.etDoorNumber.text.toString()
+                        val apartmentCode = binding.etApartmentCode.text.toString()
+                        if(newUserRole == "yonetici"){
 
+                            if (isTaken) {
+                                binding.etApartmentCode.error = "Bu İsim Daha Önce Alındı.Apartmanınıza Başka Bir İsim Belirleyiniz"
+                                binding.pbProgressBar.visibility = GONE
+                            } else {
+                                    signUp(
+                                        userName,
+                                        userEmail,
+                                        userPassword,
+                                        apartmentCode,
+                                        newUserRole,
+                                        userDoorNumber,
+                                        userCarPlate
+                                    )
+                            }
+                        }else{
+                            if(isTaken){
+                                    signUp(
+                                        userName,
+                                        userEmail,
+                                        userPassword,
+                                        apartmentCode,
+                                        newUserRole,
+                                        userDoorNumber,
+                                        userCarPlate
+                                    )
+                            }else{
+                                binding.etApartmentCode.error = "Lütfen Geçerli Bir İsim Giriniz"
+                                binding.pbProgressBar.visibility = GONE
+                            }
                         }
+
                     }
                     else -> {
 
@@ -200,9 +222,7 @@ class SignupFragment : Fragment() {
 
             buttonSignup.setOnClickListener {
                 if (isRoleSelected) {
-                    if (newUserRole == "yonetici") {
-                        getApartments()
-                    }
+                    getApartments()
 
                 } else {
                     Toast.makeText(context, "Rol Seçimi Yapmak Zorunludur.", Toast.LENGTH_LONG)
