@@ -138,11 +138,12 @@ class DatabaseRepositoryImpl @Inject constructor(
 
     override suspend fun getUsers(): Resource<ArrayList<UserModel>> {
         return try {
-            val apartmentDocumentId =
-                sharedRepository.readApartmentDocumentId(APARTMENT_DOCUMENT_ID)
+            val apartmentDocumentId =  reachToDocumentIdFromSharedPref()
+                /*sharedRepository.readApartmentDocumentId(APARTMENT_DOCUMENT_ID)*/
+
             Log.e("kontrol","apartman id ${apartmentDocumentId.toString()}")
             val usersDocuments =
-                database.collection(APARTMENT_COLLECTIONS).document(apartmentDocumentId!!)
+                database.collection(APARTMENT_COLLECTIONS).document(apartmentDocumentId)
                     .collection(
                         USER_COLLECTION
                     ).get().await()
@@ -282,7 +283,7 @@ class DatabaseRepositoryImpl @Inject constructor(
     override suspend fun getAnApartment(): Resource<ApartmentModel> {
         return try {
             val apartmentDocumentId =
-                sharedRepository.readApartmentDocumentId(APARTMENT_DOCUMENT_ID)
+                reachToDocumentIdFromSharedPref()
 
             val apartmentDocument: DocumentSnapshot =
                 database.collection(APARTMENT_COLLECTIONS).document(apartmentDocumentId!!).get()

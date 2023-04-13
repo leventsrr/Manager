@@ -268,7 +268,6 @@ class HomePageFragment : Fragment() {
 
     //apartmanda oturan kişileri çeker
     private fun observeResidents(){
-
         databaseViewModel.getAllApartmentUsers()
         viewLifecycleOwner.lifecycleScope.launch {
             databaseViewModel.users.collect {
@@ -313,7 +312,7 @@ class HomePageFragment : Fragment() {
             databaseViewModel.apartmentLiveData.observe(viewLifecycleOwner) {
                 when (it) {
                     is Resource.Failure -> {
-                        Toast.makeText(context, it.exception.message, Toast.LENGTH_LONG).show()
+                        Toast.makeText(context, "it.exception.message", Toast.LENGTH_LONG).show()
                         binding.pbProgressBar.visibility = GONE
 
                     }
