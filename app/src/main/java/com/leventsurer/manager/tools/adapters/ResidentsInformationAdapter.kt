@@ -66,7 +66,6 @@ class ResidentsInformationAdapter : RecyclerView.Adapter<ResidentsInformationAda
     //move to product's detail page
     private var moveDetailPage: ((userModel: UserModel) -> Unit)? = null
     fun moveDetailPage(f: ((userModel: UserModel) -> Unit)) {
-        Log.e("TAG", "setOnClickListenerCustom: ")
         moveDetailPage = f
     }
 

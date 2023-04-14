@@ -89,11 +89,11 @@
             android:id="@id/pbProgressBar"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:visibility="gone"
+            android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/homePageCards" />
+            app:layout_constraintTop_toBottomOf="@+id/homePageGreetPart" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerView"

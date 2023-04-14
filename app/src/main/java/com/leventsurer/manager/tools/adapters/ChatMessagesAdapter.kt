@@ -52,9 +52,7 @@ class ChatMessagesAdapter(private val sharedPreferencesViewModel: SharedPreferen
         holder.binding.apply {
 
             val currentItem: ChatMessageModel = list[position]
-            Log.e("kontrol", "item name:${currentItem.userName},userName:$userName")
             if (currentItem.userName == userName) {
-                Log.e("kontrol","if içinde")
                 cwMessageCard.setCardBackgroundColor(
                     ContextCompat.getColor(
                         context,
@@ -64,7 +62,6 @@ class ChatMessagesAdapter(private val sharedPreferencesViewModel: SharedPreferen
                 twSender.visibility = GONE
                 linearLayout1.gravity = Gravity.END
             } else {
-                Log.e("kontrol","else içinde")
                 twSender.text = currentItem.userName
             }
             twMessage.text = currentItem.message

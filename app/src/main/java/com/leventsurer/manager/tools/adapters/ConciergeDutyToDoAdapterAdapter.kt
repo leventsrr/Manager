@@ -42,7 +42,6 @@ class ConciergeDutyToDoAdapterAdapter(userRole:String) : RecyclerView.Adapter<Co
             btnDoneDuty.setOnClickListener {
                 markDoneDuty.let {
                     if (it != null) {
-                        Log.e("kontrol","Tıklanılan görev ${currentItem.duty}")
                         it(currentItem)
                     }
                 }

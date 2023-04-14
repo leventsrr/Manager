@@ -26,7 +26,14 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-
+        <ProgressBar
+            android:id="@+id/pbProgressBar"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="20dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/materialCardView7" />
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/materialCardView6"
             android:layout_width="match_parent"

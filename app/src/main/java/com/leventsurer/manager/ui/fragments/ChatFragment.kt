@@ -89,7 +89,6 @@ class ChatFragment : Fragment() {
                 is Resource.Loading -> {
                 }
                 is Resource.Success -> {
-                    Log.e("kontrol","observe success")
                     chatMessagesAdapterList.clear()
                     chatMessagesAdapterList.addAll(it.result)
                     chatMessageAdapter.list = chatMessagesAdapterList

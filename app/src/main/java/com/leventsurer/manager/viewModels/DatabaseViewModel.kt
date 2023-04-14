@@ -186,7 +186,6 @@ class DatabaseViewModel @Inject constructor(
     }
 
     fun updateUserInfo(userName: String,phoneNumber:String,carPlate: String,doorNumber: String) = viewModelScope.launch {
-        Log.e("kontrol","viewmodele geldi")
         databaseRepository.updateUserInfo(userName, phoneNumber, carPlate, doorNumber)
     }
 

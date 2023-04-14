@@ -67,7 +67,6 @@ class SignupFragment : Fragment() {
                         binding.pbProgressBar.visibility = VISIBLE
                     }
                     is Resource.Success -> {
-                        Log.e("kontrol","signup metodundan Success döndü")
                         if (findNavController().currentDestination?.id == R.id.signupFragment) {
                             writeDataToSharedPref()
                             val action =
@@ -118,7 +117,6 @@ class SignupFragment : Fragment() {
                 apartmentCode
             )
         } else  {
-            Log.e("kontrol","signup metodunun sakin şartına girdi")
             databaseViewModel.addNewUser(name, apartmentCode, carPlate, doorNumber, role)
         }
         authViewModel.signup(name, email, password)
@@ -145,10 +143,8 @@ class SignupFragment : Fragment() {
                         binding.pbProgressBar.visibility = VISIBLE
                     }
                     is Resource.Success -> {
-                        Log.e("kontrol","sapartmentsFlow değeri success oldu ")
                         apartmentsList.clear()
                         apartmentsList.addAll(it.result)
-                        Log.e("kontrol","apartman listesi $apartmentsList")
                         val isTaken = isApartmentNameTaken(
                             apartmentsList,
                             binding.etApartmentCode.text.toString()

@@ -100,7 +100,6 @@ class HomeRecyclerViewAdapter : RecyclerView.Adapter<HomeRecyclerViewHolder>() {
 
     private var sendPollAnswer: ((pollText: String,isAgree:Boolean) -> Unit)? = null
     fun sendPollAnswer(f: ((pollText: String,isAgree:Boolean) -> Unit)) {
-        Log.e("kontrol", "anket butonuna tıklandı: ")
         sendPollAnswer = f
     }
 }

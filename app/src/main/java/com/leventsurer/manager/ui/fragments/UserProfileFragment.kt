@@ -11,6 +11,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.widget.Toast
@@ -29,6 +30,7 @@ import com.leventsurer.manager.data.model.UserModel
 import com.leventsurer.manager.databinding.FragmentUserProfileBinding
 import com.leventsurer.manager.tools.helpers.HeaderHelper
 import com.leventsurer.manager.ui.dialog.ProfileCustomDialog
+import com.leventsurer.manager.viewModels.AuthViewModel
 import com.leventsurer.manager.viewModels.DatabaseViewModel
 import com.leventsurer.manager.viewModels.FirebaseStorageViewModel
 import com.leventsurer.manager.viewModels.SharedPreferencesViewModel
@@ -44,6 +46,7 @@ class UserProfileFragment : Fragment() {
     private val storageViewModel by viewModels<FirebaseStorageViewModel>()
     private val databaseViewModel by viewModels<DatabaseViewModel>()
     private val sharedPreferencesViewModel by viewModels<SharedPreferencesViewModel>()
+    private val authViewModel by viewModels<AuthViewModel>()
     private var imageUri: Uri? = null
     private var apartmentCode:String? = null
     private var isExpense:Boolean? = null
@@ -81,10 +84,14 @@ class UserProfileFragment : Fragment() {
             databaseViewModel.userInfoFlow.observe(viewLifecycleOwner) {
                 when (it) {
                     is Resource.Failure -> {
-                        Toast.makeText(context, it.exception.message, Toast.LENGTH_LONG).show()
+                        binding.pbProgressBar.visibility = GONE
+                        Toast.makeText(context, "it.exception.message", Toast.LENGTH_LONG).show()
                     }
-                    is Resource.Loading -> {}
+                    is Resource.Loading -> {
+                        binding.pbProgressBar.visibility = VISIBLE
+                    }
                     is Resource.Success -> {
+                        binding.pbProgressBar.visibility = GONE
                         userModel.fullName = it.result.fullName
                         userModel.phoneNumber = it.result.phoneNumber
                         userModel.carPlate = it.result.carPlate
@@ -272,7 +279,10 @@ class UserProfileFragment : Fragment() {
             startIcon = R.drawable.ic_baseline_sensor_door_24,
             endIcon = R.drawable.ic_baseline_settings_24,
             startIconClick = {
-                findNavController().popBackStack()
+                authViewModel.logout()
+                sharedPreferencesViewModel.clearSharedPref()
+                val action = UserProfileFragmentDirections.actionUserProfileFragmentToLoginFragment()
+                findNavController().navigate(action)
             },
             endIconClick = {
                 val action =

@@ -20,7 +20,9 @@ import com.leventsurer.manager.databinding.FragmentWalletBinding
 import com.leventsurer.manager.tools.adapters.DuesPaymentStatusAdapter
 import com.leventsurer.manager.tools.adapters.FinancialEventsDetailAdapter
 import com.leventsurer.manager.tools.helpers.HeaderHelper
+import com.leventsurer.manager.viewModels.AuthViewModel
 import com.leventsurer.manager.viewModels.DatabaseViewModel
+import com.leventsurer.manager.viewModels.SharedPreferencesViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 @AndroidEntryPoint
@@ -28,6 +30,8 @@ class WalletFragment : Fragment() {
     private var _binding: FragmentWalletBinding? = null
     private val binding: FragmentWalletBinding get() = _binding!!
     private val databaseViewModel by viewModels<DatabaseViewModel>()
+    private val authViewModel by viewModels<AuthViewModel>()
+    private val sharedPreferencesViewModel by viewModels<SharedPreferencesViewModel>()
     //Adapter list
     private var duesPaymentStatusAdapterList = ArrayList<UserModel>()
     private var financialEventAdapterList = ArrayList<FinancialEventModel>()
@@ -94,15 +98,11 @@ class WalletFragment : Fragment() {
                 when (it) {
                     is Resource.Failure -> {
                         Toast.makeText(context, it.exception.message, Toast.LENGTH_LONG).show()
-                        Log.e("kontrol","fragment içinde observe -> Failure")
 
                     }
                     is Resource.Loading -> {
-                        Log.e("kontrol","fragment içinde observe -> Loading")
                     }
                     is Resource.Success -> {
-                        Log.e("kontrol","fragment içinde observe -> Success")
-                        Log.e("kontrol","gelen liste ${it.result}")
                         financialEventAdapterList = it.result
                         financialEventsAdapter.list = financialEventAdapterList
                     }
@@ -121,15 +121,11 @@ class WalletFragment : Fragment() {
                 when (it) {
                     is Resource.Failure -> {
                         Toast.makeText(context, it.exception.message, Toast.LENGTH_LONG).show()
-                        Log.e("kontrol","fragment içinde observe -> Failure")
 
                     }
                     is Resource.Loading -> {
-                        Log.e("kontrol","fragment içinde observe -> Loading")
                     }
                     is Resource.Success -> {
-                        Log.e("kontrol","fragment içinde observe -> Success")
-                        Log.e("kontrol","gelen liste ${it.result}")
                         duesPaymentStatusAdapterList = it.result
                         duesPaymentStatusAdapter.list = duesPaymentStatusAdapterList
                     }
@@ -164,7 +160,10 @@ class WalletFragment : Fragment() {
             startIcon = R.drawable.ic_baseline_sensor_door_24,
             endIcon = R.drawable.ic_baseline_settings_24,
             startIconClick = {
-                findNavController().popBackStack()
+                authViewModel.logout()
+                sharedPreferencesViewModel.clearSharedPref()
+                val action = WalletFragmentDirections.actionWalletFragmentToLoginFragment()
+                findNavController().navigate(action)
             },
             endIconClick = {
                 val action = WalletFragmentDirections.actionWalletFragmentToSettingsFragmet()

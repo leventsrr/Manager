@@ -26,6 +26,7 @@ import com.leventsurer.manager.tools.helpers.ChipCardHelper
 import com.leventsurer.manager.tools.helpers.HeaderHelper
 import com.leventsurer.manager.viewModels.AuthViewModel
 import com.leventsurer.manager.viewModels.DatabaseViewModel
+import com.leventsurer.manager.viewModels.SharedPreferencesViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -36,6 +37,7 @@ class HomePageFragment : Fragment() {
     private val binding: FragmentHomePageBinding get() = _binding!!
     private val viewModel by viewModels<AuthViewModel>()
     private val databaseViewModel by viewModels<DatabaseViewModel>()
+    private val sharedPrefViewModel by viewModels<SharedPreferencesViewModel>()
     private var chosenCardNumber: Int = 0
     private val adapterList = ArrayList<HomeRecyclerViewItem>()
     private var residentsList = ArrayList<UserModel>()
@@ -64,6 +66,7 @@ class HomePageFragment : Fragment() {
         observeApartmentInfo()
         onClickListener()
     }
+
 
     private fun onClickListener() {
         binding.apply {
@@ -133,7 +136,6 @@ class HomePageFragment : Fragment() {
 
                     adapterList.clear()
                     for (poll in it.result) {
-                        Log.e("kontrol","${poll.pollText} / ${poll.agreeCount} / ${poll.disagreeCount}")
                         val listItem =
                             HomeRecyclerViewItem.Polls(
                                 pollText = poll.pollText,
@@ -141,11 +143,9 @@ class HomePageFragment : Fragment() {
                                 disagreeCount = poll.disagreeCount
                             )
 
-                        Log.e("kontrol","ana sayfa ${listItem.agreeCount} / ${listItem.disagreeCount} / ${listItem.pollText}")
                         adapterList.add(listItem)
                         homePageAdapter.items = adapterList
                     }
-                    Log.e("kontrol", adapterList.toString())
 
                 }
                 else -> {
@@ -181,7 +181,6 @@ class HomePageFragment : Fragment() {
                             adapterList.add(listItem)
                             homePageAdapter.items = adapterList
                         }
-                        Log.e("kontrol", adapterList.toString())
 
                     }
                     else -> {
@@ -218,7 +217,6 @@ class HomePageFragment : Fragment() {
                             adapterList.add(listItem)
                             homePageAdapter.items = adapterList
                         }
-                        Log.e("kontrol", adapterList.toString())
 
                     }
                     else -> {
@@ -254,7 +252,6 @@ class HomePageFragment : Fragment() {
                             adapterList.add(listItem)
                             homePageAdapter.items = adapterList
                         }
-                        Log.e("kontrol", adapterList.toString())
 
                     }
                     else -> {
@@ -295,7 +292,6 @@ class HomePageFragment : Fragment() {
                         }
                         binding.twResidentCount.text = residentsList.size.toString()
 
-                        Log.e("kontrol", adapterList.toString())
 
                     }
                     else -> {
@@ -329,7 +325,6 @@ class HomePageFragment : Fragment() {
 
                         }
 
-                        Log.e("kontrol", adapterList.toString())
 
                     }
                     else -> {
@@ -350,7 +345,10 @@ class HomePageFragment : Fragment() {
             endIcon = R.drawable.ic_baseline_settings_24,
             startIconClick = {
                 viewModel.logout()
-                findNavController().popBackStack()
+                sharedPrefViewModel.clearSharedPref()
+                val action = HomePageFragmentDirections.actionExecutiveHomePageToLoginFragment()
+                findNavController().navigate(action)
+
             },
             endIconClick = {
                 val action = HomePageFragmentDirections.actionExecutiveHomePageToSettingsFragmet()

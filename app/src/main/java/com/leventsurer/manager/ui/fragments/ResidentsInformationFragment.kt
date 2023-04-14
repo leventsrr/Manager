@@ -20,7 +20,9 @@ import com.leventsurer.manager.databinding.FragmentResidentsInformationBinding
 import com.leventsurer.manager.tools.adapters.DuesPaymentStatusAdapter
 import com.leventsurer.manager.tools.adapters.ResidentsInformationAdapter
 import com.leventsurer.manager.tools.helpers.HeaderHelper
+import com.leventsurer.manager.viewModels.AuthViewModel
 import com.leventsurer.manager.viewModels.DatabaseViewModel
+import com.leventsurer.manager.viewModels.SharedPreferencesViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 @AndroidEntryPoint
@@ -28,6 +30,8 @@ class ResidentsInformationFragment : Fragment() {
     private var _binding: FragmentResidentsInformationBinding? = null
     private val binding: FragmentResidentsInformationBinding get() = _binding!!
     private val databaseViewModel by viewModels<DatabaseViewModel>()
+    private val authViewModel by viewModels<AuthViewModel>()
+    private val sharedPrefViewModel by viewModels<SharedPreferencesViewModel>()
 
     //Adapter list
     private var residentsInformationAdapterList = ArrayList<UserModel>()
@@ -64,7 +68,6 @@ class ResidentsInformationFragment : Fragment() {
     }
 
     private fun getUsers() {
-        Log.e("kontrol","fragment içinde")
         databaseViewModel.getAllApartmentUsers()
         observeUsers()
     }
@@ -75,15 +78,11 @@ class ResidentsInformationFragment : Fragment() {
                 when (it) {
                     is Resource.Failure -> {
                         Toast.makeText(context, it.exception.message, Toast.LENGTH_LONG).show()
-                        Log.e("kontrol","fragment içinde observe -> Failure")
 
                     }
                     is Resource.Loading -> {
-                        Log.e("kontrol","fragment içinde observe -> Loading")
                     }
                     is Resource.Success -> {
-                        Log.e("kontrol","fragment içinde observe -> Success")
-                        Log.e("kontrol","gelen liste ${it.result}")
                         residentsInformationAdapterList = it.result
                         residentsInformationAdapter.list = residentsInformationAdapterList
                     }
@@ -105,7 +104,10 @@ class ResidentsInformationFragment : Fragment() {
             startIcon = R.drawable.ic_baseline_sensor_door_24,
             endIcon = R.drawable.ic_baseline_settings_24,
             startIconClick = {
-                findNavController().popBackStack()
+                authViewModel.logout()
+                sharedPrefViewModel.clearSharedPref()
+                val action = ResidentsInformationFragmentDirections.actionResidentsInformationFragmentToLoginFragment()
+                findNavController().navigate(action)
             },
             endIconClick = {
                 val action = ResidentsInformationFragmentDirections.actionResidentsInformationFragmentToSettingsFragmet()

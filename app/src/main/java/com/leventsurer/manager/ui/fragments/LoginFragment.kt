@@ -21,6 +21,7 @@ import com.leventsurer.manager.viewModels.DatabaseViewModel
 import com.leventsurer.manager.viewModels.SharedPreferencesViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 @AndroidEntryPoint
 class LoginFragment : Fragment() {
@@ -64,7 +65,9 @@ class LoginFragment : Fragment() {
                     }
                     is Resource.Success -> {
                         if (findNavController().currentDestination?.id == R.id.loginFragment) {
+
                             writeDataToSharedPref()
+
 
                             val action =
                                 LoginFragmentDirections.actionLoginFragmentToExecutiveHomePage()

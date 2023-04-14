@@ -21,7 +21,9 @@ import com.leventsurer.manager.tools.adapters.ConciergeDutyToDoAdapterAdapter
 import com.leventsurer.manager.tools.adapters.ConciergeDutyToDoneAdapter
 import com.leventsurer.manager.tools.adapters.homePageAdapter.HomeRecyclerViewItem
 import com.leventsurer.manager.tools.helpers.HeaderHelper
+import com.leventsurer.manager.viewModels.AuthViewModel
 import com.leventsurer.manager.viewModels.DatabaseViewModel
+import com.leventsurer.manager.viewModels.SharedPreferencesViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 @AndroidEntryPoint
@@ -30,6 +32,8 @@ class ConciergeFragment : Fragment() {
     private var _binding: FragmentConciergeBinding? = null
     private val binding: FragmentConciergeBinding get() = _binding!!
     private val databaseViewModel by viewModels<DatabaseViewModel>()
+    private val sharedPrefViewModel by viewModels<SharedPreferencesViewModel>()
+    private val authViewModel by viewModels<AuthViewModel>()
     private lateinit var userRole:String
     //lists
     private val conciergeDutyDoneAdapterList = ArrayList<ConciergeDutiesModel>()
@@ -67,7 +71,10 @@ class ConciergeFragment : Fragment() {
             startIcon = R.drawable.ic_baseline_sensor_door_24,
             endIcon = R.drawable.ic_baseline_settings_24,
             startIconClick = {
-                findNavController().popBackStack()
+                authViewModel.logout()
+                sharedPrefViewModel.clearSharedPref()
+                val action = ConciergeFragmentDirections.actionConciergeFragmentToLoginFragment()
+                findNavController().navigate(action)
             },
             endIconClick = {
                 val action = ConciergeFragmentDirections.actionConciergeFragmentToSettingsFragmet()

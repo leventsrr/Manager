@@ -138,10 +138,9 @@ class DatabaseRepositoryImpl @Inject constructor(
 
     override suspend fun getUsers(): Resource<ArrayList<UserModel>> {
         return try {
-            val apartmentDocumentId =  reachToDocumentIdFromSharedPref()
-                /*sharedRepository.readApartmentDocumentId(APARTMENT_DOCUMENT_ID)*/
+            val apartmentDocumentId = reachToDocumentIdFromSharedPref()
+            /*sharedRepository.readApartmentDocumentId(APARTMENT_DOCUMENT_ID)*/
 
-            Log.e("kontrol","apartman id ${apartmentDocumentId.toString()}")
             val usersDocuments =
                 database.collection(APARTMENT_COLLECTIONS).document(apartmentDocumentId)
                     .collection(
@@ -162,10 +161,11 @@ class DatabaseRepositoryImpl @Inject constructor(
     override suspend fun getAUser(): Resource<UserModel> {
         return try {
             val apartmentDocumentId =
-                sharedRepository.readApartmentDocumentId(APARTMENT_DOCUMENT_ID)
+                reachToDocumentIdFromSharedPref()
             val userDocumentId = sharedRepository.readUserDocumentId(USER_DOCUMENT_ID)
+            Log.e("kontrol","apartmanId:$apartmentDocumentId/userId:$userDocumentId")
             val userDocument: DocumentSnapshot =
-                database.collection(APARTMENT_COLLECTIONS).document(apartmentDocumentId!!)
+                database.collection(APARTMENT_COLLECTIONS).document(apartmentDocumentId)
                     .collection(
                         USER_COLLECTION
                     ).document(userDocumentId!!).get().await()
@@ -242,7 +242,8 @@ class DatabaseRepositoryImpl @Inject constructor(
                     pollModel.people["disagreePeople"]?.remove(userName)
                 }
                 database.collection(APARTMENT_COLLECTIONS).document(apartmentDocumentId).collection(
-                    POLLS).document(pollDocument.documents[0].id).set(pollModel)
+                    POLLS
+                ).document(pollDocument.documents[0].id).set(pollModel)
                 "Kararınızı Belirttiniz"
 
             }
@@ -258,7 +259,8 @@ class DatabaseRepositoryImpl @Inject constructor(
                     pollModel.people["agreePeople"]?.remove(userName)
                 }
                 database.collection(APARTMENT_COLLECTIONS).document(apartmentDocumentId).collection(
-                    POLLS).document(pollDocument.documents[0].id).set(pollModel)
+                    POLLS
+                ).document(pollDocument.documents[0].id).set(pollModel)
                 "Kararınızı Belirttiniz"
             }
         }
@@ -347,7 +349,7 @@ class DatabaseRepositoryImpl @Inject constructor(
                     database.collection("apartments").document(documentId)
                         .collection(USER_COLLECTION).add(user).await()
 
-                    sharedRepository.writeApartmentDocumentId(APARTMENT_DOCUMENT_ID,documentId)
+                    sharedRepository.writeApartmentDocumentId(APARTMENT_DOCUMENT_ID, documentId)
                 }
             }
         }
@@ -391,7 +393,7 @@ class DatabaseRepositoryImpl @Inject constructor(
                 "budget" to 0
             )
         ).await().id
-        sharedRepository.writeApartmentDocumentId(APARTMENT_DOCUMENT_ID,result)
+        sharedRepository.writeApartmentDocumentId(APARTMENT_DOCUMENT_ID, result)
         addNewUserToNewApartment(name, apartmentCode, carPlate, doorNumber, role, result)
     }
 
@@ -499,17 +501,18 @@ class DatabaseRepositoryImpl @Inject constructor(
         database.collection(APARTMENT_COLLECTIONS).document(apartmentDocumentId!!)
             .collection(CONCIERGE_ANNOUNCEMENT).add(announcement).await()
     }
+
     //kapıcı görevinin isDone özelliğini true olarak günceller
     override suspend fun changeConciergeDutyStatus(dutyText: String) {
         val apartmentDocumentId = sharedRepository.readApartmentDocumentId(APARTMENT_DOCUMENT_ID)
         val duties = database.collection(APARTMENT_COLLECTIONS).document(apartmentDocumentId!!)
-            .collection(DUTIES).whereEqualTo("duty",dutyText).get().await()
+            .collection(DUTIES).whereEqualTo("duty", dutyText).get().await()
         val documentId = duties.documents[0].id
-        Log.e("kontrol","id:$documentId")
         database.collection(APARTMENT_COLLECTIONS).document(apartmentDocumentId)
-            .collection(DUTIES).document(documentId).update("isDone",true)
+            .collection(DUTIES).document(documentId).update("isDone", true)
 
     }
+
     //yöneticinin yeni parasal olay girmesini sağlar
     override suspend fun addNewFinancialEvent(
         amount: Double,
@@ -521,13 +524,12 @@ class DatabaseRepositoryImpl @Inject constructor(
         val apartment =
             database.collection(APARTMENT_COLLECTIONS).document(apartmentDocumentId!!).get().await()
         val apartmentModel = apartment.toObject(ApartmentModel::class.java)
-        Log.e("kontrol", apartmentModel!!.apartmentName)
         var newBudget = 0.0
         newBudget = if (!isExpense) {
-            apartmentModel.budget + amount
+            apartmentModel!!.budget + amount
 
         } else {
-            apartmentModel.budget - amount
+            apartmentModel!!.budget - amount
         }
 
         database.collection(APARTMENT_COLLECTIONS).document(apartmentDocumentId)
@@ -590,10 +592,8 @@ class DatabaseRepositoryImpl @Inject constructor(
         carPlate: String,
         doorNumber: String
     ) {
-        Log.e("kontrol","databaseRepo ya geldi")
         val apartmentDocumentId = sharedRepository.readApartmentDocumentId(APARTMENT_DOCUMENT_ID)
         val userDocumentId = sharedRepository.readUserDocumentId(USER_DOCUMENT_ID)
-        Log.e("kontrol","apartmanId:$apartmentDocumentId - userId:$userDocumentId")
 
 
 
