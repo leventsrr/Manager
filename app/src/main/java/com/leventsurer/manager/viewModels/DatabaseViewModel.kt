@@ -173,8 +173,8 @@ class DatabaseViewModel @Inject constructor(
     fun changeConciergeDutyStatus(duty:String) = viewModelScope.launch {
         databaseRepository.changeConciergeDutyStatus(duty)
     }
-    fun setUserDuesPaymentStatus(currentStats:Boolean) = viewModelScope.launch {
-        databaseRepository.changeUserDuesPaymentStatus(currentStats)
+    fun setUserDuesPaymentStatus(currentStats:Boolean,userName: String) = viewModelScope.launch {
+        databaseRepository.changeUserDuesPaymentStatus(currentStats,userName)
     }
 
     fun addBudgetMovement(amount:Double,isExpense:Boolean,time:FieldValue,eventName:String) = viewModelScope.launch{

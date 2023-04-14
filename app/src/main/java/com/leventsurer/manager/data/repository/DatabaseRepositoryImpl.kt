@@ -163,7 +163,7 @@ class DatabaseRepositoryImpl @Inject constructor(
             val apartmentDocumentId =
                 reachToDocumentIdFromSharedPref()
             val userDocumentId = sharedRepository.readUserDocumentId(USER_DOCUMENT_ID)
-            Log.e("kontrol","apartmanId:$apartmentDocumentId/userId:$userDocumentId")
+            Log.e("kontrol", "apartmanId:$apartmentDocumentId/userId:$userDocumentId")
             val userDocument: DocumentSnapshot =
                 database.collection(APARTMENT_COLLECTIONS).document(apartmentDocumentId)
                     .collection(
@@ -397,7 +397,7 @@ class DatabaseRepositoryImpl @Inject constructor(
         addNewUserToNewApartment(name, apartmentCode, carPlate, doorNumber, role, result)
     }
 
-    override suspend fun changeUserDuesPaymentStatus(currentStatus: Boolean) {
+    override suspend fun changeUserDuesPaymentStatus(currentStatus: Boolean,userName: String) {
         val apartmentDocumentId = sharedRepository.readApartmentDocumentId(APARTMENT_DOCUMENT_ID)
         val userDocumentId = sharedRepository.readUserDocumentId(USER_DOCUMENT_ID)
 
@@ -409,11 +409,28 @@ class DatabaseRepositoryImpl @Inject constructor(
         val apartmentModel = apartment.toObject(ApartmentModel::class.java)
         val apartmentDailyPaymentAmount: Double =
             apartmentModel?.monthlyPayment.toString().toDouble()
-        val apartmentNewBudget: Double =
-            apartmentDailyPaymentAmount + apartmentModel?.budget.toString().toDouble()
-
+        val apartmentNewBudget: Double
+        val financialEventName = "$userName Kira Ödemesi"
+        if (currentStatus) {
+            apartmentNewBudget=apartmentDailyPaymentAmount + apartmentModel?.budget.toString().toDouble()
+            val time = FieldValue.serverTimestamp()
+            addNewFinancialEvent(apartmentModel!!.monthlyPayment,false,time,financialEventName)
+        } else {
+            apartmentNewBudget=apartmentModel?.budget.toString().toDouble() - apartmentDailyPaymentAmount
+            deleteMonthlyPaymentInFinancialEvents(financialEventName)
+        }
         database.collection(APARTMENT_COLLECTIONS).document(apartmentDocumentId)
-            .update("budget", apartmentNewBudget)
+            .update("budget", apartmentNewBudget).await()
+
+
+    }
+    //aidat ödeme durumunu ödemedi olarak değiştiren kullanıcın cüzdan sayfasındaki aidat ödeme bildirisi silinir
+    override suspend fun deleteMonthlyPaymentInFinancialEvents(financialEvent: String) {
+        val apartmentDocumentId = sharedRepository.readApartmentDocumentId(APARTMENT_DOCUMENT_ID)
+        val financialEvents = database.collection(APARTMENT_COLLECTIONS).document(apartmentDocumentId!!).collection(
+            FINANCIAL_EVENTS).whereEqualTo("eventName",financialEvent).get().await()
+        database.collection(APARTMENT_COLLECTIONS).document(apartmentDocumentId).collection(
+            FINANCIAL_EVENTS).document(financialEvents.documents[0].id).delete().await()
 
     }
 

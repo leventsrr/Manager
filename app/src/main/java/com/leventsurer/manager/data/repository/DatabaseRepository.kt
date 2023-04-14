@@ -14,16 +14,12 @@ interface DatabaseRepository {
     suspend fun getResidentsRequests(): Resource<ArrayList<ResidentsRequestModel>>
     suspend fun getUsers(): Resource<ArrayList<UserModel>>
     suspend fun getAUser(): Resource<UserModel>
-
-
     suspend fun getApartments():Resource<List<ApartmentModel>>
     suspend fun getAnApartment() : Resource<ApartmentModel>
-
     suspend fun getAUserByNameAndDoorNumber(userName:String,doorNumber:String): Resource<UserModel>
     suspend fun getApartmentDocumentId(apartmentCode: String):String
     suspend fun writeUserDocumentIdToSharedPref(userName:String, apartmentCode: String):String
     suspend fun getPolls():LiveData<Resource<List<PollModel>>>
-
     fun getChatMessages():LiveData<Resource<List<ChatMessageModel>>>
 
     //Add
@@ -50,7 +46,7 @@ interface DatabaseRepository {
         role: String, apartmentName: String
     )
 
-    suspend fun changeUserDuesPaymentStatus(currentStatus:Boolean)
+
     suspend fun addNewConciergeAnnouncement(announcement:String,time:FieldValue)
     suspend fun addNewRequest(request:String,time:FieldValue)
     suspend fun addNewManagerAnnouncement(announcement:String,time: FieldValue)
@@ -60,8 +56,10 @@ interface DatabaseRepository {
 
 
     //Set
+    suspend fun changeUserDuesPaymentStatus(currentStatus:Boolean,userName: String)
     suspend fun setApartmentMonthlyPayment(amount:Double)
     suspend fun updateUserInfo(userName:String, phoneNumber: String, carPlate: String, doorNumber: String)
     suspend fun changePollStatistics(isAgree:Boolean,pollText:String):String
     suspend fun changeConciergeDutyStatus(dutyText:String)
+    suspend fun deleteMonthlyPaymentInFinancialEvents(financialEvent:String)
 }

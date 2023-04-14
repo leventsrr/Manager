@@ -152,7 +152,7 @@ class UserProfileFragment : Fragment() {
 
             cbUserPaymentStatus.setOnClickListener {
                 val currentStatus: Boolean = cbUserPaymentStatus.isChecked
-                databaseViewModel.setUserDuesPaymentStatus(currentStatus)
+                databaseViewModel.setUserDuesPaymentStatus(currentStatus, userModel.fullName)
             }
 
             btnSendRequest.setOnClickListener {
