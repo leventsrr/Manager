@@ -52,7 +52,7 @@ interface DatabaseRepository {
     suspend fun addNewManagerAnnouncement(announcement:String,time: FieldValue)
     suspend fun addNewFinancialEvent(amount:Double, isExpense:Boolean, time:FieldValue,eventName:String)
     suspend fun sendNewMessageInChat(message:String,userName:String,time:FieldValue)
-
+    suspend fun addNewConciergeDuty(duty:String,time: FieldValue)
 
 
     //Set
@@ -61,5 +61,10 @@ interface DatabaseRepository {
     suspend fun updateUserInfo(userName:String, phoneNumber: String, carPlate: String, doorNumber: String)
     suspend fun changePollStatistics(isAgree:Boolean,pollText:String):String
     suspend fun changeConciergeDutyStatus(dutyText:String)
+
+
+
+    //Delete
     suspend fun deleteMonthlyPaymentInFinancialEvents(financialEvent:String)
+    suspend fun deleteUserData()
 }

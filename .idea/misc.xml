@@ -40,6 +40,7 @@
         <entry key="..\:/Users/leven/AndroidStudioProjects/Manager/app/src/main/res/layout/fragment_concierge.xml" value="0.3453703703703704" />
         <entry key="..\:/Users/leven/AndroidStudioProjects/Manager/app/src/main/res/layout/fragment_concierge_announcements.xml" value="0.3569230769230769" />
         <entry key="..\:/Users/leven/AndroidStudioProjects/Manager/app/src/main/res/layout/fragment_concierge_user_profile.xml" value="0.3484375" />
+        <entry key="..\:/Users/leven/AndroidStudioProjects/Manager/app/src/main/res/layout/fragment_confirmation_dialog.xml" value="0.35208333333333336" />
         <entry key="..\:/Users/leven/AndroidStudioProjects/Manager/app/src/main/res/layout/fragment_executive_home_page.xml" value="0.228125" />
         <entry key="..\:/Users/leven/AndroidStudioProjects/Manager/app/src/main/res/layout/fragment_home_page.xml" value="0.3625" />
         <entry key="..\:/Users/leven/AndroidStudioProjects/Manager/app/src/main/res/layout/fragment_login.xml" value="0.2786458333333333" />
@@ -48,7 +49,7 @@
         <entry key="..\:/Users/leven/AndroidStudioProjects/Manager/app/src/main/res/layout/fragment_resident_user_profile.xml" value="0.21851851851851853" />
         <entry key="..\:/Users/leven/AndroidStudioProjects/Manager/app/src/main/res/layout/fragment_residents_information.xml" value="0.275" />
         <entry key="..\:/Users/leven/AndroidStudioProjects/Manager/app/src/main/res/layout/fragment_residents_requests.xml" value="0.3625" />
-        <entry key="..\:/Users/leven/AndroidStudioProjects/Manager/app/src/main/res/layout/fragment_settings_fragmet.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/leven/AndroidStudioProjects/Manager/app/src/main/res/layout/fragment_settings_fragmet.xml" value="0.225" />
         <entry key="..\:/Users/leven/AndroidStudioProjects/Manager/app/src/main/res/layout/fragment_signup.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/leven/AndroidStudioProjects/Manager/app/src/main/res/layout/fragment_splash.xml" value="0.3625" />
         <entry key="..\:/Users/leven/AndroidStudioProjects/Manager/app/src/main/res/layout/fragment_user_profile.xml" value="0.193359375" />

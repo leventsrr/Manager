@@ -94,7 +94,13 @@
     <fragment
         android:id="@+id/settingsFragmet"
         android:name="com.leventsurer.manager.ui.fragments.SettingsFragmet"
-        android:label="SettingsFragmet" />
+        android:label="SettingsFragmet" >
+        <action
+            android:id="@+id/action_settingsFragmet_to_loginFragment"
+            app:destination="@id/loginFragment"
+            app:popUpTo="@id/nav_graph"
+            app:popUpToInclusive="true" />
+    </fragment>
     <fragment
         android:id="@+id/userProfileFragment"
         android:name="com.leventsurer.manager.ui.fragments.UserProfileFragment"

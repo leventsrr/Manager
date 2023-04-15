@@ -85,7 +85,7 @@ class DatabaseRepositoryImpl @Inject constructor(
                 database.collection(APARTMENT_COLLECTIONS).document(documentId)
                     .collection(
                         DUTIES
-                    ).get().await()
+                    ).orderBy("assignmentDate",Query.Direction.ASCENDING).get().await()
 
             for (document in result) {
                 duties.add(document.toObject(ConciergeDutiesModel::class.java))
@@ -219,7 +219,17 @@ class DatabaseRepositoryImpl @Inject constructor(
         database.collection(APARTMENT_COLLECTIONS).document(apartmentDocumentId!!).collection(POLLS)
             .add(newPoll).await()
     }
-
+    //Yeni kapıcı görevi ekleme
+    override suspend fun addNewConciergeDuty(duty: String, time: FieldValue) {
+        val apartmentDocumentId =
+            sharedRepository.readApartmentDocumentId(APARTMENT_DOCUMENT_ID)
+        val newDuty = hashMapOf(
+            "assignmentDate" to time,
+            "duty" to duty,
+            "isDone" to false
+        )
+        database.collection(APARTMENT_COLLECTIONS).document(apartmentDocumentId!!).collection(DUTIES).add(newDuty).await()
+    }
     override suspend fun changePollStatistics(isAgree: Boolean, pollText: String): String {
         val apartmentDocumentId =
             sharedRepository.readApartmentDocumentId(APARTMENT_DOCUMENT_ID)
@@ -633,6 +643,14 @@ class DatabaseRepositoryImpl @Inject constructor(
 
     }
 
+    override suspend fun deleteUserData() {
+        Log.e("kontrol","deleteUser repository")
+        val apartmentDocumentId = sharedRepository.readApartmentDocumentId(APARTMENT_DOCUMENT_ID)
+        val userDocumentId = sharedRepository.readUserDocumentId(USER_DOCUMENT_ID)
+        Log.e("kontrol","userId:$userDocumentId|apartmanId:$apartmentDocumentId")
+        database.collection(APARTMENT_COLLECTIONS).document(apartmentDocumentId!!).collection(
+            USER_COLLECTION).document(userDocumentId!!).delete().await()
+    }
     //Yöneticinin apartman aidatının tutarını değiştirmesini sağlar
     override suspend fun setApartmentMonthlyPayment(amount: Double) {
         val apartmentDocumentId = sharedRepository.readApartmentDocumentId(APARTMENT_DOCUMENT_ID)

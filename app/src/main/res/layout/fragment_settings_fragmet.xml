@@ -39,32 +39,36 @@
                 android:layout_height="match_parent"
                 android:layout_marginEnd="15dp"
                 android:gravity="center"
-                android:text="Tema" />
+                android:fontFamily="@font/titillium_web"
+                android:text="Açık Tema" />
 
             <Switch
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:gravity="center" />
-        </LinearLayout>
-
-        <com.google.android.material.card.MaterialCardView
-            android:layout_width="200dp"
-            android:layout_height="20dp"
-            android:layout_marginTop="52dp"
-            app:cardCornerRadius="10dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/linearLayout3">
+                android:gravity="center"
+                tools:ignore="UseSwitchCompatOrMaterialXml" />
 
             <TextView
-
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="Hakkında" />
+                android:fontFamily="@font/titillium_web"
+                android:text="Koyu Tema" />
 
-        </com.google.android.material.card.MaterialCardView>
+        </LinearLayout>
+
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnDeleteAccount"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/red"
+            android:text="Hesabımı Sil"
+            android:fontFamily="@font/titillium_web_bold"
+            android:layout_marginBottom="20dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

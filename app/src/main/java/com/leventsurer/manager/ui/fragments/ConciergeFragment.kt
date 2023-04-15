@@ -58,7 +58,7 @@ class ConciergeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         setupUi()
         getUserInfo()
-        getConciergeDuties()
+
     }
 
 
@@ -163,6 +163,7 @@ class ConciergeFragment : Fragment() {
                         userRole = it.result.role
                         setupConciergeDutyToDoAdapter()
                         setupConciergeDutyToDoneAdapter()
+                        getConciergeDuties()
                     }
                     else -> {}
                 }

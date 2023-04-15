@@ -188,5 +188,11 @@ class DatabaseViewModel @Inject constructor(
     fun updateUserInfo(userName: String,phoneNumber:String,carPlate: String,doorNumber: String) = viewModelScope.launch {
         databaseRepository.updateUserInfo(userName, phoneNumber, carPlate, doorNumber)
     }
+    fun addNewConciergeDuty(duty: String,time: FieldValue) = viewModelScope.launch {
+        databaseRepository.addNewConciergeDuty(duty, time)
+    }
+    fun deleteUserData()=viewModelScope.launch {
+        databaseRepository.deleteUserData()
+    }
 
 }

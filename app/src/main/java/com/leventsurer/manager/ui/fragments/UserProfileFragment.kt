@@ -257,6 +257,18 @@ class UserProfileFragment : Fragment() {
                 }
 
             }
+
+            btnNewConciergeDuty.setOnClickListener {
+                if(etNewConciergeDuty.text.isNullOrEmpty()){
+                    Toast.makeText(requireContext(),"Boş Görev Ataması Yapılamaz",Toast.LENGTH_LONG).show()
+                }else{
+                    val time = FieldValue.serverTimestamp()
+                    val duty = etNewConciergeDuty.text.toString()
+                    databaseViewModel.addNewConciergeDuty(duty,time)
+                    etNewConciergeDuty.text?.clear()
+                    Toast.makeText(requireContext(),"Yeni Kapıcı Görevi Eklendi",Toast.LENGTH_LONG).show()
+                }
+            }
         }
 
 

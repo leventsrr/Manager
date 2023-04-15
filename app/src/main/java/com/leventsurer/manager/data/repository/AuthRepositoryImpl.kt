@@ -1,10 +1,11 @@
 package com.leventsurer.manager.data.repository
 
+import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.UserProfileChangeRequest
 import com.leventsurer.manager.data.model.Resource
-import com.leventsurer.manager.tools.helpers.await
+import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
 
@@ -46,5 +47,11 @@ class AuthRepositoryImpl @Inject constructor(
     //Çıkış işlemi yapılır
     override fun logout() {
         firebaseAuth.signOut()
+    }
+
+    override suspend fun deleteUser() {
+        Log.e("kontrol","${firebaseAuth.currentUser}")
+        //firebaseAuth.currentUser!!.delete().await()
+        currentUser?.delete()?.await()
     }
 }
