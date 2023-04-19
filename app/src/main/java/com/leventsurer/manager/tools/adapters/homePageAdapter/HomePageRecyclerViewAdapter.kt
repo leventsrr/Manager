@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.RadioButton
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
@@ -69,6 +70,7 @@ class HomeRecyclerViewAdapter : RecyclerView.Adapter<HomeRecyclerViewHolder>() {
                 val radioButton2 = holder.itemView.findViewById<RadioButton>(R.id.radio_button_2)
                 val pollTextView = holder.itemView.findViewById<TextView>(R.id.twPollText)
                 val pollText = pollTextView.text.toString()
+                val pdfButton = holder.itemView.findViewById<ImageView>(R.id.btnCreatePdfFile)
                 btn.setOnClickListener {
                     sendPollAnswer.let {
                         if (it != null){
@@ -78,6 +80,16 @@ class HomeRecyclerViewAdapter : RecyclerView.Adapter<HomeRecyclerViewHolder>() {
                                 it(pollText,true)
                             }
 
+                        }
+                    }
+
+
+                }
+                pdfButton.setOnClickListener {
+                    Log.e("kontrol","pdf butonuna tıklandı")
+                    createPdfFile.let {
+                        if (it != null) {
+                            it(items[position] as HomeRecyclerViewItem.Polls)
                         }
                     }
                 }
@@ -102,5 +114,11 @@ class HomeRecyclerViewAdapter : RecyclerView.Adapter<HomeRecyclerViewHolder>() {
     fun sendPollAnswer(f: ((pollText: String,isAgree:Boolean) -> Unit)) {
         sendPollAnswer = f
     }
+
+    private var createPdfFile: ((poll: HomeRecyclerViewItem.Polls) -> Unit)? = null
+    fun createPdfFile(f: ((poll: HomeRecyclerViewItem.Polls) -> Unit)) {
+        createPdfFile = f
+    }
+
 }
  

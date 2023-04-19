@@ -1,8 +1,17 @@
 package com.leventsurer.manager.ui.fragments
 
+import android.Manifest.permission.READ_EXTERNAL_STORAGE
+import android.Manifest.permission.WRITE_EXTERNAL_STORAGE
 import android.annotation.SuppressLint
+import android.content.pm.PackageManager
+import android.graphics.Canvas
 import android.graphics.Color
+import android.graphics.Paint
+import android.graphics.Typeface
+import android.graphics.pdf.PdfDocument
+import android.os.Build
 import android.os.Bundle
+import android.os.Environment
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -11,6 +20,8 @@ import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.annotation.RequiresApi
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -30,6 +41,8 @@ import com.leventsurer.manager.viewModels.SharedPreferencesViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import java.io.File
+import java.io.FileOutputStream
 
 @AndroidEntryPoint
 class HomePageFragment : Fragment() {
@@ -42,6 +55,7 @@ class HomePageFragment : Fragment() {
     private val adapterList = ArrayList<HomeRecyclerViewItem>()
     private var residentsList = ArrayList<UserModel>()
     private lateinit var homePageAdapter: HomeRecyclerViewAdapter
+    var PERMISSION_CODE = 101
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -90,8 +104,110 @@ class HomePageFragment : Fragment() {
                 Toast.makeText(requireContext(),report,Toast.LENGTH_LONG).show()
             }
         }
+
+        homePageAdapter.createPdfFile {
+
+            createPdfFile(it)
+        }
     }
 
+    private fun createPdfFile(pollModel :HomeRecyclerViewItem.Polls) {
+
+
+        if (checkPermissions()) {
+            generatePDF(pollModel)
+        } else {
+            requestPermission()
+        }
+
+    }
+    private fun generatePDF(pollModel :HomeRecyclerViewItem.Polls) {
+        val pageHeight = 1120
+        val pageWidth = 792
+        val pdfDocument: PdfDocument = PdfDocument()
+        val title: Paint = Paint()
+        val subTitle:Paint = Paint()
+        val myPageInfo: PdfDocument.PageInfo? =
+            PdfDocument.PageInfo.Builder(pageWidth, pageHeight, 1).create()
+        val myPage: PdfDocument.Page = pdfDocument.startPage(myPageInfo)
+        val canvas: Canvas = myPage.canvas
+        //Anket Başlığı
+        title.typeface = Typeface.create(Typeface.DEFAULT, Typeface.NORMAL)
+        title.textSize = 35F
+        title.color = ContextCompat.getColor(requireContext(), R.color.purple_200)
+        title.textAlign = Paint.Align.CENTER
+        //Anket alt başlığı
+        subTitle.typeface = Typeface.create(Typeface.DEFAULT, Typeface.NORMAL)
+        subTitle.textSize = 25F
+        subTitle.color = ContextCompat.getColor(requireContext(), R.color.purple_200)
+        subTitle.textAlign = Paint.Align.CENTER
+        canvas.drawText(pollModel.pollText, 396F, 80F, title)
+        canvas.drawText("Adlı Anket Sonuçları", 396F, 120F, subTitle)
+        title.typeface = Typeface.defaultFromStyle(Typeface.NORMAL)
+        title.color = ContextCompat.getColor(requireContext(), R.color.purple_200)
+        title.textSize = 15F
+
+
+        canvas.drawText("This is sample document which we have created.", 396F, 560F, title)
+        pdfDocument.finishPage(myPage)
+        val file: File = File(Environment.getExternalStorageDirectory(), "Anket.pdf")
+
+        try {
+            pdfDocument.writeTo(FileOutputStream(file))
+
+            Toast.makeText(requireContext(), "PDF file generated..", Toast.LENGTH_SHORT).show()
+        } catch (e: Exception) {
+            e.printStackTrace()
+
+            Toast.makeText(requireContext(), "$e", Toast.LENGTH_SHORT)
+                .show()
+        }
+        pdfDocument.close()
+    }
+    private fun checkPermissions(): Boolean {
+
+        val writeStoragePermission = ContextCompat.checkSelfPermission(
+            requireContext(),
+            WRITE_EXTERNAL_STORAGE
+        )
+
+        val readStoragePermission = ContextCompat.checkSelfPermission(
+            requireContext(),
+            READ_EXTERNAL_STORAGE
+        )
+
+        return writeStoragePermission == PackageManager.PERMISSION_GRANTED
+                && readStoragePermission == PackageManager.PERMISSION_GRANTED
+    }
+    private fun requestPermission() {
+
+        ActivityCompat.requestPermissions(
+            requireActivity(),
+            arrayOf(READ_EXTERNAL_STORAGE, WRITE_EXTERNAL_STORAGE), PERMISSION_CODE
+        )
+    }
+    @Deprecated("Deprecated in Java")
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+
+        if (requestCode == PERMISSION_CODE) {
+
+            if (grantResults.isNotEmpty()) {
+
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1]
+                    == PackageManager.PERMISSION_GRANTED) {
+                    Toast.makeText(requireContext(), "Permission Granted..", Toast.LENGTH_SHORT).show()
+                } else {
+                    Toast.makeText(requireContext(), "Permission Denied..", Toast.LENGTH_SHORT).show()
+
+                }
+            }
+        }
+    }
     //Seçilen karta göre bilgileri veritababından çağırır
     private fun getHomePageInfo(chosenCardNumber: Int) {
         when (chosenCardNumber) {

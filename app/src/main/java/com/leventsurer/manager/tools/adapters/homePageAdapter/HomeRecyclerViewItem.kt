@@ -17,7 +17,8 @@ sealed class HomeRecyclerViewItem{
     class Polls(
         val pollText:String,
         val agreeCount:Int,
-        val disagreeCount:Int
+        val disagreeCount:Int,
+        val people: Map<String, ArrayList<String>> = mapOf("agreePeople" to arrayListOf(),"disagreePeople" to arrayListOf()),
     ):HomeRecyclerViewItem()
 
 }

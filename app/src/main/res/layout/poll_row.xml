@@ -7,7 +7,7 @@
 
     </data>
     <com.google.android.material.card.MaterialCardView
-
+        android:id="@+id/mcwPollCard"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="10dp"
@@ -106,13 +106,35 @@
                     android:fontFamily="@font/titillium_web"/>
             </RadioGroup>
 
-            <Button
-                android:id="@+id/btnSendAnswer"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Gönder"
-                android:textSize="12sp"
-                android:layout_gravity="center"/>
+           <androidx.constraintlayout.widget.ConstraintLayout
+               android:gravity="center"
+               android:layout_gravity="center"
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:orientation="horizontal">
+
+               <Button
+                   android:id="@+id/btnSendAnswer"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:text="Gönder"
+
+                   android:textSize="12sp"
+                   app:layout_constraintBottom_toBottomOf="parent"
+                   app:layout_constraintEnd_toEndOf="parent"
+                   app:layout_constraintStart_toStartOf="parent"
+                   app:layout_constraintTop_toTopOf="parent" />
+
+               <ImageView
+                   android:id="@+id/btnCreatePdfFile"
+                   android:layout_width="wrap_content"
+                   android:layout_height="match_parent"
+                   android:layout_marginEnd="10dp"
+                   android:src="@drawable/ic_baseline_picture_as_pdf_24"
+                   app:layout_constraintBottom_toBottomOf="parent"
+                   app:layout_constraintEnd_toEndOf="parent"
+                   app:layout_constraintTop_toTopOf="parent" />
+           </androidx.constraintlayout.widget.ConstraintLayout>
         </LinearLayout>
 
     </com.google.android.material.card.MaterialCardView>

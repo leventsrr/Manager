@@ -38,7 +38,9 @@ sealed class HomeRecyclerViewHolder(binding:ViewBinding):RecyclerView.ViewHolder
                 twDisagreeCount.text = poll.disagreeCount.toString()
 
             }
+
         }
+
 
     }
 
