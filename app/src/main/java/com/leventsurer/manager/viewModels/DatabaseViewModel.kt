@@ -191,7 +191,7 @@ class DatabaseViewModel @Inject constructor(
     fun addNewConciergeDuty(duty: String,time: FieldValue) = viewModelScope.launch {
         databaseRepository.addNewConciergeDuty(duty, time)
     }
-    fun deleteUserData()=viewModelScope.launch {
+    fun deleteUserData(){
         databaseRepository.deleteUserData()
     }
 

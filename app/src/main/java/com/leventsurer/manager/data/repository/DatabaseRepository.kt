@@ -66,5 +66,5 @@ interface DatabaseRepository {
 
     //Delete
     suspend fun deleteMonthlyPaymentInFinancialEvents(financialEvent:String)
-    suspend fun deleteUserData()
+    fun deleteUserData()
 }

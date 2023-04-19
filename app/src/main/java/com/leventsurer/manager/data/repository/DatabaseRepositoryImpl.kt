@@ -650,13 +650,14 @@ class DatabaseRepositoryImpl @Inject constructor(
 
     }
 
-    override suspend fun deleteUserData() {
-        Log.e("kontrol","deleteUser repository")
+    override fun deleteUserData() {
+        Log.e("kontrol", "deleteUser repository")
         val apartmentDocumentId = sharedRepository.readApartmentDocumentId(APARTMENT_DOCUMENT_ID)
         val userDocumentId = sharedRepository.readUserDocumentId(USER_DOCUMENT_ID)
-        Log.e("kontrol","userId:$userDocumentId|apartmanId:$apartmentDocumentId")
+        Log.e("kontrol", "userId:$userDocumentId|apartmanId:$apartmentDocumentId")
         database.collection(APARTMENT_COLLECTIONS).document(apartmentDocumentId!!).collection(
-            USER_COLLECTION).document(userDocumentId!!).delete().await()
+            USER_COLLECTION
+        ).document(userDocumentId!!).delete()
     }
     //Yöneticinin apartman aidatının tutarını değiştirmesini sağlar
     override suspend fun setApartmentMonthlyPayment(amount: Double) {
