@@ -16,6 +16,7 @@ import com.leventsurer.manager.viewModels.AuthViewModel
 import com.leventsurer.manager.viewModels.DatabaseViewModel
 import com.leventsurer.manager.viewModels.SharedPreferencesViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.runBlocking
 
 @AndroidEntryPoint
 class SettingsFragmet : Fragment() {
@@ -51,6 +52,21 @@ class SettingsFragmet : Fragment() {
                 val action = SettingsFragmetDirections.actionSettingsFragmetToLoginFragment()
                 findNavController().navigate(action)
             }
+
+            btnSetPassword.setOnClickListener {
+                val newPassword = etNewUserPassword.text.toString()
+                val newPasswordAgain = etNewUserPasswordAgain.text.toString()
+                if(newPassword == newPasswordAgain){
+                    authViewModel.updateUserPassword(newPassword)
+                    Toast.makeText(requireContext(),"Şifreniz Güncellendi",Toast.LENGTH_LONG).show()
+                    etNewUserPassword.text?.clear()
+                    etNewUserPasswordAgain.text?.clear()
+                }else{
+                    etNewUserPasswordAgain.error = "Girilen Şifreler Aynı Değil"
+                }
+
+            }
+            
         }
     }
 
@@ -59,7 +75,6 @@ class SettingsFragmet : Fragment() {
         authViewModel.deleteUser()
         sharedPreferencesViewModel.clearSharedPref()
         authViewModel.logout()
-
     }
 
 

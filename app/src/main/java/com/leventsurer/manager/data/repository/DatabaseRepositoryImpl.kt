@@ -6,7 +6,6 @@ import androidx.lifecycle.MutableLiveData
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.UserProfileChangeRequest
 import com.google.firebase.firestore.*
-import com.google.firebase.firestore.ktx.toObject
 import com.leventsurer.manager.data.model.*
 import com.leventsurer.manager.tools.constants.FirebaseConstants.APARTMENT_COLLECTIONS
 import com.leventsurer.manager.tools.constants.FirebaseConstants.CHAT_COLLECTION
@@ -186,7 +185,7 @@ class DatabaseRepositoryImpl @Inject constructor(
         liveData.value = Resource.Loading
         database.collection(APARTMENT_COLLECTIONS).document(apartmentDocumentId!!).collection(
             POLLS
-        ).addSnapshotListener { value, error ->
+        ).orderBy("time",Query.Direction.DESCENDING).addSnapshotListener { value, error ->
             if (error != null) {
                 liveData.value = Resource.Failure(error)
             } else if (value != null) {
@@ -240,6 +239,7 @@ class DatabaseRepositoryImpl @Inject constructor(
             ).whereEqualTo("pollText", pollText).get().await()
 
         val pollModel = pollDocument.documents[0].toObject(PollModel::class.java)
+
         if (isAgree) {
             return if (userName.toString() in pollModel!!.people["agreePeople"]!!) {
                 "Daha önce bu yönde kararınızı belirttiniz"
@@ -251,9 +251,12 @@ class DatabaseRepositoryImpl @Inject constructor(
                     pollModel.disagreeCount -= 1
                     pollModel.people["disagreePeople"]?.remove(userName)
                 }
-                database.collection(APARTMENT_COLLECTIONS).document(apartmentDocumentId).collection(
+                val pollDocument = database.collection(APARTMENT_COLLECTIONS).document(apartmentDocumentId).collection(
                     POLLS
-                ).document(pollDocument.documents[0].id).set(pollModel)
+                ).document(pollDocument.documents[0].id)
+                pollDocument.update("agreeCount",pollModel.agreeCount)
+                pollDocument.update("disagreeCount",pollModel.disagreeCount)
+                pollDocument.update("people",pollModel.people)
                 "Kararınızı Belirttiniz"
 
             }
@@ -268,9 +271,13 @@ class DatabaseRepositoryImpl @Inject constructor(
                     pollModel.agreeCount -= 1
                     pollModel.people["agreePeople"]?.remove(userName)
                 }
-                database.collection(APARTMENT_COLLECTIONS).document(apartmentDocumentId).collection(
+
+                val pollDocument = database.collection(APARTMENT_COLLECTIONS).document(apartmentDocumentId).collection(
                     POLLS
-                ).document(pollDocument.documents[0].id).set(pollModel)
+                ).document(pollDocument.documents[0].id)
+                pollDocument.update("agreeCount",pollModel.agreeCount)
+                pollDocument.update("disagreeCount",pollModel.disagreeCount)
+                pollDocument.update("people",pollModel.people)
                 "Kararınızı Belirttiniz"
             }
         }

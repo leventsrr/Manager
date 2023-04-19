@@ -57,5 +57,9 @@ class AuthViewModel @Inject constructor(
         repository.deleteUser()
     }
 
+    fun updateUserPassword(newPassword:String){
+        repository.updateUserPassword(newPassword)
+    }
+
 
 }

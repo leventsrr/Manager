@@ -54,4 +54,8 @@ class AuthRepositoryImpl @Inject constructor(
         //firebaseAuth.currentUser!!.delete().await()
         currentUser?.delete()?.await()
     }
+
+    override fun updateUserPassword(newPassword: String) {
+        currentUser!!.updatePassword(newPassword)
+    }
 }
