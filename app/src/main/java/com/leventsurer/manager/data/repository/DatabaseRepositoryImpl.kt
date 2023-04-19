@@ -659,6 +659,65 @@ class DatabaseRepositoryImpl @Inject constructor(
             USER_COLLECTION
         ).document(userDocumentId!!).delete()
     }
+    //Seçilen apartman verilerinin silinmesini sağlar
+    override suspend fun resetData(
+        isRequestReset: Boolean,
+        isManagerAnnouncementReset: Boolean,
+        isConciergeAnnouncementReset: Boolean,
+        isPollReset: Boolean,
+        isFinancialEventReset: Boolean,
+        isConciergeDutyReset: Boolean
+    ) {
+        val apartmentDocumentId = sharedRepository.readApartmentDocumentId(APARTMENT_DOCUMENT_ID)
+        if(isRequestReset){
+            val requests = database.collection(APARTMENT_COLLECTIONS).document(apartmentDocumentId!!).collection(
+                RESIDENT_REQUESTS).get().await()
+            for(request in requests){
+                database.collection(APARTMENT_COLLECTIONS).document(apartmentDocumentId).collection(
+                    RESIDENT_REQUESTS).document(request.id).delete()
+            }
+        }
+        if(isManagerAnnouncementReset){
+            val announcements = database.collection(APARTMENT_COLLECTIONS).document(apartmentDocumentId!!).collection(
+                MANAGER_ANNOUNCEMENT).get().await()
+            for(announcement in announcements){
+                database.collection(APARTMENT_COLLECTIONS).document(apartmentDocumentId).collection(
+                    MANAGER_ANNOUNCEMENT).document(announcement.id).delete()
+            }
+        }
+        if(isConciergeAnnouncementReset){
+            val announcements = database.collection(APARTMENT_COLLECTIONS).document(apartmentDocumentId!!).collection(
+                CONCIERGE_ANNOUNCEMENT).get().await()
+            for(announcement in announcements){
+                database.collection(APARTMENT_COLLECTIONS).document(apartmentDocumentId).collection(
+                    CONCIERGE_ANNOUNCEMENT).document(announcement.id).delete()
+            }
+        }
+        if(isPollReset){
+            val polls = database.collection(APARTMENT_COLLECTIONS).document(apartmentDocumentId!!).collection(
+                POLLS).get().await()
+            for(poll in polls){
+                database.collection(APARTMENT_COLLECTIONS).document(apartmentDocumentId).collection(
+                    POLLS).document(poll.id).delete()
+            }
+        }
+        if(isFinancialEventReset){
+            val financialEvents = database.collection(APARTMENT_COLLECTIONS).document(apartmentDocumentId!!).collection(
+                FINANCIAL_EVENTS).get().await()
+            for(financialEvent in financialEvents){
+                database.collection(APARTMENT_COLLECTIONS).document(apartmentDocumentId).collection(
+                    FINANCIAL_EVENTS).document(financialEvent.id).delete()
+            }
+        }
+        if(isConciergeDutyReset){
+            val conciergeDuties = database.collection(APARTMENT_COLLECTIONS).document(apartmentDocumentId!!).collection(
+                DUTIES).get().await()
+            for(conciergeDuty in conciergeDuties){
+                database.collection(APARTMENT_COLLECTIONS).document(apartmentDocumentId).collection(
+                    DUTIES).document(conciergeDuty.id).delete()
+            }
+        }
+    }
     //Yöneticinin apartman aidatının tutarını değiştirmesini sağlar
     override suspend fun setApartmentMonthlyPayment(amount: Double) {
         val apartmentDocumentId = sharedRepository.readApartmentDocumentId(APARTMENT_DOCUMENT_ID)

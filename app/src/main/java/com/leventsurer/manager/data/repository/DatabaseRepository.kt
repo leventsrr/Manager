@@ -67,4 +67,5 @@ interface DatabaseRepository {
     //Delete
     suspend fun deleteMonthlyPaymentInFinancialEvents(financialEvent:String)
     fun deleteUserData()
+    suspend fun resetData(isRequestReset:Boolean,isManagerAnnouncementReset:Boolean,isConciergeAnnouncementReset:Boolean,isPollReset:Boolean,isFinancialEventReset:Boolean,isConciergeDutyReset:Boolean)
 }

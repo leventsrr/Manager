@@ -48,9 +48,9 @@ class UserProfileFragment : Fragment() {
     private val sharedPreferencesViewModel by viewModels<SharedPreferencesViewModel>()
     private val authViewModel by viewModels<AuthViewModel>()
     private var imageUri: Uri? = null
-    private var apartmentCode:String? = null
-    private var isExpense:Boolean? = null
-    private  var userModel=UserModel()
+    private var apartmentCode: String? = null
+    private var isExpense: Boolean? = null
+    private var userModel = UserModel()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -73,7 +73,6 @@ class UserProfileFragment : Fragment() {
     }
 
 
-
     //Giriş yapan kullanıcının verilerini veritabanından çeker
     private fun getUserInfo() {
         apartmentCode = sharedPreferencesViewModel.readApartmentName()
@@ -81,52 +80,51 @@ class UserProfileFragment : Fragment() {
     }
 
     private fun observeUserInfo() {
-            databaseViewModel.userInfoFlow.observe(viewLifecycleOwner) {
-                when (it) {
-                    is Resource.Failure -> {
-                        binding.pbProgressBar.visibility = GONE
-                        Toast.makeText(context, "it.exception.message", Toast.LENGTH_LONG).show()
-                    }
-                    is Resource.Loading -> {
-                        binding.pbProgressBar.visibility = VISIBLE
-                    }
-                    is Resource.Success -> {
-                        binding.pbProgressBar.visibility = GONE
-                        userModel.fullName = it.result.fullName
-                        userModel.phoneNumber = it.result.phoneNumber
-                        userModel.carPlate = it.result.carPlate
-                        userModel.doorNumber = it.result.doorNumber
-                        bindUserInfoToUi(it.result)
-                        when (it.result.role) {
-                            "yonetici" -> {
-                                binding.apply {
-                                    mcwManagerSetMonthlyPaymentCard.visibility = VISIBLE
-                                    mcwManagerNewAnnouncementCard.visibility =VISIBLE
-                                    mcwManagerNewExpenseOrIncomeCard.visibility = VISIBLE
-                                    mcwManagerPollCard.visibility = VISIBLE
-
-                                }
-                            }
-                            "sakin" -> {
-                                binding.apply {
-                                    mcwResidentMaterialCard1.visibility = VISIBLE
-                                    mcwResidentMaterialCard2.visibility = VISIBLE
-                                }
-                            }
-                            "kapici" -> {
-                                binding.apply {
-                                    mcwConciergeNewAnnouncementCard.visibility = VISIBLE
-                                }
+        databaseViewModel.userInfoFlow.observe(viewLifecycleOwner) {
+            when (it) {
+                is Resource.Failure -> {
+                    binding.pbProgressBar.visibility = GONE
+                    Toast.makeText(context, "it.exception.message", Toast.LENGTH_LONG).show()
+                }
+                is Resource.Loading -> {
+                    binding.pbProgressBar.visibility = VISIBLE
+                }
+                is Resource.Success -> {
+                    binding.pbProgressBar.visibility = GONE
+                    userModel.fullName = it.result.fullName
+                    userModel.phoneNumber = it.result.phoneNumber
+                    userModel.carPlate = it.result.carPlate
+                    userModel.doorNumber = it.result.doorNumber
+                    bindUserInfoToUi(it.result)
+                    when (it.result.role) {
+                        "yonetici" -> {
+                            binding.apply {
+                                mcwAssignConciergeDutyCard.visibility = VISIBLE
+                                managerCards.visibility = VISIBLE
                             }
                         }
+                        "sakin" -> {
+                            binding.apply {
+                                mcwAssignConciergeDutyCard.visibility = VISIBLE
+                                residentCards.visibility = VISIBLE
+                            }
+                        }
+                        "kapici" -> {
+                            binding.apply {
+                                conciergeCards.visibility = VISIBLE
 
+                            }
+                        }
                     }
-                    else -> { }
+
                 }
+                else -> {}
             }
+        }
 
 
     }
+
     //Gelene kullanıcı bilgilerini arayüzde gerekli yerlere yerleştirir
     private fun bindUserInfoToUi(model: UserModel) {
         binding.twUserName.text = model.fullName
@@ -135,7 +133,6 @@ class UserProfileFragment : Fragment() {
         binding.twUserDoorNumber.text = model.doorNumber
         Glide.with(requireContext()).load(model.imageLink).into(binding.iwUserProfilePhoto)
         binding.cbUserPaymentStatus.isChecked = model.duesPaymentStatus
-        binding.twApartmentCode.text = apartmentCode
     }
 
     private fun onClickHandler() {
@@ -156,43 +153,52 @@ class UserProfileFragment : Fragment() {
             }
 
             btnSendRequest.setOnClickListener {
-                if(etUserRequest.text.isNullOrEmpty()){
-                    Toast.makeText(requireContext(),"Boş İstek Paylaşılamaz",Toast.LENGTH_LONG).show()
-                }else{
+                if (etUserRequest.text.isNullOrEmpty()) {
+                    Toast.makeText(requireContext(), "Boş İstek Paylaşılamaz", Toast.LENGTH_LONG)
+                        .show()
+                } else {
                     val userRequest = etUserRequest.text.toString()
                     val time = FieldValue.serverTimestamp()
-                    databaseViewModel.addNewRequest(userRequest,time)
+                    databaseViewModel.addNewRequest(userRequest, time)
                     etUserRequest.text?.clear()
-                    Toast.makeText(requireContext(),"Yeni İstek Paylaşıldı",Toast.LENGTH_LONG).show()
+                    Toast.makeText(requireContext(), "Yeni İstek Paylaşıldı", Toast.LENGTH_LONG)
+                        .show()
                 }
             }
 
             btnSendExpense.setOnClickListener {
-                if(radioButton1.isChecked || radioButton2.isChecked && etAmountName.text.toString().isNotEmpty() && etAmount.text.toString().isNotEmpty()){
+                if (radioButton1.isChecked || radioButton2.isChecked && etAmountName.text.toString()
+                        .isNotEmpty() && etAmount.text.toString().isNotEmpty()
+                ) {
 
-                        if(radioButton1.isChecked){
-                            isExpense = false
-                        }else if(radioButton2.isChecked){
-                            isExpense = true
-                        }
-                        val amount = etAmount.text.toString().toDouble()
-                        val time = FieldValue.serverTimestamp()
-                        val eventName = etAmountName.text.toString()
-                        databaseViewModel.addBudgetMovement(amount,isExpense!!,time,eventName)
-                        radioButton1.isChecked = false
-                        radioButton2.isChecked = false
-                        etAmountName.text?.clear()
-                        etAmount.text?.clear()
-                        Toast.makeText(requireContext(),"Yeni Gelir/Gider Paylaşıldı",Toast.LENGTH_LONG).show()
+                    if (radioButton1.isChecked) {
+                        isExpense = false
+                    } else if (radioButton2.isChecked) {
+                        isExpense = true
+                    }
+                    val amount = etAmount.text.toString().toDouble()
+                    val time = FieldValue.serverTimestamp()
+                    val eventName = etAmountName.text.toString()
+                    databaseViewModel.addBudgetMovement(amount, isExpense!!, time, eventName)
+                    radioButton1.isChecked = false
+                    radioButton2.isChecked = false
+                    etAmountName.text?.clear()
+                    etAmount.text?.clear()
+                    Toast.makeText(
+                        requireContext(),
+                        "Yeni Gelir/Gider Paylaşıldı",
+                        Toast.LENGTH_LONG
+                    ).show()
 
-                }else if(!(radioButton1.isChecked || radioButton2.isChecked)){
-                    Toast.makeText(requireContext(),"Lütfen Bir Tip Seçiniz",Toast.LENGTH_LONG).show()
+                } else if (!(radioButton1.isChecked || radioButton2.isChecked)) {
+                    Toast.makeText(requireContext(), "Lütfen Bir Tip Seçiniz", Toast.LENGTH_LONG)
+                        .show()
 
 
-                }else if(etAmountName.text.toString().isEmpty()){
+                } else if (etAmountName.text.toString().isEmpty()) {
                     etAmountName.error = "Lütfen İşlemi Açıklaması Giriniz"
 
-                }else if( etAmount.text.toString().isEmpty()){
+                } else if (etAmount.text.toString().isEmpty()) {
                     etAmount.error = "Lütfen İşlemi Tutarı Giriniz"
 
                 }
@@ -200,44 +206,47 @@ class UserProfileFragment : Fragment() {
             }
 
             btnNewMonthlyPayment.setOnClickListener {
-                if(etMonthlyPaymentAmount.text.isNullOrEmpty()){
-                    Toast.makeText(requireContext(),"Lütfen Bir Miktar Giriniz",Toast.LENGTH_LONG).show()
-                }else{
-                    val amount:Double = etMonthlyPaymentAmount.text.toString().toDouble()
+                if (etMonthlyPaymentAmount.text.isNullOrEmpty()) {
+                    Toast.makeText(requireContext(), "Lütfen Bir Miktar Giriniz", Toast.LENGTH_LONG)
+                        .show()
+                } else {
+                    val amount: Double = etMonthlyPaymentAmount.text.toString().toDouble()
                     databaseViewModel.setApartmentMonthlyPayment(amount)
                     etMonthlyPaymentAmount.text?.clear()
-                    Toast.makeText(requireContext(),"Aidat Güncellendi",Toast.LENGTH_LONG).show()
+                    Toast.makeText(requireContext(), "Aidat Güncellendi", Toast.LENGTH_LONG).show()
                 }
 
             }
 
             btnSendAnnouncement.setOnClickListener {
-                if(etManagerAnnouncement.text.isNullOrEmpty()){
-                    Toast.makeText(requireContext(),"Boş Duyuru Paylaşılamaz",Toast.LENGTH_LONG).show()
-                }else{
+                if (etManagerAnnouncement.text.isNullOrEmpty()) {
+                    Toast.makeText(requireContext(), "Boş Duyuru Paylaşılamaz", Toast.LENGTH_LONG)
+                        .show()
+                } else {
                     val announcement = etManagerAnnouncement.text.toString()
-                    val time =  FieldValue.serverTimestamp()
-                    databaseViewModel.addNewManagerAnnouncement(announcement,time)
+                    val time = FieldValue.serverTimestamp()
+                    databaseViewModel.addNewManagerAnnouncement(announcement, time)
                     etManagerAnnouncement.text?.clear()
-                    Toast.makeText(requireContext(),"Duyuru Paylaşıldı",Toast.LENGTH_LONG).show()
+                    Toast.makeText(requireContext(), "Duyuru Paylaşıldı", Toast.LENGTH_LONG).show()
                 }
 
             }
 
             btnEditInfo.setOnClickListener {
 
-                ProfileCustomDialog(userModel).show(parentFragmentManager,"Custom Fragment")
+                ProfileCustomDialog(userModel).show(parentFragmentManager, "Custom Fragment")
 
             }
 
 
             btnPollShare.setOnClickListener {
 
-                if(etPoll.text.isNullOrEmpty()){
-                    Toast.makeText(requireContext(),"Boş Anket Paylaşılamaz",Toast.LENGTH_LONG).show()
-                }else{
-                    val time:FieldValue = FieldValue.serverTimestamp()
-                    val pollText:String = etPoll.text.toString()
+                if (etPoll.text.isNullOrEmpty()) {
+                    Toast.makeText(requireContext(), "Boş Anket Paylaşılamaz", Toast.LENGTH_LONG)
+                        .show()
+                } else {
+                    val time: FieldValue = FieldValue.serverTimestamp()
+                    val pollText: String = etPoll.text.toString()
                     databaseViewModel.addNewPoll(pollText, time)
                     etPoll.text?.clear()
                 }
@@ -246,28 +255,63 @@ class UserProfileFragment : Fragment() {
             }
 
             btnSendConciergeAnnouncement.setOnClickListener {
-                if(etConciergeAnnouncement.text.isNullOrEmpty()){
-                    Toast.makeText(requireContext(),"Boş Duyuru Paylaşılamaz",Toast.LENGTH_LONG).show()
-                }else{
-                    val time:FieldValue = FieldValue.serverTimestamp()
-                    val announcement:String = etConciergeAnnouncement.text.toString()
+                if (etConciergeAnnouncement.text.isNullOrEmpty()) {
+                    Toast.makeText(requireContext(), "Boş Duyuru Paylaşılamaz", Toast.LENGTH_LONG)
+                        .show()
+                } else {
+                    val time: FieldValue = FieldValue.serverTimestamp()
+                    val announcement: String = etConciergeAnnouncement.text.toString()
                     databaseViewModel.addNewConciergeAnnouncement(announcement, time)
                     etConciergeAnnouncement.text?.clear()
-                    Toast.makeText(requireContext(),"Duyuru Paylaşıldı",Toast.LENGTH_LONG).show()
+                    Toast.makeText(requireContext(), "Duyuru Paylaşıldı", Toast.LENGTH_LONG).show()
                 }
 
             }
 
             btnNewConciergeDuty.setOnClickListener {
-                if(etNewConciergeDuty.text.isNullOrEmpty()){
-                    Toast.makeText(requireContext(),"Boş Görev Ataması Yapılamaz",Toast.LENGTH_LONG).show()
-                }else{
+                if (etNewConciergeDuty.text.isNullOrEmpty()) {
+                    Toast.makeText(
+                        requireContext(),
+                        "Boş Görev Ataması Yapılamaz",
+                        Toast.LENGTH_LONG
+                    ).show()
+                } else {
                     val time = FieldValue.serverTimestamp()
                     val duty = etNewConciergeDuty.text.toString()
-                    databaseViewModel.addNewConciergeDuty(duty,time)
+                    databaseViewModel.addNewConciergeDuty(duty, time)
                     etNewConciergeDuty.text?.clear()
-                    Toast.makeText(requireContext(),"Yeni Kapıcı Görevi Eklendi",Toast.LENGTH_LONG).show()
+                    Toast.makeText(
+                        requireContext(),
+                        "Yeni Kapıcı Görevi Eklendi",
+                        Toast.LENGTH_LONG
+                    ).show()
                 }
+            }
+
+            btnReset.setOnClickListener {
+                val isRequestReset: Boolean = cbResidentRequest.isChecked
+                val isManagerAnnouncementReset: Boolean = cbMnagerAnnouncement.isChecked
+                val isConciergeAnnouncementReset: Boolean = cbConciergeAnnouncement.isChecked
+                val isPollReset: Boolean = cbPoll.isChecked
+                val isFinancialEventReset: Boolean = cbFinancialEvent.isChecked
+                val isConciergeDutyReset: Boolean = cbConciergeDuty.isChecked
+                Log.e("kontrol","request:${isRequestReset},managerAn:${isManagerAnnouncementReset}")
+                databaseViewModel.resetData(
+                    isRequestReset,
+                    isManagerAnnouncementReset,
+                    isConciergeAnnouncementReset,
+                    isPollReset,
+                    isFinancialEventReset,
+                    isConciergeDutyReset
+                )
+                Toast.makeText(requireContext(), "Seçili Veriler Silindi", Toast.LENGTH_LONG).show()
+
+                cbResidentRequest.isChecked = false
+                cbMnagerAnnouncement.isChecked = false
+                cbConciergeAnnouncement.isChecked = false
+                cbPoll.isChecked = false
+                cbFinancialEvent.isChecked = false
+                cbConciergeDuty.isChecked = false
             }
         }
 
@@ -293,7 +337,8 @@ class UserProfileFragment : Fragment() {
             startIconClick = {
                 authViewModel.logout()
                 sharedPreferencesViewModel.clearSharedPref()
-                val action = UserProfileFragmentDirections.actionUserProfileFragmentToLoginFragment()
+                val action =
+                    UserProfileFragmentDirections.actionUserProfileFragmentToLoginFragment()
                 findNavController().navigate(action)
             },
             endIconClick = {

@@ -194,5 +194,12 @@ class DatabaseViewModel @Inject constructor(
     fun deleteUserData(){
         databaseRepository.deleteUserData()
     }
-
+    fun resetData(isRequestReset: Boolean,
+                  isManagerAnnouncementReset: Boolean,
+                  isConciergeAnnouncementReset: Boolean,
+                  isPollReset: Boolean,
+                  isFinancialEventReset: Boolean,
+    isConciergeDutyReset:Boolean)=viewModelScope.launch{
+        databaseRepository.resetData(isRequestReset, isManagerAnnouncementReset, isConciergeAnnouncementReset, isPollReset, isFinancialEventReset,isConciergeDutyReset)
+    }
 }
