@@ -114,6 +114,7 @@ class HomePageFragment : Fragment() {
     //Pdf oluışturmak için gerekli izni kontrol eder
     private fun createPdfFile(pollModel: HomeRecyclerViewItem.Polls) {
         if (checkPermissions()) {
+
             generatePDF(pollModel)
         } else {
             requestPermission()
@@ -214,8 +215,12 @@ class HomePageFragment : Fragment() {
 
 
         pdfDocument.finishPage(myPage)
+        val fileName = pollModel.pollText.replace(" ","");
         val file =
-            File(Environment.getExternalStorageDirectory(), "${pollModel.pollText}Anketi.pdf")
+            //File( Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS), "${fileName}Anketi.pdf")
+            File( Environment.getExternalStorageDirectory(), "${fileName}Anketi.pdf")
+
+
         try {
             pdfDocument.writeTo(FileOutputStream(file))
             Toast.makeText(requireContext(), "PDF Dosyası Oluşturuldu", Toast.LENGTH_SHORT).show()
