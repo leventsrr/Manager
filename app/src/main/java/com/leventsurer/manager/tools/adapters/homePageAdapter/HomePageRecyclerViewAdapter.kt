@@ -82,11 +82,9 @@ class HomeRecyclerViewAdapter : RecyclerView.Adapter<HomeRecyclerViewHolder>() {
 
                         }
                     }
-
-
                 }
                 pdfButton.setOnClickListener {
-                    Log.e("kontrol","pdf butonuna tıklandı")
+
                     createPdfFile.let {
                         if (it != null) {
                             it(items[position] as HomeRecyclerViewItem.Polls)

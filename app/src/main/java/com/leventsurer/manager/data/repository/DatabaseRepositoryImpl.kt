@@ -189,13 +189,13 @@ class DatabaseRepositoryImpl @Inject constructor(
             if (error != null) {
                 liveData.value = Resource.Failure(error)
             } else if (value != null) {
-                val messages = mutableListOf<PollModel>()
+                val polls = mutableListOf<PollModel>()
                 for (doc in value) {
                     val data = doc.toObject(PollModel::class.java)
-
-                    messages.add(data)
+                    Log.e("kontrol","repository oluşturulan anket:${data}")
+                    polls.add(data)
                 }
-                liveData.value = Resource.Success(messages)
+                liveData.value = Resource.Success(polls)
             }
         }
         return liveData

@@ -43,6 +43,9 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import java.io.File
 import java.io.FileOutputStream
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
 @AndroidEntryPoint
 class HomePageFragment : Fragment() {
@@ -81,7 +84,6 @@ class HomePageFragment : Fragment() {
         onClickListener()
     }
 
-
     private fun onClickListener() {
         binding.apply {
             btnHome.setOnClickListener {
@@ -98,87 +100,148 @@ class HomePageFragment : Fragment() {
         binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
         homePageAdapter = HomeRecyclerViewAdapter()
         binding.recyclerView.adapter = homePageAdapter
-        homePageAdapter.sendPollAnswer{ text,isAgree->
+        homePageAdapter.sendPollAnswer { text, isAgree ->
             runBlocking {
-                val report = databaseViewModel.changePollStatistics(isAgree,text)
-                Toast.makeText(requireContext(),report,Toast.LENGTH_LONG).show()
+                val report = databaseViewModel.changePollStatistics(isAgree, text)
+                Toast.makeText(requireContext(), report, Toast.LENGTH_LONG).show()
             }
         }
-
         homePageAdapter.createPdfFile {
-
             createPdfFile(it)
         }
     }
 
-    private fun createPdfFile(pollModel :HomeRecyclerViewItem.Polls) {
-
-
+    //Pdf oluışturmak için gerekli izni kontrol eder
+    private fun createPdfFile(pollModel: HomeRecyclerViewItem.Polls) {
         if (checkPermissions()) {
             generatePDF(pollModel)
         } else {
             requestPermission()
         }
-
     }
-    private fun generatePDF(pollModel :HomeRecyclerViewItem.Polls) {
+
+    //Gerekli izin varsa istenilen verilerle pdf i oluşturur
+    private fun generatePDF(pollModel: HomeRecyclerViewItem.Polls) {
         val pageHeight = 1120
         val pageWidth = 792
-        val pdfDocument: PdfDocument = PdfDocument()
-        val title: Paint = Paint()
-        val subTitle:Paint = Paint()
+        val pdfDocument = PdfDocument()
         val myPageInfo: PdfDocument.PageInfo? =
             PdfDocument.PageInfo.Builder(pageWidth, pageHeight, 1).create()
         val myPage: PdfDocument.Page = pdfDocument.startPage(myPageInfo)
         val canvas: Canvas = myPage.canvas
+
         //Anket Başlığı
-        title.typeface = Typeface.create(Typeface.DEFAULT, Typeface.NORMAL)
-        title.textSize = 35F
-        title.color = ContextCompat.getColor(requireContext(), R.color.purple_200)
-        title.textAlign = Paint.Align.CENTER
+        fun writePollTitle() {
+            val title = Paint()
+            title.typeface = Typeface.create(Typeface.DEFAULT, Typeface.NORMAL)
+            title.textSize = 35F
+            title.color = ContextCompat.getColor(requireContext(), R.color.black)
+            title.textAlign = Paint.Align.CENTER
+            canvas.drawText(pollModel.pollText.uppercase(), 396F, 80F, title)
+        }
+
         //Anket alt başlığı
-        subTitle.typeface = Typeface.create(Typeface.DEFAULT, Typeface.NORMAL)
-        subTitle.textSize = 25F
-        subTitle.color = ContextCompat.getColor(requireContext(), R.color.purple_200)
-        subTitle.textAlign = Paint.Align.CENTER
-        canvas.drawText(pollModel.pollText, 396F, 80F, title)
-        canvas.drawText("Adlı Anket Sonuçları", 396F, 120F, subTitle)
-        title.typeface = Typeface.defaultFromStyle(Typeface.NORMAL)
-        title.color = ContextCompat.getColor(requireContext(), R.color.purple_200)
-        title.textSize = 15F
+        fun writePollSubtitle() {
+            val subTitle = Paint()
+            subTitle.typeface = Typeface.create(Typeface.DEFAULT, Typeface.NORMAL)
+            subTitle.textSize = 25F
+            subTitle.color = ContextCompat.getColor(requireContext(), R.color.black)
+            subTitle.textAlign = Paint.Align.CENTER
+            canvas.drawText("Adlı Anket Sonuçları", 396F, 120F, subTitle)
+        }
+        @SuppressLint("SimpleDateFormat")
+        fun writeApartmentNameAndPrintDateToBottom(){
+            val apartmentName = Paint()
+            apartmentName.typeface = Typeface.create(Typeface.DEFAULT, Typeface.NORMAL)
+            apartmentName.textSize = 30F
+            apartmentName.color = ContextCompat.getColor(requireContext(), R.color.black)
+            apartmentName.textAlign = Paint.Align.CENTER
+            val apartmentNameText = sharedPrefViewModel.readApartmentName()
+
+            val date = SimpleDateFormat("dd/M/yyyy hh:mm:ss")
+            val currentDate = date.format(Date())
+            canvas.drawText("${apartmentNameText?.uppercase()}", 396F, 1090F, apartmentName)
+            apartmentName.textSize = 20F
+            canvas.drawText(currentDate, 396F, 1110F, apartmentName)
+        }
+        //normal yazı
+        fun writePollMain() {
+            val text = Paint()
+            text.typeface = Typeface.create(Typeface.DEFAULT, Typeface.NORMAL)
+            text.textSize = 15F
+            text.color = ContextCompat.getColor(requireContext(), R.color.black)
+            canvas.drawText("Anketi Onaylayanlar:${pollModel.agreeCount} kişi", 20F, 160F, text)
+            var locationY = 180F
+            val agreePeople = pollModel.people["agreePeople"]!!
+            val disagreePeople = pollModel.people["disagreePeople"]!!
+            Log.e("kontrol", "onaylayanlar:$agreePeople|onaylamayanlar:$disagreePeople")
+            for (i in 0 until pollModel.people["agreePeople"]!!.size) {
+                canvas.drawText(
+                    "${i + 1}-${pollModel.people["agreePeople"]!![i]}",
+                    25F,
+                    locationY,
+                    text
+                )
+                locationY += 20F
+            }
+            locationY += 10F
+            canvas.drawText(
+                "Anketi Onaylamayanlar:${pollModel.disagreeCount} kişi",
+                20F,
+                locationY,
+                text
+            )
+            for (i in 0 until pollModel.people["disagreePeople"]!!.size) {
+                locationY += 20F
+                canvas.drawText(
+                    "${i + 1}-${pollModel.people["disagreePeople"]!![i]}",
+                    25F,
+                    locationY,
+                    text
+                )
+
+            }
+        }
 
 
-        canvas.drawText("This is sample document which we have created.", 396F, 560F, title)
+        writePollTitle()
+        writePollSubtitle()
+        writePollMain()
+        writeApartmentNameAndPrintDateToBottom()
+
+
+
+
+
         pdfDocument.finishPage(myPage)
-        val file: File = File(Environment.getExternalStorageDirectory(), "Anket.pdf")
-
+        val file =
+            File(Environment.getExternalStorageDirectory(), "${pollModel.pollText}Anketi.pdf")
         try {
             pdfDocument.writeTo(FileOutputStream(file))
-
-            Toast.makeText(requireContext(), "PDF file generated..", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), "PDF Dosyası Oluşturuldu", Toast.LENGTH_SHORT).show()
         } catch (e: Exception) {
             e.printStackTrace()
-
             Toast.makeText(requireContext(), "$e", Toast.LENGTH_SHORT)
                 .show()
         }
         pdfDocument.close()
     }
-    private fun checkPermissions(): Boolean {
 
+    //PDF oluşturmak için izin kontrolü
+    private fun checkPermissions(): Boolean {
         val writeStoragePermission = ContextCompat.checkSelfPermission(
             requireContext(),
             WRITE_EXTERNAL_STORAGE
         )
-
         val readStoragePermission = ContextCompat.checkSelfPermission(
             requireContext(),
             READ_EXTERNAL_STORAGE
         )
-
         return writeStoragePermission == PackageManager.PERMISSION_GRANTED
                 && readStoragePermission == PackageManager.PERMISSION_GRANTED
     }
+
+    //PDF oluşturmak izin isteme
     private fun requestPermission() {
 
         ActivityCompat.requestPermissions(
@@ -186,6 +249,7 @@ class HomePageFragment : Fragment() {
             arrayOf(READ_EXTERNAL_STORAGE, WRITE_EXTERNAL_STORAGE), PERMISSION_CODE
         )
     }
+
     @Deprecated("Deprecated in Java")
     override fun onRequestPermissionsResult(
         requestCode: Int,
@@ -193,21 +257,20 @@ class HomePageFragment : Fragment() {
         grantResults: IntArray
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-
         if (requestCode == PERMISSION_CODE) {
-
             if (grantResults.isNotEmpty()) {
-
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1]
-                    == PackageManager.PERMISSION_GRANTED) {
-                    Toast.makeText(requireContext(), "Permission Granted..", Toast.LENGTH_SHORT).show()
+                    == PackageManager.PERMISSION_GRANTED
+                ) {
+                    Toast.makeText(requireContext(), "İizin Verildi", Toast.LENGTH_SHORT).show()
                 } else {
-                    Toast.makeText(requireContext(), "Permission Denied..", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), "İzin Reddedildi", Toast.LENGTH_SHORT).show()
 
                 }
             }
         }
     }
+
     //Seçilen karta göre bilgileri veritababından çağırır
     private fun getHomePageInfo(chosenCardNumber: Int) {
         when (chosenCardNumber) {
@@ -232,6 +295,7 @@ class HomePageFragment : Fragment() {
             }
         }
     }
+
     //Apartmana ait anketleri dinler
     private suspend fun observePollData() {
         databaseViewModel.getPolls().observe(viewLifecycleOwner) {
@@ -256,7 +320,8 @@ class HomePageFragment : Fragment() {
                             HomeRecyclerViewItem.Polls(
                                 pollText = poll.pollText,
                                 agreeCount = poll.agreeCount,
-                                disagreeCount = poll.disagreeCount
+                                disagreeCount = poll.disagreeCount,
+                                people = poll.people
                             )
 
                         adapterList.add(listItem)
@@ -380,7 +445,7 @@ class HomePageFragment : Fragment() {
     }
 
     //apartmanda oturan kişileri çeker
-    private fun observeResidents(){
+    private fun observeResidents() {
         databaseViewModel.getAllApartmentUsers()
         viewLifecycleOwner.lifecycleScope.launch {
             databaseViewModel.users.collect {
@@ -397,11 +462,11 @@ class HomePageFragment : Fragment() {
                     is Resource.Success -> {
                         binding.pbProgressBar.visibility = GONE
                         residentsList = it.result
-                        for(resident:UserModel in it.result){
-                            if (resident.role == "yonetici"){
+                        for (resident: UserModel in it.result) {
+                            if (resident.role == "yonetici") {
                                 binding.twManagerName.text = resident.fullName
                                 binding.twManagerPhone.text = resident.phoneNumber
-                            }else if(resident.role == "kapici"){
+                            } else if (resident.role == "kapici") {
                                 binding.twConciergeName.text = resident.fullName
                                 binding.twConciergePhone.text = resident.phoneNumber
                             }
@@ -419,37 +484,38 @@ class HomePageFragment : Fragment() {
         }
     }
 
-    private fun observeApartmentInfo(){
+    private fun observeApartmentInfo() {
         databaseViewModel.getApartmentInfo()
-            databaseViewModel.apartmentLiveData.observe(viewLifecycleOwner) {
-                when (it) {
-                    is Resource.Failure -> {
-                        Toast.makeText(context, "it.exception.message", Toast.LENGTH_LONG).show()
-                        binding.pbProgressBar.visibility = GONE
+        databaseViewModel.apartmentLiveData.observe(viewLifecycleOwner) {
+            when (it) {
+                is Resource.Failure -> {
+                    Toast.makeText(context, "it.exception.message", Toast.LENGTH_LONG).show()
+                    binding.pbProgressBar.visibility = GONE
+
+                }
+                is Resource.Loading -> {
+                    binding.recyclerView.visibility = GONE
+                    binding.pbProgressBar.visibility = VISIBLE
+                }
+                is Resource.Success -> {
+                    binding.pbProgressBar.visibility = GONE
+                    binding.apply {
+                        twApartmentAddress.text = it.result.address
+                        twApartmentMonthlyPayment.text = it.result.monthlyPayment.toString()
+                        twApartmentName.text = it.result.apartmentName
 
                     }
-                    is Resource.Loading -> {
-                        binding.recyclerView.visibility = GONE
-                        binding.pbProgressBar.visibility = VISIBLE
-                    }
-                    is Resource.Success -> {
-                        binding.pbProgressBar.visibility = GONE
-                        binding.apply {
-                            twApartmentAddress.text = it.result.address
-                            twApartmentMonthlyPayment.text = it.result.monthlyPayment.toString()
-                            twApartmentName.text = it.result.apartmentName
-
-                        }
 
 
-                    }
-                    else -> {
+                }
+                else -> {
 
-                    }
                 }
             }
+        }
 
     }
+
     //Fragment açılırken gerekli arayüz bağlantılarını kurar
     private fun setupUi() {
         HeaderHelper.customHeader(
