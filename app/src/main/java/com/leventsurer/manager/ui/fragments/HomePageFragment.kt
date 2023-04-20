@@ -210,10 +210,6 @@ class HomePageFragment : Fragment() {
         writePollMain()
         writeApartmentNameAndPrintDateToBottom()
 
-
-
-
-
         pdfDocument.finishPage(myPage)
         val fileName = pollModel.pollText.replace(" ","");
         val file =

@@ -13,6 +13,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.firebase.firestore.FieldValue
 import com.leventsurer.manager.MainActivity
 import com.leventsurer.manager.R
 import com.leventsurer.manager.data.model.FinancialEventModel
@@ -36,6 +37,10 @@ import java.io.File
 import java.io.FileNotFoundException
 import java.io.FileOutputStream
 import java.io.IOException
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
+import kotlin.math.exp
 
 @AndroidEntryPoint
 class WalletFragment : Fragment() {
@@ -44,14 +49,14 @@ class WalletFragment : Fragment() {
     private val databaseViewModel by viewModels<DatabaseViewModel>()
     private val authViewModel by viewModels<AuthViewModel>()
     private val sharedPreferencesViewModel by viewModels<SharedPreferencesViewModel>()
+
     //Adapter list
     private var duesPaymentStatusAdapterList = ArrayList<UserModel>()
     private var financialEventAdapterList = ArrayList<FinancialEventModel>()
+
     //Adapters
-    private lateinit var duesPaymentStatusAdapter : DuesPaymentStatusAdapter
-    private lateinit var financialEventsAdapter:FinancialEventsDetailAdapter
-
-
+    private lateinit var duesPaymentStatusAdapter: DuesPaymentStatusAdapter
+    private lateinit var financialEventsAdapter: FinancialEventsDetailAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -80,131 +85,181 @@ class WalletFragment : Fragment() {
     private fun onClickListener() {
         binding.apply {
             btnCreatePdfFile.setOnClickListener {
-                fun createSheetHeader(cellStyle: CellStyle, sheet: Sheet) {
-                    //setHeaderStyle is a custom function written below to add header style
-
-                    //Create sheet first row
-                    val row = sheet.createRow(0)
-
-                    //Header list
-                    val HEADER_LIST = listOf("column_1", "column_2", "column_3")
-
-                    //Loop to populate each column of header row
-                    for ((index, value) in HEADER_LIST.withIndex()) {
-
-                        val columnWidth = (15 * 500)
-
-                        //index represents the column number
-                        sheet.setColumnWidth(index, columnWidth)
-
-                        //Create cell
-                        val cell = row.createCell(index)
-
-                        //value represents the header value from HEADER_LIST
-                        cell?.setCellValue(value)
-
-                        //Apply style to cell
-                        cell.cellStyle = cellStyle
-                    }
-                }
-                fun getHeaderStyle(workbook: Workbook): CellStyle {
-
-                    //Cell style for header row
-                    val cellStyle: CellStyle = workbook.createCellStyle()
-
-                    //Apply cell color
-                    val colorMap: IndexedColorMap = (workbook as XSSFWorkbook).stylesSource.indexedColors
-                    var color = XSSFColor(IndexedColors.RED, colorMap).indexed
-                    cellStyle.fillForegroundColor = color
-                    cellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND)
-
-                    //Apply font style on cell text
-                    val whiteFont = workbook.createFont()
-                    color = XSSFColor(IndexedColors.WHITE, colorMap).indexed
-                    whiteFont.color = color
-                    whiteFont.bold = true
-                    cellStyle.setFont(whiteFont)
-
-
-                    return cellStyle
-                }
-                fun addData(rowIndex: Int, sheet: Sheet) {
-
-                    //Create row based on row index
-                    val row = sheet.createRow(rowIndex)
-
-                    //Add data to each cell
-                    createCell(row, 0, "value 1") //Column 1
-                    createCell(row, 1, "value 2") //Column 2
-                    createCell(row, 2, "value 3") //Column 3
-                }
-                fun createWorkbook(): Workbook {
-                    // Creating excel workbook
-                    val workbook = XSSFWorkbook()
-
-                    //Creating first sheet inside workbook
-                    //Constants.SHEET_NAME is a string value of sheet name
-                    val sheet: Sheet = workbook.createSheet("SheetName")
-
-                    //Create Header Cell Style
-                    val cellStyle = getHeaderStyle(workbook)
-
-                    //Creating sheet header row
-                    createSheetHeader(cellStyle, sheet)
-
-                    //Adding data to the sheet
-                    addData(0, sheet)
-
-                    return workbook
-                }
-
-
-                fun createExcel(workbook: Workbook) {
-
-                    //Get App Director, APP_DIRECTORY_NAME is a string
-                    val appDirectory =  File( Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS), "Manager")//requireContext().getExternalFilesDir(Constants.APP_DIRECTORY_NAME)
-
-                    //Check App Directory whether it exists or not, create if not.
-                    if (appDirectory != null && !appDirectory.exists()) {
-                        appDirectory.mkdirs()
-                    }
-
-                    //Create excel file with extension .xlsx
-                    val excelFile = File(appDirectory,"Kasa.xlsx")
-
-                    //Write workbook to file using FileOutputStream
-                    try {
-                        val fileOut = FileOutputStream(excelFile)
-                        workbook.write(fileOut)
-                        fileOut.close()
-                        Toast.makeText(requireContext(),"Belge Kaydedildi",Toast.LENGTH_SHORT).show()
-                    } catch (e: FileNotFoundException) {
-                        e.printStackTrace()
-                    } catch (e: IOException) {
-                        e.printStackTrace()
-                    }
-                }
-
                 val myWorkBook = createWorkbook()
                 createExcel(myWorkBook)
             }
         }
     }
 
+    private fun createSheetHeader(cellStyle: CellStyle, sheet: Sheet) {
+        //setHeaderStyle is a custom function written below to add header style
+
+        //Create sheet first row
+        val row = sheet.createRow(0)
+
+        //Header list
+        val HEADER_LIST = listOf("column_1", "column_2", "column_3","column_4","column_5")
+
+        //Loop to populate each column of header row
+        for ((index, value) in HEADER_LIST.withIndex()) {
+
+            val columnWidth = (15 * 500)
+
+            //index represents the column number
+            sheet.setColumnWidth(index, columnWidth)
+
+            //Create cell
+            val cell = row.createCell(index)
+
+            //value represents the header value from HEADER_LIST
+            cell?.setCellValue(value)
+
+            //Apply style to cell
+            cell.cellStyle = cellStyle
+        }
+    }
+
+    private fun getHeaderStyle(workbook: Workbook): CellStyle {
+
+        //Cell style for header row
+        val cellStyle: CellStyle = workbook.createCellStyle()
+
+        //Apply cell color
+        val colorMap: IndexedColorMap = (workbook as XSSFWorkbook).stylesSource.indexedColors
+        var color = XSSFColor(IndexedColors.RED, colorMap).indexed
+        cellStyle.fillForegroundColor = color
+        cellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND)
+
+        //Apply font style on cell text
+        val whiteFont = workbook.createFont()
+        color = XSSFColor(IndexedColors.WHITE, colorMap).indexed
+        whiteFont.color = color
+        whiteFont.bold = true
+        cellStyle.setFont(whiteFont)
+        return cellStyle
+    }
+
+    private fun createWorkbook(): Workbook {
+        // Creating excel workbook
+        val workbook = XSSFWorkbook()
+
+        //Creating first sheet inside workbook
+        //Constants.SHEET_NAME is a string value of sheet name
+        val date = SimpleDateFormat("dd/M/yyyy hh:mm:ss")
+        val currentDate = date.format(Date()).replace("/",".").split(" ")[0]
+        val sheet: Sheet = workbook.createSheet(currentDate)
+
+        //Create Header Cell Style
+        val cellStyle = getHeaderStyle(workbook)
+
+        //Creating sheet header row
+        createSheetHeader(cellStyle, sheet)
+
+        //Sütun Başlıklarının Dosyaya Eklenmesi
+        val row = sheet.createRow(0)
+        createCell(row, 0, "Gelir ADI") //Column 1
+        createCell(row, 1, "Gelir Tutarı")//Column 2
+        createCell(row, 2, "Gider Adı") //Column 3
+        createCell(row, 3, "Gider Tutarı") //Column 4
+        createCell(row, 4, "Aidat Ödemeyenler")//Column 5
+        //Gelir Gider Listelerini Oluşturulması
+        val expenseList = ArrayList<FinancialEventModel>()
+        val incomeList = ArrayList<FinancialEventModel>()
+        val paymentStatusList = ArrayList<UserModel>()
+        for (financialEvent in financialEventAdapterList) {
+            if (financialEvent.isExpense) {
+                expenseList.add(financialEvent)
+            } else {
+                incomeList.add(financialEvent)
+            }
+        }
+        for(user in duesPaymentStatusAdapterList){
+            if(!user.duesPaymentStatus){
+                paymentStatusList.add(user)
+            }
+        }
+        //En uzun listeye göre sayılı satır oluşturulması
+        val rowList = ArrayList<Row>()
+        if(expenseList.size>=incomeList.size && expenseList.size >= paymentStatusList.size){
+            for (i in 0..expenseList.size){
+                rowList.add(sheet.createRow(i+1))
+            }
+        }else if(incomeList.size >= expenseList.size && incomeList.size >= paymentStatusList.size){
+            for (i in 0.. expenseList.size){
+                rowList.add(sheet.createRow(i+1))
+            }
+        }else if(paymentStatusList.size >= expenseList.size && paymentStatusList.size >= incomeList.size){
+            for (i in 0.. paymentStatusList.size){
+                rowList.add(sheet.createRow(i+1))
+            }
+        }
+
+        var incomeRowCount = 1
+        var expenseRowCount = 1
+        var paymentStatusCount = 1
+        Log.e("kontrol","Row:${rowList}")
+        Log.e("kontrol","RowSize:${rowList.size}")
+        Log.e("kontrol","incomeList${incomeList}")
+        Log.e("kontrol","incomeListSiz${incomeList.size}")
+        //Gelir Ve Giderlerin Ait Olduğu Satıra Yazdırılması
+        for (i in 0 until incomeList.size) {
+            Log.e("kontrol","i değeri:$i")
+            createCell(rowList[incomeRowCount], 0, incomeList[i].eventName)
+            createCell(rowList[incomeRowCount], 1, incomeList[i].amount.toString())
+            incomeRowCount += 1
+        }
+        for (i in 0..expenseList.size) {
+            createCell(rowList[expenseRowCount], 2, expenseList[i].eventName)
+            createCell(rowList[expenseRowCount], 3, expenseList[i].amount.toString())
+            expenseRowCount += 1
+        }
+        for (i in 0..paymentStatusList.size) {
+            createCell(rowList[paymentStatusCount], 4, paymentStatusList[i].fullName)
+            paymentStatusCount += 1
+        }
+        return workbook
+    }
+
+    private fun createExcel(workbook: Workbook) {
+        //Get App Director, APP_DIRECTORY_NAME is a string
+        val appDirectory = File(
+            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS),
+            "Manager"
+        )//requireContext().getExternalFilesDir("kasa"),"Manager")
+        //Check App Directory whether it exists or not, create if not.
+        if (!appDirectory.exists()) {
+            appDirectory.mkdirs()
+        }
+        //Create excel file with extension .xlsx
+        val date = SimpleDateFormat("dd/M/yyyy hh:mm:ss")
+        val currentDate = date.format(Date()).replace("/",".").split(" ")[0]
+        val excelFile = File(appDirectory, "${currentDate}gelirGiderKontrol.xlsx")
+        //Write workbook to file using FileOutputStream
+        try {
+            val fileOut = FileOutputStream(excelFile)
+            workbook.write(fileOut)
+            fileOut.close()
+            Toast.makeText(requireContext(), "Belge Kaydedildi", Toast.LENGTH_SHORT).show()
+        } catch (e: FileNotFoundException) {
+            e.printStackTrace()
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
+    }
+
     private fun getApartmentBudget() {
         databaseViewModel.getApartmentInfo()
-
     }
 
     private fun observeApartmentData() {
-        databaseViewModel.apartmentLiveData.observe(viewLifecycleOwner){
-            when(it){
-                is Resource.Loading ->{}
-                is Resource.Failure ->{}
-                is Resource.Success ->{
+        databaseViewModel.apartmentLiveData.observe(viewLifecycleOwner) {
+            when (it) {
+                is Resource.Loading -> {}
+                is Resource.Failure -> {}
+                is Resource.Success -> {
                     binding.twCurrentBudget.text = it.result.budget.toString()
                 }
-                else->{}
+                else -> {}
             }
         }
     }
@@ -214,7 +269,7 @@ class WalletFragment : Fragment() {
         observeUsers()
     }
 
-    private fun getFinancialEvents(){
+    private fun getFinancialEvents() {
         databaseViewModel.getFinancialEvents()
         observeFinancialEvents()
     }
@@ -225,7 +280,6 @@ class WalletFragment : Fragment() {
                 when (it) {
                     is Resource.Failure -> {
                         Toast.makeText(context, it.exception.message, Toast.LENGTH_LONG).show()
-
                     }
                     is Resource.Loading -> {
                     }
@@ -271,12 +325,12 @@ class WalletFragment : Fragment() {
         duesPaymentStatusAdapter = DuesPaymentStatusAdapter()
         binding.rwDuesPaymentStatus.adapter = duesPaymentStatusAdapter
     }
-    private fun setupFinancialEventsDetailAdapter(){
+
+    private fun setupFinancialEventsDetailAdapter() {
         binding.rwFinancialEvents.layoutManager = LinearLayoutManager(requireContext())
         financialEventsAdapter = FinancialEventsDetailAdapter()
         binding.rwFinancialEvents.adapter = financialEventsAdapter
     }
-
 
     private fun setupUi() {
         HeaderHelper.customHeader(
