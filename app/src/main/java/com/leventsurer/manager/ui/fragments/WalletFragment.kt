@@ -181,26 +181,27 @@ class WalletFragment : Fragment() {
         //En uzun listeye göre sayılı satır oluşturulması
         val rowList = ArrayList<Row>()
         if(expenseList.size>=incomeList.size && expenseList.size >= paymentStatusList.size){
-            for (i in 0..expenseList.size){
+            Log.e("kontrol","expense list en büyük")
+            for (i in 0..expenseList.size+1){
                 rowList.add(sheet.createRow(i+1))
             }
         }else if(incomeList.size >= expenseList.size && incomeList.size >= paymentStatusList.size){
-            for (i in 0.. expenseList.size){
+            Log.e("kontrol","income list en büyük")
+            for (i in 0.. expenseList.size+1){
                 rowList.add(sheet.createRow(i+1))
             }
         }else if(paymentStatusList.size >= expenseList.size && paymentStatusList.size >= incomeList.size){
-            for (i in 0.. paymentStatusList.size){
+            Log.e("kontrol","paymentStatusList list en büyük")
+            for (i in 0.. paymentStatusList.size+1){
                 rowList.add(sheet.createRow(i+1))
             }
         }
 
-        var incomeRowCount = 1
-        var expenseRowCount = 1
-        var paymentStatusCount = 1
-        Log.e("kontrol","Row:${rowList}")
-        Log.e("kontrol","RowSize:${rowList.size}")
-        Log.e("kontrol","incomeList${incomeList}")
-        Log.e("kontrol","incomeListSiz${incomeList.size}")
+        var incomeRowCount = 0
+        var expenseRowCount = 0
+        var paymentStatusCount = 0
+        Log.e("kontrol","rowList length:${rowList.size}")
+        Log.e("kontrol","rowList :${rowList}")
         //Gelir Ve Giderlerin Ait Olduğu Satıra Yazdırılması
         for (i in 0 until incomeList.size) {
             Log.e("kontrol","i değeri:$i")
@@ -208,12 +209,12 @@ class WalletFragment : Fragment() {
             createCell(rowList[incomeRowCount], 1, incomeList[i].amount.toString())
             incomeRowCount += 1
         }
-        for (i in 0..expenseList.size) {
+        for (i in 0 until expenseList.size) {
             createCell(rowList[expenseRowCount], 2, expenseList[i].eventName)
             createCell(rowList[expenseRowCount], 3, expenseList[i].amount.toString())
             expenseRowCount += 1
         }
-        for (i in 0..paymentStatusList.size) {
+        for (i in 0 until paymentStatusList.size) {
             createCell(rowList[paymentStatusCount], 4, paymentStatusList[i].fullName)
             paymentStatusCount += 1
         }
