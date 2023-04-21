@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.SearchView
 import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -32,7 +33,7 @@ class ResidentsInformationFragment : Fragment() {
     private val databaseViewModel by viewModels<DatabaseViewModel>()
     private val authViewModel by viewModels<AuthViewModel>()
     private val sharedPrefViewModel by viewModels<SharedPreferencesViewModel>()
-
+    private val filteredList = ArrayList<UserModel>()
     //Adapter list
     private var residentsInformationAdapterList = ArrayList<UserModel>()
     //Adapters
@@ -56,7 +57,37 @@ class ResidentsInformationFragment : Fragment() {
         setupConciergeDutyToDoAdapter()
         getUsers()
         onClickHandler()
+        filterList()
     }
+
+    private fun filterList() {
+        binding.swFilter.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                for (resident in residentsInformationAdapterList){
+                    if(resident.carPlate.contains(newText!!,ignoreCase = true) || resident.fullName.contains(newText,ignoreCase = true)|| resident.phoneNumber.contains(newText,ignoreCase = true)){
+                        if(!filteredList.contains(resident)){
+                            filteredList.add(resident)
+                        }
+                        val iterator = filteredList.iterator()
+                        while(iterator.hasNext()){
+                            val res = iterator.next()
+                            if(!res.carPlate.contains(newText,ignoreCase = true) && !res.fullName.contains(newText,ignoreCase = true)&& !res.phoneNumber.contains(newText,ignoreCase = true)){
+                                iterator.remove()
+                            }
+                        }
+
+                    }
+                }
+                residentsInformationAdapter.list = filteredList
+                return false
+            }
+        })
+    }
+
 
     private fun onClickHandler() {
         binding.apply {
@@ -127,6 +158,7 @@ class ResidentsInformationFragment : Fragment() {
             findNavController().navigate(action)
         }
     }
+
 
 
 }

@@ -64,17 +64,32 @@
                        android:layout_height="wrap_content"
                        android:textSize="20sp"/>
 
-                   <ImageView
-                       android:id="@+id/btnCreatePdfFile"
+
+                   <androidx.constraintlayout.widget.ConstraintLayout
                        android:layout_width="40dp"
-                       android:layout_height="40dp"
-                       android:src="@drawable/ic_baseline_picture_as_pdf_24" />
-                   <!--<TextView
-                       android:gravity="start"
-                       android:layout_width="wrap_content"
-                       android:layout_height="match_parent"
-                       android:text="Türk Lirası"
-                       android:textSize="15sp"/>-->
+                       android:layout_height="wrap_content">
+
+                       <ImageView
+                           android:id="@+id/btnCreatePdfFile"
+                           android:layout_width="25dp"
+                           android:layout_height="25dp"
+                           android:src="@drawable/ic_baseline_picture_as_pdf_24"
+                           android:visibility="visible"
+                           app:layout_constraintBottom_toBottomOf="parent"
+                           app:layout_constraintEnd_toEndOf="parent"
+                           app:layout_constraintStart_toStartOf="parent"
+                           app:layout_constraintTop_toTopOf="parent" />
+
+                       <ProgressBar
+                           android:id="@+id/pbProgressBar"
+                           android:layout_width="25dp"
+                           android:layout_height="25dp"
+                           android:visibility="gone"
+                           app:layout_constraintBottom_toBottomOf="parent"
+                           app:layout_constraintEnd_toEndOf="parent"
+                           app:layout_constraintStart_toStartOf="parent"
+                           app:layout_constraintTop_toTopOf="parent" />
+                   </androidx.constraintlayout.widget.ConstraintLayout>
                </LinearLayout>
 
                 <com.google.android.material.divider.MaterialDivider

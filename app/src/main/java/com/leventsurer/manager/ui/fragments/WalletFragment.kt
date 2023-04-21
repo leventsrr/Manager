@@ -28,6 +28,7 @@ import com.leventsurer.manager.viewModels.DatabaseViewModel
 import com.leventsurer.manager.viewModels.SharedPreferencesViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import org.apache.poi.ss.usermodel.*
 import org.apache.poi.ss.util.CellUtil.createCell
 import org.apache.poi.xssf.usermodel.IndexedColorMap
@@ -85,8 +86,13 @@ class WalletFragment : Fragment() {
     private fun onClickListener() {
         binding.apply {
             btnCreatePdfFile.setOnClickListener {
+                binding.btnCreatePdfFile.visibility = View.GONE
+                binding.pbProgressBar.visibility = View.VISIBLE
                 val myWorkBook = createWorkbook()
                 createExcel(myWorkBook)
+
+                binding.btnCreatePdfFile.visibility = View.VISIBLE
+                binding.pbProgressBar.visibility = View.GONE
             }
         }
     }
@@ -140,6 +146,7 @@ class WalletFragment : Fragment() {
     }
 
     private fun createWorkbook(): Workbook {
+
         // Creating excel workbook
         val workbook = XSSFWorkbook()
 
@@ -178,20 +185,17 @@ class WalletFragment : Fragment() {
                 paymentStatusList.add(user)
             }
         }
-        //En uzun listeye göre sayılı satır oluşturulması
+        //En uzun listeye kadar excel satırının oluşturulması
         val rowList = ArrayList<Row>()
         if(expenseList.size>=incomeList.size && expenseList.size >= paymentStatusList.size){
-            Log.e("kontrol","expense list en büyük")
             for (i in 0..expenseList.size+1){
                 rowList.add(sheet.createRow(i+1))
             }
         }else if(incomeList.size >= expenseList.size && incomeList.size >= paymentStatusList.size){
-            Log.e("kontrol","income list en büyük")
             for (i in 0.. expenseList.size+1){
                 rowList.add(sheet.createRow(i+1))
             }
         }else if(paymentStatusList.size >= expenseList.size && paymentStatusList.size >= incomeList.size){
-            Log.e("kontrol","paymentStatusList list en büyük")
             for (i in 0.. paymentStatusList.size+1){
                 rowList.add(sheet.createRow(i+1))
             }
@@ -200,9 +204,7 @@ class WalletFragment : Fragment() {
         var incomeRowCount = 0
         var expenseRowCount = 0
         var paymentStatusCount = 0
-        Log.e("kontrol","rowList length:${rowList.size}")
-        Log.e("kontrol","rowList :${rowList}")
-        //Gelir Ve Giderlerin Ait Olduğu Satıra Yazdırılması
+        //Gelir Ve Giderlerin Ait Oldukları Satırlara Yazdırılması
         for (i in 0 until incomeList.size) {
             Log.e("kontrol","i değeri:$i")
             createCell(rowList[incomeRowCount], 0, incomeList[i].eventName)
@@ -241,11 +243,13 @@ class WalletFragment : Fragment() {
             workbook.write(fileOut)
             fileOut.close()
             Toast.makeText(requireContext(), "Belge Kaydedildi", Toast.LENGTH_SHORT).show()
+
         } catch (e: FileNotFoundException) {
             e.printStackTrace()
         } catch (e: IOException) {
             e.printStackTrace()
         }
+
     }
 
     private fun getApartmentBudget() {
