@@ -20,8 +20,8 @@
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/mcwImageCard"
-            android:layout_width="match_parent"
-            android:layout_height="150dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:elevation="5dp"
             app:cardCornerRadius="10dp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -34,8 +34,8 @@
 
             <ImageView
                 android:id="@+id/iwUserProfilePhoto"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
                 android:scaleType="centerCrop" />
         </com.google.android.material.card.MaterialCardView>
 

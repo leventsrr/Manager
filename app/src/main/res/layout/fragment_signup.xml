@@ -7,8 +7,8 @@
 
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/secondColor"
@@ -19,21 +19,17 @@
         <ImageView
             android:id="@+id/iwSignUpButton"
             android:layout_width="246dp"
-            android:layout_height="209dp"
-            android:layout_marginTop="7dp"
-            android:layout_marginBottom="15dp"
+            android:layout_height="0dp"
+            android:layout_weight="1"
             android:src="@drawable/logo"
-            app:layout_constraintBottom_toTopOf="@+id/materialCardView2"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.496"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:layout_gravity="center"/>
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/materialCardView2"
             android:layout_width="match_parent"
 
-            android:layout_height="500dp"
+            android:layout_height="0dp"
+            android:layout_weight="3"
             app:cardCornerRadius="15dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -64,11 +60,12 @@
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/textInputLayout"
                     android:layout_width="300dp"
-                    android:layout_height="50dp"
+                    android:layout_height="wrap_content"
                     android:layout_marginStart="55dp"
                     android:layout_marginTop="10dp"
                     android:layout_marginEnd="51dp"
                     android:hint="E-posta Adresiniz"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     app:boxBackgroundColor="@color/white"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -83,11 +80,12 @@
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/textInputLayout2"
                     android:layout_width="300dp"
-                    android:layout_height="50dp"
+                    android:layout_height="wrap_content"
                     android:layout_marginStart="55dp"
                     android:layout_marginTop="5dp"
                     android:layout_marginEnd="51dp"
                     android:hint="Şifreniz"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     app:boxBackgroundColor="@color/white"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -103,11 +101,12 @@
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/textInputLayout3"
                     android:layout_width="300dp"
-                    android:layout_height="50dp"
+                    android:layout_height="wrap_content"
                     android:layout_marginStart="55dp"
                     android:layout_marginTop="5dp"
                     android:layout_marginEnd="51dp"
                     android:hint="İsminiz"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     app:boxBackgroundColor="@color/white"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -115,6 +114,7 @@
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/etNewUserName"
+                        android:inputType="textPassword"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent" />
                 </com.google.android.material.textfield.TextInputLayout>
@@ -122,11 +122,12 @@
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/textInputLayout4"
                     android:layout_width="300dp"
-                    android:layout_height="50dp"
+                    android:layout_height="wrap_content"
                     android:layout_marginStart="55dp"
                     android:layout_marginTop="10dp"
                     android:layout_marginEnd="51dp"
                     android:hint="Apartman Kodu"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     app:boxBackgroundColor="@color/white"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -142,11 +143,12 @@
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/textInputLayout5"
                     android:layout_width="150dp"
-                    android:layout_height="50dp"
+                    android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
                     android:layout_marginTop="10dp"
                     android:layout_marginEnd="51dp"
                     android:hint="Kapı Numarası"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     app:boxBackgroundColor="@color/white"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/textInputLayout6"
@@ -162,11 +164,12 @@
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/textInputLayout6"
                     android:layout_width="150dp"
-                    android:layout_height="50dp"
+                    android:layout_height="wrap_content"
                     android:layout_marginStart="55dp"
                     android:layout_marginTop="10dp"
                     android:layout_marginEnd="5dp"
                     android:hint="Plaka"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     app:boxBackgroundColor="@color/white"
                     app:layout_constraintEnd_toStartOf="@+id/textInputLayout5"
                     app:layout_constraintStart_toStartOf="parent"
@@ -259,5 +262,5 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
         </com.google.android.material.card.MaterialCardView>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
 </layout>

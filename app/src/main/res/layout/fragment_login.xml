@@ -7,8 +7,8 @@
 
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/secondColor"
@@ -19,25 +19,20 @@
         <ImageView
             android:id="@+id/iwSignInWithGoogle"
             android:layout_width="246dp"
-            android:layout_height="209dp"
+            android:layout_height="0dp"
+            android:layout_weight="1"
             android:layout_marginTop="7dp"
             android:layout_marginBottom="15dp"
             android:src="@drawable/logo"
-            app:layout_constraintBottom_toTopOf="@+id/materialCardView2"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.496"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:layout_gravity="center" />
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/materialCardView2"
             android:layout_width="match_parent"
 
-            android:layout_height="500dp"
-            app:cardCornerRadius="15dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent">
+            android:layout_height="0dp"
+            android:layout_weight="2"
+            app:cardCornerRadius="15dp">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -51,7 +46,7 @@
                     android:layout_height="wrap_content"
 
                     android:layout_marginStart="135dp"
-                    android:layout_marginTop="16dp"
+                    android:layout_marginTop="40dp"
                     android:layout_marginEnd="135dp"
                     android:fontFamily="@font/titillium_web_bold"
                     android:text="Hoş Geldiniz"
@@ -64,9 +59,10 @@
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/textInputLayout"
                     android:layout_width="300dp"
-                    android:layout_height="50dp"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="30dp"
                     android:hint="E-posta Adresiniz"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     app:boxBackgroundColor="@color/white"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -81,16 +77,20 @@
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/textInputLayout2"
                     android:layout_width="300dp"
-                    android:layout_height="50dp"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
                     android:hint="Şifreniz"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     app:boxBackgroundColor="@color/white"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/textInputLayout"
-                    app:passwordToggleEnabled="true">
+                    app:passwordToggleEnabled="true"
+
+                    >
 
                     <com.google.android.material.textfield.TextInputEditText
+                        android:inputType="textPassword"
                         android:id="@+id/twUserPassword"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent" />
@@ -99,9 +99,10 @@
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/textInputLayout3"
                     android:layout_width="300dp"
-                    android:layout_height="50dp"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
                     android:hint="Apartman Kodu"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     app:boxBackgroundColor="@color/white"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -140,52 +141,10 @@
                     app:layout_constraintTop_toBottomOf="@+id/textInputLayout3" />
 
                 <TextView
-                    android:id="@+id/textView2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="131dp"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginEnd="130dp"
-                    android:text="veya Google ile giriş yap"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="1.0"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/buttonLogin" />
-
-                <com.google.android.material.card.MaterialCardView
-                    android:id="@+id/materialCardView"
-                    android:layout_width="40dp"
-
-                    android:layout_height="40dp"
-                    android:layout_marginStart="181dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginEnd="181dp"
-                    android:foregroundGravity="center"
-                    app:cardBackgroundColor="@color/red"
-                    app:cardCornerRadius="20dp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textView2">
-
-
-                    <TextView
-                        android:layout_width="16dp"
-                        android:layout_height="30dp"
-                        android:layout_gravity="center"
-                        android:gravity="center"
-                        android:text="G"
-                        android:textColor="@color/white"
-                        android:textSize="20sp" />
-
-
-                </com.google.android.material.card.MaterialCardView>
-
-                <TextView
                     android:id="@+id/buttonNavigateSignUp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="181dp"
-
                     android:layout_marginEnd="182dp"
                     android:layout_marginBottom="7dp"
                     android:text="Kayıt Ol"
@@ -197,5 +156,5 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
         </com.google.android.material.card.MaterialCardView>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
 </layout>
