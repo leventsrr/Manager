@@ -49,10 +49,12 @@ class ChatMessagesAdapter(private val sharedPreferencesViewModel: SharedPreferen
     @SuppressLint("ResourceAsColor")
     override fun onBindViewHolder(holder: ChatMessageHolder, position: Int) {
         val userName = sharedPreferencesViewModel.readUserName()
-        holder.binding.apply {
+        Log.e("kontrol","onBindViewHolder içinde")
 
+        holder.binding.apply {
             val currentItem: ChatMessageModel = list[position]
             if (currentItem.userName == userName) {
+                Log.e("kontrol","onBindViewHolder if içinde")
                 cwMessageCard.setCardBackgroundColor(
                     ContextCompat.getColor(
                         context,
@@ -62,6 +64,7 @@ class ChatMessagesAdapter(private val sharedPreferencesViewModel: SharedPreferen
                 twSender.visibility = GONE
                 linearLayout1.gravity = Gravity.END
             } else {
+                Log.e("kontrol","onBindViewHolder else içinde")
                 twSender.text = currentItem.userName
             }
             twMessage.text = currentItem.message

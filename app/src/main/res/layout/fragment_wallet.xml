@@ -123,6 +123,12 @@
                         android:text="Gider/Gelir"
                         android:fontFamily="@font/titillium_web_bold"/>
                 </LinearLayout>
+
+                <ProgressBar
+                    android:id="@+id/pbFinancialEvents"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="center" />
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rwFinancialEvents"
                     android:layout_width="match_parent"
@@ -170,6 +176,11 @@
                     tools:layout_editor_absoluteX="5dp"
                     tools:layout_editor_absoluteY="295dp" />
 
+                <ProgressBar
+                    android:id="@+id/pbPaymentStatus"
+                    android:layout_gravity="center"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp" />
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rwDuesPaymentStatus"
                     android:layout_width="match_parent"

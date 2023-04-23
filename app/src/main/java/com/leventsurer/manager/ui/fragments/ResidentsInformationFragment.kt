@@ -5,6 +5,7 @@ import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.GONE
 import android.view.ViewGroup
 import android.widget.SearchView
 import android.widget.Toast
@@ -26,6 +27,7 @@ import com.leventsurer.manager.viewModels.DatabaseViewModel
 import com.leventsurer.manager.viewModels.SharedPreferencesViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+
 @AndroidEntryPoint
 class ResidentsInformationFragment : Fragment() {
     private var _binding: FragmentResidentsInformationBinding? = null
@@ -34,10 +36,12 @@ class ResidentsInformationFragment : Fragment() {
     private val authViewModel by viewModels<AuthViewModel>()
     private val sharedPrefViewModel by viewModels<SharedPreferencesViewModel>()
     private val filteredList = ArrayList<UserModel>()
+
     //Adapter list
     private var residentsInformationAdapterList = ArrayList<UserModel>()
+
     //Adapters
-    private lateinit var residentsInformationAdapter : ResidentsInformationAdapter
+    private lateinit var residentsInformationAdapter: ResidentsInformationAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -56,10 +60,12 @@ class ResidentsInformationFragment : Fragment() {
         setupUi()
         setupConciergeDutyToDoAdapter()
         getUsers()
+        observeUsers()
         onClickHandler()
         filterList()
     }
 
+    //Liste filtrelemesi yapar
     private fun filterList() {
         binding.swFilter.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
@@ -67,21 +73,39 @@ class ResidentsInformationFragment : Fragment() {
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
-                for (resident in residentsInformationAdapterList){
-                    if(resident.carPlate.contains(newText!!,ignoreCase = true) || resident.fullName.contains(newText,ignoreCase = true)|| resident.phoneNumber.contains(newText,ignoreCase = true)){
-                        if(!filteredList.contains(resident)){
+                //Yazılan kelimenin apartman sakinleri listesindeki kişilerden herhangi birinin araç plakası,adı veya telefon numarasıyla eşleşme kontrolü yapılır
+                for (resident in residentsInformationAdapterList) {
+                    if (resident.carPlate.contains(
+                            newText!!,
+                            ignoreCase = true
+                        ) || resident.fullName.contains(
+                            newText,
+                            ignoreCase = true
+                        ) || resident.phoneNumber.contains(newText, ignoreCase = true)
+                    ) {
+                        //eşlelşme varsa filtrelenmiş listeye eklenir
+                        if (!filteredList.contains(resident)) {
                             filteredList.add(resident)
                         }
+                        //daha önce eklenenlerin bilgisi yeni kelimeyle eşleşmiyorsa filtrelenmiş listeden kişi çıkartılır
                         val iterator = filteredList.iterator()
-                        while(iterator.hasNext()){
+                        while (iterator.hasNext()) {
                             val res = iterator.next()
-                            if(!res.carPlate.contains(newText,ignoreCase = true) && !res.fullName.contains(newText,ignoreCase = true)&& !res.phoneNumber.contains(newText,ignoreCase = true)){
+                            if (!res.carPlate.contains(
+                                    newText,
+                                    ignoreCase = true
+                                ) && !res.fullName.contains(
+                                    newText,
+                                    ignoreCase = true
+                                ) && !res.phoneNumber.contains(newText, ignoreCase = true)
+                            ) {
                                 iterator.remove()
                             }
                         }
 
                     }
                 }
+                //Elde edilen son liste adapter listesine eşitlenir
                 residentsInformationAdapter.list = filteredList
                 return false
             }
@@ -92,28 +116,30 @@ class ResidentsInformationFragment : Fragment() {
     private fun onClickHandler() {
         binding.apply {
             btnMoveChatScreen.setOnClickListener {
-                val action = ResidentsInformationFragmentDirections.actionResidentsInformationFragmentToChatFragment()
+                val action =
+                    ResidentsInformationFragmentDirections.actionResidentsInformationFragmentToChatFragment()
                 findNavController().navigate(action)
             }
         }
     }
 
+    //Kullanıcıları veri tabanından çeker
     private fun getUsers() {
         databaseViewModel.getAllApartmentUsers()
-        observeUsers()
     }
 
+    //Kullanıcılar verisini gözlemler
     private fun observeUsers() {
         viewLifecycleOwner.lifecycleScope.launch {
             databaseViewModel.users.collect {
                 when (it) {
                     is Resource.Failure -> {
                         Toast.makeText(context, it.exception.message, Toast.LENGTH_LONG).show()
-
                     }
                     is Resource.Loading -> {
                     }
                     is Resource.Success -> {
+                        binding.pbProgressBar.visibility = GONE
                         residentsInformationAdapterList = it.result
                         residentsInformationAdapter.list = residentsInformationAdapterList
                     }
@@ -137,28 +163,34 @@ class ResidentsInformationFragment : Fragment() {
             startIconClick = {
                 authViewModel.logout()
                 sharedPrefViewModel.clearSharedPref()
-                val action = ResidentsInformationFragmentDirections.actionResidentsInformationFragmentToLoginFragment()
+                val action =
+                    ResidentsInformationFragmentDirections.actionResidentsInformationFragmentToLoginFragment()
                 findNavController().navigate(action)
             },
             endIconClick = {
-                val action = ResidentsInformationFragmentDirections.actionResidentsInformationFragmentToSettingsFragmet()
+                val action =
+                    ResidentsInformationFragmentDirections.actionResidentsInformationFragmentToSettingsFragmet()
                 findNavController().navigate(action)
             },
         )
 
         (requireActivity() as MainActivity).showBottomNavigation()
     }
+
     //apartman sakinlerinin listeleneceği adapter ın kurulumunu yapar
     private fun setupConciergeDutyToDoAdapter() {
-        binding.rwResidentsInformation.layoutManager = LinearLayoutManager(requireContext()) //GridLayoutManager(requireContext(), 3)
+        binding.rwResidentsInformation.layoutManager =
+            LinearLayoutManager(requireContext()) //GridLayoutManager(requireContext(), 3)
         residentsInformationAdapter = ResidentsInformationAdapter()
         binding.rwResidentsInformation.adapter = residentsInformationAdapter
         residentsInformationAdapter.moveDetailPage {
-            val action = ResidentsInformationFragmentDirections.actionResidentsInformationFragmentToResidentInformationDetailsFragment(it)
+            val action =
+                ResidentsInformationFragmentDirections.actionResidentsInformationFragmentToResidentInformationDetailsFragment(
+                    it
+                )
             findNavController().navigate(action)
         }
     }
-
 
 
 }

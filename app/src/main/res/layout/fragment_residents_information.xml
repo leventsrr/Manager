@@ -34,6 +34,12 @@
                 android:padding="4dp"
                 android:queryHint="Filtrele (Plaka,İsim,Telefon)"
                 android:layout_gravity="center"/>
+
+            <ProgressBar
+                android:id="@+id/pbProgressBar"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center"/>
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rwResidentsInformation"
                 android:layout_width="match_parent"

@@ -7,6 +7,7 @@ import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.GONE
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.viewModels
@@ -98,45 +99,30 @@ class WalletFragment : Fragment() {
     }
 
     private fun createSheetHeader(cellStyle: CellStyle, sheet: Sheet) {
-        //setHeaderStyle is a custom function written below to add header style
 
-        //Create sheet first row
         val row = sheet.createRow(0)
 
-        //Header list
         val HEADER_LIST = listOf("column_1", "column_2", "column_3","column_4","column_5")
 
-        //Loop to populate each column of header row
         for ((index, value) in HEADER_LIST.withIndex()) {
 
             val columnWidth = (15 * 500)
-
-            //index represents the column number
             sheet.setColumnWidth(index, columnWidth)
-
-            //Create cell
             val cell = row.createCell(index)
-
-            //value represents the header value from HEADER_LIST
             cell?.setCellValue(value)
-
-            //Apply style to cell
             cell.cellStyle = cellStyle
         }
     }
 
     private fun getHeaderStyle(workbook: Workbook): CellStyle {
 
-        //Cell style for header row
         val cellStyle: CellStyle = workbook.createCellStyle()
 
-        //Apply cell color
         val colorMap: IndexedColorMap = (workbook as XSSFWorkbook).stylesSource.indexedColors
         var color = XSSFColor(IndexedColors.RED, colorMap).indexed
         cellStyle.fillForegroundColor = color
         cellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND)
 
-        //Apply font style on cell text
         val whiteFont = workbook.createFont()
         color = XSSFColor(IndexedColors.WHITE, colorMap).indexed
         whiteFont.color = color
@@ -147,19 +133,11 @@ class WalletFragment : Fragment() {
 
     private fun createWorkbook(): Workbook {
 
-        // Creating excel workbook
         val workbook = XSSFWorkbook()
-
-        //Creating first sheet inside workbook
-        //Constants.SHEET_NAME is a string value of sheet name
         val date = SimpleDateFormat("dd/M/yyyy hh:mm:ss")
         val currentDate = date.format(Date()).replace("/",".").split(" ")[0]
         val sheet: Sheet = workbook.createSheet(currentDate)
-
-        //Create Header Cell Style
         val cellStyle = getHeaderStyle(workbook)
-
-        //Creating sheet header row
         createSheetHeader(cellStyle, sheet)
 
         //Sütun Başlıklarının Dosyaya Eklenmesi
@@ -289,6 +267,7 @@ class WalletFragment : Fragment() {
                     is Resource.Loading -> {
                     }
                     is Resource.Success -> {
+                        binding.pbFinancialEvents.visibility = GONE
                         financialEventAdapterList = it.result
                         financialEventsAdapter.list = financialEventAdapterList
                     }
@@ -312,6 +291,7 @@ class WalletFragment : Fragment() {
                     is Resource.Loading -> {
                     }
                     is Resource.Success -> {
+                        binding.pbPaymentStatus.visibility = GONE
                         duesPaymentStatusAdapterList = it.result
                         duesPaymentStatusAdapter.list = duesPaymentStatusAdapterList
                     }

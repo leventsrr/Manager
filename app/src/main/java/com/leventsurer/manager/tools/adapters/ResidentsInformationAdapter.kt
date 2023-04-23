@@ -29,7 +29,6 @@ class ResidentsInformationAdapter : RecyclerView.Adapter<ResidentsInformationAda
             notifyDataSetChanged()
         }
 
-    //Tutucu ilk oluşturulduğunda ne yapılacak
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ResidentInformationHolder {
         context = parent.context
         val binding =
@@ -37,7 +36,6 @@ class ResidentsInformationAdapter : RecyclerView.Adapter<ResidentsInformationAda
         return ResidentInformationHolder(binding)
     }
 
-    //Bağlanma olduktan sonra ne olacak
     override fun onBindViewHolder(holder: ResidentInformationHolder, position: Int) {
         holder.binding.apply {
             val currentItem = list[position]
@@ -48,8 +46,6 @@ class ResidentsInformationAdapter : RecyclerView.Adapter<ResidentsInformationAda
             }else{
                 iwResidentPhoto.setImageResource(R.drawable.default_profile_photo)
             }
-
-
         }
 
         holder.itemView.setOnClickListener{
@@ -58,18 +54,15 @@ class ResidentsInformationAdapter : RecyclerView.Adapter<ResidentsInformationAda
                     it(list[position])
                 }
             }
-
         }
 
     }
 
-    //move to product's detail page
     private var moveDetailPage: ((userModel: UserModel) -> Unit)? = null
     fun moveDetailPage(f: ((userModel: UserModel) -> Unit)) {
         moveDetailPage = f
     }
 
-    //Kaç tane olacak
     override fun getItemCount(): Int {
         return list.size
     }

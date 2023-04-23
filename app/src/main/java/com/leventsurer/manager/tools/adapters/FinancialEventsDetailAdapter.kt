@@ -7,7 +7,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.leventsurer.manager.R
 import com.leventsurer.manager.data.model.FinancialEventModel
 import com.leventsurer.manager.databinding.FinancialEventDetailRowBinding
-import com.leventsurer.manager.databinding.IncomeExpenseRowBinding
 
 
 class FinancialEventsDetailAdapter : RecyclerView.Adapter<FinancialEventsDetailAdapter.FinancialEventDetailHolder>() {
@@ -40,17 +39,14 @@ class FinancialEventsDetailAdapter : RecyclerView.Adapter<FinancialEventsDetailA
 
             if (currentItem.isExpense){
                 iwArrowImage.setImageResource(R.drawable.ic_baseline_expense_arrow)
-                twFinancialEventAmount.setTextColor(R.color.red)
             }
             else{
                 iwArrowImage.setImageResource(R.drawable.ic_outline_income_arrow)
-                twFinancialEventAmount.setTextColor(R.color.green)
             }
 
         }
     }
 
-    //Kaç tane olacak
     override fun getItemCount(): Int {
         return list.size
     }

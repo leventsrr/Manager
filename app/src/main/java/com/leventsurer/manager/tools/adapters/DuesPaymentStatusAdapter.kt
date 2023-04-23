@@ -23,14 +23,12 @@ class DuesPaymentStatusAdapter : RecyclerView.Adapter<DuesPaymentStatusAdapter.D
             notifyDataSetChanged()
         }
 
-    //Tutucu ilk oluşturulduğunda ne yapılacak
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DuesPaymentStatusHolder {
         val binding =
             DuesPaymentStatusRowBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return DuesPaymentStatusHolder(binding)
     }
 
-    //Bağlanma olduktan sonra ne olacak
     override fun onBindViewHolder(holder: DuesPaymentStatusHolder, position: Int) {
         holder.binding.apply {
             val currentItem = list[position]
@@ -39,7 +37,6 @@ class DuesPaymentStatusAdapter : RecyclerView.Adapter<DuesPaymentStatusAdapter.D
         }
     }
 
-    //Kaç tane olacak
     override fun getItemCount(): Int {
         return list.size
     }

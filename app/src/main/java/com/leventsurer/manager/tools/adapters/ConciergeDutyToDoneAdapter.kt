@@ -22,14 +22,12 @@ class ConciergeDutyToDoneAdapter : RecyclerView.Adapter<ConciergeDutyToDoneAdapt
             notifyDataSetChanged()
         }
 
-    //Tutucu ilk oluşturulduğunda ne yapılacak
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ConciergeDutyToDoneHolder {
         val binding =
             ConciergeDutyRowBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ConciergeDutyToDoneHolder(binding)
     }
 
-    //Bağlanma olduktan sonra ne olacak
     override fun onBindViewHolder(holder: ConciergeDutyToDoneHolder, position: Int) {
         holder.binding.apply {
             val currentItem = list[position]
@@ -37,7 +35,6 @@ class ConciergeDutyToDoneAdapter : RecyclerView.Adapter<ConciergeDutyToDoneAdapt
         }
     }
 
-    //Kaç tane olacak
     override fun getItemCount(): Int {
         return list.size
     }

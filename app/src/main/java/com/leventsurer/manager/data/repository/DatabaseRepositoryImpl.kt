@@ -84,7 +84,7 @@ class DatabaseRepositoryImpl @Inject constructor(
                 database.collection(APARTMENT_COLLECTIONS).document(documentId)
                     .collection(
                         DUTIES
-                    ).orderBy("assignmentDate",Query.Direction.ASCENDING).get().await()
+                    ).orderBy("assignmentDate", Query.Direction.ASCENDING).get().await()
 
             for (document in result) {
                 duties.add(document.toObject(ConciergeDutiesModel::class.java))
@@ -185,14 +185,14 @@ class DatabaseRepositoryImpl @Inject constructor(
         liveData.value = Resource.Loading
         database.collection(APARTMENT_COLLECTIONS).document(apartmentDocumentId!!).collection(
             POLLS
-        ).orderBy("time",Query.Direction.DESCENDING).addSnapshotListener { value, error ->
+        ).orderBy("time", Query.Direction.DESCENDING).addSnapshotListener { value, error ->
             if (error != null) {
                 liveData.value = Resource.Failure(error)
             } else if (value != null) {
                 val polls = mutableListOf<PollModel>()
                 for (doc in value) {
                     val data = doc.toObject(PollModel::class.java)
-                    Log.e("kontrol","repository oluşturulan anket:${data}")
+                    Log.e("kontrol", "repository oluşturulan anket:${data}")
                     polls.add(data)
                 }
                 liveData.value = Resource.Success(polls)
@@ -218,6 +218,7 @@ class DatabaseRepositoryImpl @Inject constructor(
         database.collection(APARTMENT_COLLECTIONS).document(apartmentDocumentId!!).collection(POLLS)
             .add(newPoll).await()
     }
+
     //Yeni kapıcı görevi ekleme
     override suspend fun addNewConciergeDuty(duty: String, time: FieldValue) {
         val apartmentDocumentId =
@@ -227,8 +228,10 @@ class DatabaseRepositoryImpl @Inject constructor(
             "duty" to duty,
             "isDone" to false
         )
-        database.collection(APARTMENT_COLLECTIONS).document(apartmentDocumentId!!).collection(DUTIES).add(newDuty).await()
+        database.collection(APARTMENT_COLLECTIONS).document(apartmentDocumentId!!)
+            .collection(DUTIES).add(newDuty).await()
     }
+
     override suspend fun changePollStatistics(isAgree: Boolean, pollText: String): String {
         val apartmentDocumentId =
             sharedRepository.readApartmentDocumentId(APARTMENT_DOCUMENT_ID)
@@ -251,12 +254,14 @@ class DatabaseRepositoryImpl @Inject constructor(
                     pollModel.disagreeCount -= 1
                     pollModel.people["disagreePeople"]?.remove(userName)
                 }
-                val pollDocument = database.collection(APARTMENT_COLLECTIONS).document(apartmentDocumentId).collection(
-                    POLLS
-                ).document(pollDocument.documents[0].id)
-                pollDocument.update("agreeCount",pollModel.agreeCount)
-                pollDocument.update("disagreeCount",pollModel.disagreeCount)
-                pollDocument.update("people",pollModel.people)
+                val pollDocument =
+                    database.collection(APARTMENT_COLLECTIONS).document(apartmentDocumentId)
+                        .collection(
+                            POLLS
+                        ).document(pollDocument.documents[0].id)
+                pollDocument.update("agreeCount", pollModel.agreeCount)
+                pollDocument.update("disagreeCount", pollModel.disagreeCount)
+                pollDocument.update("people", pollModel.people)
                 "Kararınızı Belirttiniz"
 
             }
@@ -272,12 +277,14 @@ class DatabaseRepositoryImpl @Inject constructor(
                     pollModel.people["agreePeople"]?.remove(userName)
                 }
 
-                val pollDocument = database.collection(APARTMENT_COLLECTIONS).document(apartmentDocumentId).collection(
-                    POLLS
-                ).document(pollDocument.documents[0].id)
-                pollDocument.update("agreeCount",pollModel.agreeCount)
-                pollDocument.update("disagreeCount",pollModel.disagreeCount)
-                pollDocument.update("people",pollModel.people)
+                val pollDocument =
+                    database.collection(APARTMENT_COLLECTIONS).document(apartmentDocumentId)
+                        .collection(
+                            POLLS
+                        ).document(pollDocument.documents[0].id)
+                pollDocument.update("agreeCount", pollModel.agreeCount)
+                pollDocument.update("disagreeCount", pollModel.disagreeCount)
+                pollDocument.update("people", pollModel.people)
                 "Kararınızı Belirttiniz"
             }
         }
@@ -414,7 +421,7 @@ class DatabaseRepositoryImpl @Inject constructor(
         addNewUserToNewApartment(name, apartmentCode, carPlate, doorNumber, role, result)
     }
 
-    override suspend fun changeUserDuesPaymentStatus(currentStatus: Boolean,userName: String) {
+    override suspend fun changeUserDuesPaymentStatus(currentStatus: Boolean, userName: String) {
         val apartmentDocumentId = sharedRepository.readApartmentDocumentId(APARTMENT_DOCUMENT_ID)
         val userDocumentId = sharedRepository.readUserDocumentId(USER_DOCUMENT_ID)
 
@@ -429,11 +436,13 @@ class DatabaseRepositoryImpl @Inject constructor(
         val apartmentNewBudget: Double
         val financialEventName = "$userName Kira Ödemesi"
         if (currentStatus) {
-            apartmentNewBudget=apartmentDailyPaymentAmount + apartmentModel?.budget.toString().toDouble()
+            apartmentNewBudget =
+                apartmentDailyPaymentAmount + apartmentModel?.budget.toString().toDouble()
             val time = FieldValue.serverTimestamp()
-            addNewFinancialEvent(apartmentModel!!.monthlyPayment,false,time,financialEventName)
+            addNewFinancialEvent(apartmentModel!!.monthlyPayment, false, time, financialEventName)
         } else {
-            apartmentNewBudget=apartmentModel?.budget.toString().toDouble() - apartmentDailyPaymentAmount
+            apartmentNewBudget =
+                apartmentModel?.budget.toString().toDouble() - apartmentDailyPaymentAmount
             deleteMonthlyPaymentInFinancialEvents(financialEventName)
         }
         database.collection(APARTMENT_COLLECTIONS).document(apartmentDocumentId)
@@ -441,13 +450,17 @@ class DatabaseRepositoryImpl @Inject constructor(
 
 
     }
+
     //aidat ödeme durumunu ödemedi olarak değiştiren kullanıcın cüzdan sayfasındaki aidat ödeme bildirisi silinir
     override suspend fun deleteMonthlyPaymentInFinancialEvents(financialEvent: String) {
         val apartmentDocumentId = sharedRepository.readApartmentDocumentId(APARTMENT_DOCUMENT_ID)
-        val financialEvents = database.collection(APARTMENT_COLLECTIONS).document(apartmentDocumentId!!).collection(
-            FINANCIAL_EVENTS).whereEqualTo("eventName",financialEvent).get().await()
+        val financialEvents =
+            database.collection(APARTMENT_COLLECTIONS).document(apartmentDocumentId!!).collection(
+                FINANCIAL_EVENTS
+            ).whereEqualTo("eventName", financialEvent).get().await()
         database.collection(APARTMENT_COLLECTIONS).document(apartmentDocumentId).collection(
-            FINANCIAL_EVENTS).document(financialEvents.documents[0].id).delete().await()
+            FINANCIAL_EVENTS
+        ).document(financialEvents.documents[0].id).delete().await()
 
     }
 
@@ -659,6 +672,7 @@ class DatabaseRepositoryImpl @Inject constructor(
             USER_COLLECTION
         ).document(userDocumentId!!).delete()
     }
+
     //Seçilen apartman verilerinin silinmesini sağlar
     override suspend fun resetData(
         isRequestReset: Boolean,
@@ -669,55 +683,79 @@ class DatabaseRepositoryImpl @Inject constructor(
         isConciergeDutyReset: Boolean
     ) {
         val apartmentDocumentId = sharedRepository.readApartmentDocumentId(APARTMENT_DOCUMENT_ID)
-        if(isRequestReset){
-            val requests = database.collection(APARTMENT_COLLECTIONS).document(apartmentDocumentId!!).collection(
-                RESIDENT_REQUESTS).get().await()
-            for(request in requests){
+        if (isRequestReset) {
+            val requests =
+                database.collection(APARTMENT_COLLECTIONS).document(apartmentDocumentId!!)
+                    .collection(
+                        RESIDENT_REQUESTS
+                    ).get().await()
+            for (request in requests) {
                 database.collection(APARTMENT_COLLECTIONS).document(apartmentDocumentId).collection(
-                    RESIDENT_REQUESTS).document(request.id).delete()
+                    RESIDENT_REQUESTS
+                ).document(request.id).delete()
             }
         }
-        if(isManagerAnnouncementReset){
-            val announcements = database.collection(APARTMENT_COLLECTIONS).document(apartmentDocumentId!!).collection(
-                MANAGER_ANNOUNCEMENT).get().await()
-            for(announcement in announcements){
+        if (isManagerAnnouncementReset) {
+            val announcements =
+                database.collection(APARTMENT_COLLECTIONS).document(apartmentDocumentId!!)
+                    .collection(
+                        MANAGER_ANNOUNCEMENT
+                    ).get().await()
+            for (announcement in announcements) {
                 database.collection(APARTMENT_COLLECTIONS).document(apartmentDocumentId).collection(
-                    MANAGER_ANNOUNCEMENT).document(announcement.id).delete()
+                    MANAGER_ANNOUNCEMENT
+                ).document(announcement.id).delete()
             }
         }
-        if(isConciergeAnnouncementReset){
-            val announcements = database.collection(APARTMENT_COLLECTIONS).document(apartmentDocumentId!!).collection(
-                CONCIERGE_ANNOUNCEMENT).get().await()
-            for(announcement in announcements){
+        if (isConciergeAnnouncementReset) {
+            val announcements =
+                database.collection(APARTMENT_COLLECTIONS).document(apartmentDocumentId!!)
+                    .collection(
+                        CONCIERGE_ANNOUNCEMENT
+                    ).get().await()
+            for (announcement in announcements) {
                 database.collection(APARTMENT_COLLECTIONS).document(apartmentDocumentId).collection(
-                    CONCIERGE_ANNOUNCEMENT).document(announcement.id).delete()
+                    CONCIERGE_ANNOUNCEMENT
+                ).document(announcement.id).delete()
             }
         }
-        if(isPollReset){
-            val polls = database.collection(APARTMENT_COLLECTIONS).document(apartmentDocumentId!!).collection(
-                POLLS).get().await()
-            for(poll in polls){
+        if (isPollReset) {
+            val polls = database.collection(APARTMENT_COLLECTIONS).document(apartmentDocumentId!!)
+                .collection(
+                    POLLS
+                ).get().await()
+            for (poll in polls) {
                 database.collection(APARTMENT_COLLECTIONS).document(apartmentDocumentId).collection(
-                    POLLS).document(poll.id).delete()
+                    POLLS
+                ).document(poll.id).delete()
             }
         }
-        if(isFinancialEventReset){
-            val financialEvents = database.collection(APARTMENT_COLLECTIONS).document(apartmentDocumentId!!).collection(
-                FINANCIAL_EVENTS).get().await()
-            for(financialEvent in financialEvents){
+        if (isFinancialEventReset) {
+            val financialEvents =
+                database.collection(APARTMENT_COLLECTIONS).document(apartmentDocumentId!!)
+                    .collection(
+                        FINANCIAL_EVENTS
+                    ).get().await()
+            for (financialEvent in financialEvents) {
                 database.collection(APARTMENT_COLLECTIONS).document(apartmentDocumentId).collection(
-                    FINANCIAL_EVENTS).document(financialEvent.id).delete()
+                    FINANCIAL_EVENTS
+                ).document(financialEvent.id).delete()
             }
         }
-        if(isConciergeDutyReset){
-            val conciergeDuties = database.collection(APARTMENT_COLLECTIONS).document(apartmentDocumentId!!).collection(
-                DUTIES).get().await()
-            for(conciergeDuty in conciergeDuties){
+        if (isConciergeDutyReset) {
+            val conciergeDuties =
+                database.collection(APARTMENT_COLLECTIONS).document(apartmentDocumentId!!)
+                    .collection(
+                        DUTIES
+                    ).get().await()
+            for (conciergeDuty in conciergeDuties) {
                 database.collection(APARTMENT_COLLECTIONS).document(apartmentDocumentId).collection(
-                    DUTIES).document(conciergeDuty.id).delete()
+                    DUTIES
+                ).document(conciergeDuty.id).delete()
             }
         }
     }
+
     //Yöneticinin apartman aidatının tutarını değiştirmesini sağlar
     override suspend fun setApartmentMonthlyPayment(amount: Double) {
         val apartmentDocumentId = sharedRepository.readApartmentDocumentId(APARTMENT_DOCUMENT_ID)

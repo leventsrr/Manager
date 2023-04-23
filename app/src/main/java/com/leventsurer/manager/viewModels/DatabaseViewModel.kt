@@ -44,8 +44,8 @@ class DatabaseViewModel @Inject constructor(
     private val _users = MutableStateFlow<Resource<ArrayList<UserModel>>?>(null)
     val users : StateFlow<Resource<ArrayList<UserModel>>?> = _users
 
-    private val _chatMessagesFlow = MutableLiveData<Resource<List<ChatMessageModel>>?>(null)
-    val chatMessagesFlow : LiveData<Resource<List<ChatMessageModel>>?> = _chatMessagesFlow
+    private val _chatMessagesFlow = MutableLiveData<LiveData<List<ChatMessageModel>>>(null)
+    val chatMessagesFlow : LiveData<LiveData<List<ChatMessageModel>>?> = _chatMessagesFlow
 
     private val _apartmentLiveData = MutableLiveData<Resource<ApartmentModel>?>(null)
     val apartmentLiveData :LiveData<Resource<ApartmentModel>?> = _apartmentLiveData

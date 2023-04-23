@@ -82,7 +82,7 @@ class ChatFragment : Fragment() {
     private fun observeChatMessages() {
         databaseViewModel.getChatMessages().observe(viewLifecycleOwner) {
 
-        when (it) {
+            when (it) {
                 is Resource.Failure -> {
                     Toast.makeText(requireContext(), it.exception.message, Toast.LENGTH_LONG).show()
                 }
