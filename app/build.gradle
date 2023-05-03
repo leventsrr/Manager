@@ -10,7 +10,7 @@ plugins {
 apply plugin: 'com.google.gms.google-services'
 apply plugin: 'com.google.firebase.crashlytics'
 android {
-    compileSdk 31
+    compileSdk 33
     buildToolsVersion "30.0.3"
 
     lintOptions {
@@ -21,8 +21,11 @@ android {
         applicationId "com.leventsurer.manager"
         minSdk 23
         targetSdk 31
-        versionCode 1
-        versionName "1.0"
+        versionCode 7
+        versionName "1.1.4"
+        
+
+        multiDexEnabled true
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -68,6 +71,16 @@ dependencies {
     def lottie_version = '4.1.0'
 
     def firebase_messaging_version = '23.1.2'
+    def activity_version = "1.7.1"
+    def multidex_version = "2.0.1"
+    //Multidex
+    implementation "androidx.multidex:multidex:$multidex_version"
+
+
+    //activity
+    //noinspection GradleDependency
+    implementation("androidx.activity:activity-ktx:$activity_version")
+
 
     implementation "com.google.firebase:firebase-messaging-ktx:$firebase_messaging_version"
     implementation platform('com.google.firebase:firebase-bom:26.7.0')

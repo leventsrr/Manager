@@ -39,7 +39,21 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/buttonNavigateLogin"
+                    app:cardBackgroundColor="@color/thirdColor"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    app:layout_constraintEnd_toStartOf="@+id/textView"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
 
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_baseline_arrow_back_24" />
+                </com.google.android.material.card.MaterialCardView>
                 <TextView
 
                     android:id="@+id/textView"
@@ -64,7 +78,7 @@
                     android:layout_marginStart="55dp"
                     android:layout_marginTop="10dp"
                     android:layout_marginEnd="51dp"
-                    android:hint="E-posta Adresiniz"
+                    android:hint="E-posta Adresiniz*"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     app:boxBackgroundColor="@color/white"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -84,7 +98,7 @@
                     android:layout_marginStart="55dp"
                     android:layout_marginTop="5dp"
                     android:layout_marginEnd="51dp"
-                    android:hint="Şifreniz"
+                    android:hint="Şifreniz*"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     app:boxBackgroundColor="@color/white"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -94,6 +108,7 @@
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/etNewUserPassword"
+                        android:inputType="textPassword"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent" />
                 </com.google.android.material.textfield.TextInputLayout>
@@ -105,7 +120,7 @@
                     android:layout_marginStart="55dp"
                     android:layout_marginTop="5dp"
                     android:layout_marginEnd="51dp"
-                    android:hint="İsminiz"
+                    android:hint="İsminiz*"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     app:boxBackgroundColor="@color/white"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -114,7 +129,7 @@
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/etNewUserName"
-                        android:inputType="textPassword"
+
                         android:layout_width="match_parent"
                         android:layout_height="match_parent" />
                 </com.google.android.material.textfield.TextInputLayout>
@@ -126,7 +141,7 @@
                     android:layout_marginStart="55dp"
                     android:layout_marginTop="10dp"
                     android:layout_marginEnd="51dp"
-                    android:hint="Apartman Kodu"
+                    android:hint="Apartman Kodu*"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     app:boxBackgroundColor="@color/white"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -245,7 +260,7 @@
                     app:layout_constraintStart_toEndOf="@+id/buttonSignup"
                     app:layout_constraintTop_toBottomOf="@+id/toggleButton" />
 
-                <TextView
+                <!--<TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="181dp"
@@ -257,7 +272,7 @@
                     android:textColor="@color/thirdColor"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent" />
+                    app:layout_constraintStart_toStartOf="parent" />-->
 
             </androidx.constraintlayout.widget.ConstraintLayout>
         </com.google.android.material.card.MaterialCardView>

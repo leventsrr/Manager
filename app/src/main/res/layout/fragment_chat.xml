@@ -42,8 +42,7 @@
                 android:layout_marginStart="10dp"
                 android:layout_marginBottom="5dp"
                 android:layout_weight="5"
-                android:hint="Mesajınız..."
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+                android:hint="Mesajınız...">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/twUserMessage"

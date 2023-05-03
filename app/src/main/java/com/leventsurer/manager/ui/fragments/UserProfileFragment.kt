@@ -15,6 +15,7 @@ import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.getSystemService
 import androidx.fragment.app.Fragment
@@ -138,7 +139,10 @@ class UserProfileFragment : Fragment() {
     private fun onClickHandler() {
         binding.apply {
             iwUserProfilePhoto.setOnClickListener {
+
+                //pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
                 resultLauncher.launch("image/*")
+
             }
 
             btnUploadImage.setOnClickListener {
@@ -317,6 +321,15 @@ class UserProfileFragment : Fragment() {
 
 
     }
+    private val pickMedia = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
+        // Callback is invoked after the user selects a media item or closes the
+        // photo picker.
+        if (uri != null) {
+            Log.d("PhotoPicker", "Selected URI: $uri")
+        } else {
+            Log.d("PhotoPicker", "No media selected")
+        }
+    }
 
     private val resultLauncher = registerForActivityResult(
         ActivityResultContracts.GetContent()
@@ -325,7 +338,6 @@ class UserProfileFragment : Fragment() {
         binding.iwUserProfilePhoto.setImageURI(it)
         binding.btnUploadImage.text = "Resmi Kaydet"
     }
-
     private fun setupUi() {
         HeaderHelper.customHeader(
             binding.customHeader,

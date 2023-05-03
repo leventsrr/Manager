@@ -10,6 +10,7 @@ import android.graphics.Paint
 import android.graphics.Typeface
 import android.graphics.pdf.PdfDocument
 import android.os.Build
+import android.os.Build.VERSION.SDK_INT
 import android.os.Bundle
 import android.os.Environment
 import android.util.Log
@@ -211,20 +212,43 @@ class HomePageFragment : Fragment() {
         writeApartmentNameAndPrintDateToBottom()
 
         pdfDocument.finishPage(myPage)
-        val fileName = pollModel.pollText.replace(" ","");
+        val fileName = pollModel.pollText.replace(" ","")
+        if(SDK_INT>=Build.VERSION_CODES.R){
+            val file =   File( Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS), "${fileName}Anketi.pdf")
+            try {
+                pdfDocument.writeTo(FileOutputStream(file))
+                Toast.makeText(requireContext(), "PDF Dosyası Oluşturuldu", Toast.LENGTH_SHORT).show()
+            } catch (e: Exception) {
+                e.printStackTrace()
+                Toast.makeText(requireContext(), "$e", Toast.LENGTH_SHORT)
+                    .show()
+            }
+        }else{
+            val file =
+                File( Environment.getExternalStorageDirectory(), "${fileName}Anketi.pdf")
+            try {
+                pdfDocument.writeTo(FileOutputStream(file))
+                Toast.makeText(requireContext(), "PDF Dosyası Oluşturuldu", Toast.LENGTH_SHORT).show()
+            } catch (e: Exception) {
+                e.printStackTrace()
+                Toast.makeText(requireContext(), "$e", Toast.LENGTH_SHORT)
+                    .show()
+            }
+        }
+        /*
         val file =
             //File( Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS), "${fileName}Anketi.pdf")
             File( Environment.getExternalStorageDirectory(), "${fileName}Anketi.pdf")
+        */
 
-
-        try {
+        /*try {
             pdfDocument.writeTo(FileOutputStream(file))
             Toast.makeText(requireContext(), "PDF Dosyası Oluşturuldu", Toast.LENGTH_SHORT).show()
         } catch (e: Exception) {
             e.printStackTrace()
             Toast.makeText(requireContext(), "$e", Toast.LENGTH_SHORT)
                 .show()
-        }
+        }*/
         pdfDocument.close()
     }
 

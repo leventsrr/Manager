@@ -155,6 +155,7 @@ class SignupFragment : Fragment() {
                         val userCarPlate = binding.etCarPlate.text.toString()
                         val userDoorNumber = binding.etDoorNumber.text.toString()
                         val apartmentCode = binding.etApartmentCode.text.toString()
+
                         if(newUserRole == "yonetici"){
 
                             if (isTaken) {
@@ -217,13 +218,18 @@ class SignupFragment : Fragment() {
             }
 
             buttonSignup.setOnClickListener {
-                if (isRoleSelected) {
-                    getApartments()
+                if (binding.etNewUserName.text.isNullOrEmpty()||binding.etNewUserMail.text.isNullOrEmpty()||binding.etNewUserPassword.text.isNullOrEmpty()){
+                    Toast.makeText(requireContext(),"Lütfen zorunlu alanları doldurunuz",Toast.LENGTH_LONG).show()
+                }else{
+                    if (isRoleSelected) {
+                        getApartments()
 
-                } else {
-                    Toast.makeText(context, "Rol Seçimi Yapmak Zorunludur.", Toast.LENGTH_LONG)
-                        .show()
+                    } else {
+                        Toast.makeText(context, "Rol Seçimi Yapmak Zorunludur.", Toast.LENGTH_LONG)
+                            .show()
+                    }
                 }
+
 
             }
             toggleButton.addOnButtonCheckedListener { toggleButton, checkedId, isChecked ->
